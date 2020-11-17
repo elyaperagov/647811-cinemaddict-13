@@ -1,7 +1,7 @@
 # Проект «Киноман» [![Build status][travis-image]][travis-url]
 
 * Студент: [Илья Пирогов](https://up.htmlacademy.ru/ecmascript/13/user/647811).
-* Наставник: `Неизвестно`.
+* Наставник: [Артур Галимов](https://htmlacademy.ru/profile/id1237543).
 
 ---
 
