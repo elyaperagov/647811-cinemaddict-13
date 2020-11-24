@@ -7,15 +7,17 @@ import {createFilmCardTemplate} from "./view/film-card.js";
 import {createShowMoreButtonTemplate} from "./view/show-more.js";
 import {createFilmsExtraContainersTemplate} from "./view/films-extra.js";
 import {createFilmPopupTemplate} from "./view/popup.js";
-import {generateCards} from './mock/cards.js';
+import {generateCard, generateCards} from './mock/cards.js';
 
 const CARDS_IN_ROW = 5;
-// const NUMBER_OF_EXTRA_CONTAINERS = 2;
+const NUMBER_OF_EXTRA_CONTAINERS = 2;
 const FILM_CARDS_QUANTITY = 15;
 
 let showingFilmCardsCount = CARDS_IN_ROW;
 
 const allFilms = generateCards(FILM_CARDS_QUANTITY);
+
+const generatedCards = new Array(FILM_CARDS_QUANTITY).fill().map(generateCard);
 
 const renderCards = (cards, container) => {
   let cardsRow = cards.slice(0, showingFilmCardsCount);
@@ -75,12 +77,18 @@ loadMoreButton.addEventListener(`click`, showMoreCards);
 
 render(siteFilms, createFilmsExtraContainersTemplate());
 
-// const filmsExtraContainers = siteMainElement.querySelectorAll(`.films-list--extra .films-list__container`);
+const filmsExtraContainers = siteMainElement.querySelectorAll(`.films-list--extra .films-list__container`);
 
 // filmsExtraContainers.forEach((item) => {
 //   for (let i = 0; i < NUMBER_OF_EXTRA_CONTAINERS; i++) {
-//     render(item, createFilmCardTemplate());
+//     render(item, createFilmCardTemplate(generateCards(2)));
 //   }
 // });
+
+for (let filmListExtra of filmsExtraContainers) {
+  for (let i = 0; i < NUMBER_OF_EXTRA_CONTAINERS; i++) {
+    render(filmListExtra, createFilmCardTemplate(generatedCards[i]));
+  }
+}
 
 renderPopup(allFilms[0], siteBody);

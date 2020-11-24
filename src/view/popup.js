@@ -1,5 +1,10 @@
+import {getPosterName} from '../helpers.js';
+
 export const createFilmPopupTemplate = (filmCard) => {
-  let {title, poster, description, genre, year, rating, duration} = filmCard;
+  let {title, description, genre, year, rating, duration} = filmCard;
+
+  const posterName = `./images/posters/` + getPosterName(title) + `.png`;
+
   return `<section class="film-details">
     <form class="film-details__inner" action="" method="get">
       <div class="film-details__top-container">
@@ -8,7 +13,7 @@ export const createFilmPopupTemplate = (filmCard) => {
         </div>
         <div class="film-details__info-wrap">
           <div class="film-details__poster">
-            <img class="film-details__poster-img" src="${poster}" alt="">
+            <img class="film-details__poster-img" src="${posterName}" alt="">
 
             <p class="film-details__age">18+</p>
           </div>

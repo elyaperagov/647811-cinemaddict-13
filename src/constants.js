@@ -44,12 +44,23 @@ const genres = [
   `Drama`
 ];
 
+const FILM_TITLES = [
+  `Made for each other`,
+  `Popeye meets sinbad`,
+  `Sagebrush trail`,
+  `Santa claus conquers the martians`,
+  `The Dance of life`,
+  `The great flamarion`,
+  `The man with the golden arm`
+];
+
 export {
   COMMENTS,
   YEARS,
   RATING,
   DURATION,
   DESCRIPTION_MAX,
+  FILM_TITLES,
   descriptions,
   genres
 };
