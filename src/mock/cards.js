@@ -12,6 +12,9 @@ const generateCard = () => {
     comments: getRandomInteger(COMMENTS.MIN, COMMENTS.MAX),
     year: (randomDate(new Date(YEARS.MIN, 0, 1))).getFullYear(),
     rating: (getRandomInteger(RATING.MIN, RATING.MAX) / RATING_DIVIDER).toFixed(1),
+    isInWatchList: Boolean(getRandomInteger(0, 1)),
+    isWatched: Boolean(getRandomInteger(0, 1)),
+    isFavorite: Boolean(getRandomInteger(0, 1)),
   };
   return card;
 };
@@ -20,6 +23,7 @@ const generateCards = (itemCount) => {
   const cards = [];
   for (let i = 0; i < itemCount; i++) {
     cards.push(generateCard());
+
   }
   return cards;
 };

@@ -1,4 +1,4 @@
-import {getPosterName} from '../helpers.js';
+import {getPosterName, createElement} from '../helpers.js';
 
 export const createFilmPopupTemplate = (filmCard) => {
   let {title, description, genre, year, rating, duration} = filmCard;
@@ -175,3 +175,27 @@ export const createFilmPopupTemplate = (filmCard) => {
     </form>
   </section>`;
 };
+
+
+export default class PopUpFilmCard {
+  constructor(filmCard) {
+    this._filmCard = filmCard;
+    this._element = null;
+  }
+
+  getTemplate() {
+    return createFilmPopupTemplate(this._filmCard);
+  }
+
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate());
+    }
+
+    return this._element;
+  }
+
+  removeElement() {
+    this._element = null;
+  }
+}
