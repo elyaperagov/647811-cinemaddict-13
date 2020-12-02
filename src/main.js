@@ -8,11 +8,13 @@ import ShowMoreButton from "./view/show-more.js";
 import FilmsExtra from "./view/films-extra.js";
 import PopUpFilmCard from "./view/popup.js";
 import {generateCard} from './mock/cards.js';
-import {RenderPosition, renderElement, getRandomArrayItem} from './helpers.js';
+import {RenderPosition, renderElement} from './helpers.js';
 
 const CARDS_IN_ROW = 5;
 const NUMBER_OF_EXTRA_CONTAINERS = 2;
 const FILM_CARDS_QUANTITY = 15;
+const TOP_RATED_FILMS = 2;
+const MOST_COMMENTED_FILMS = 2;
 
 let showingFilmCardsCount = CARDS_IN_ROW;
 
@@ -109,16 +111,22 @@ for (let i = 0; i < NUMBER_OF_EXTRA_CONTAINERS; i++) {
 const topRated = document.querySelector(`.films-list--extra .films-list__container`);
 const mostCommented = document.querySelector(`.films-list--extra:last-child .films-list__container`);
 
-
-const getTopRatedFilms = () => {
-  const topRatedFilms = generatedCards
+const topRatedFilms = [...generatedCards]
   .sort(function (a, b) {
     return a.rating - b.rating;
-  }).slice(generatedCards.length - 2, generatedCards.length);
-  return topRatedFilms;
-};
+  })
+  .slice([...generatedCards].length - 2, [...generatedCards].length);
 
-for (let i = 0; i < NUMBER_OF_EXTRA_CONTAINERS; i++) {
-  renderElement(topRated, new FilmCard(getRandomArrayItem(getTopRatedFilms())).getElement(), RenderPosition.BEFOREEND);
-  renderElement(mostCommented, new FilmCard(getRandomArrayItem(generatedCards)).getElement(), RenderPosition.BEFOREEND);
-}
+topRatedFilms
+  .slice(0, TOP_RATED_FILMS)
+  .forEach((film) => renderElement(topRated, new FilmCard(film).getElement(), RenderPosition.BEFOREEND));
+
+generatedCards
+  .slice(0, MOST_COMMENTED_FILMS)
+  .forEach((film) => renderElement(mostCommented, new FilmCard(film).getElement(), RenderPosition.BEFOREEND));
+
+
+// for (let i = 0; i < NUMBER_OF_EXTRA_CONTAINERS; i++) {
+//   renderElement(topRated, new FilmCard(topRatedFilms[i]).getElement(), RenderPosition.BEFOREEND);
+//   renderElement(mostCommented, new FilmCard(getRandomArrayItem(generatedCards)).getElement(), RenderPosition.BEFOREEND);
+// }
