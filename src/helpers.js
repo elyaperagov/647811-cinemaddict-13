@@ -32,11 +32,44 @@ const getPosterName = (name) => {
   return title;
 };
 
+const RenderPosition = {
+  AFTERBEGIN: `afterbegin`,
+  BEFOREEND: `beforeend`
+};
+
+
+const renderElement = (container, element, place) => {
+  switch (place) {
+    case RenderPosition.AFTERBEGIN:
+      container.prependChild(element);
+      break;
+    case RenderPosition.BEFOREEND:
+      container.appendChild(element);
+      break;
+  }
+};
+
+const createElement = (template) => {
+  const newElement = document.createElement(`div`); // 1
+  newElement.innerHTML = template; // 2
+
+  return newElement.firstChild; // 3
+};
+
+const renderTemplate = (container, template, place) => {
+  place = `beforeend`;
+  container.insertAdjacentHTML(place, template);
+};
+
 export {
   getRandomArrayItem,
   getRandomInteger,
   randomDate,
   shuffleArray,
   getTimeFromMins,
-  getPosterName
+  getPosterName,
+  renderTemplate,
+  renderElement,
+  createElement,
+  RenderPosition
 };
