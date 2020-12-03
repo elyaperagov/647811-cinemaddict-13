@@ -115,10 +115,9 @@ const topRatedFilms = [...generatedCards]
   .sort(function (a, b) {
     return a.rating - b.rating;
   })
-  .slice([...generatedCards].length - 2, [...generatedCards].length);
+  .slice(-TOP_RATED_FILMS);
 
 topRatedFilms
-  .slice(0, TOP_RATED_FILMS)
   .forEach((film) => renderElement(topRated, new FilmCard(film).getElement(), RenderPosition.BEFOREEND));
 
 generatedCards
