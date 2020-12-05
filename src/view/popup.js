@@ -1,5 +1,5 @@
 import AbstractView from "./abstract.js";
-import {getPosterName} from '../helpers.js';
+import {getPosterName} from '../helpers/common.js';
 
 export const createFilmPopupTemplate = (filmCard) => {
   let {title, description, genre, year, rating, duration} = filmCard;
