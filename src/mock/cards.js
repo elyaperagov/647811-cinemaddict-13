@@ -1,4 +1,4 @@
-import {getRandomArrayItem, getRandomInteger, randomDate, shuffleArray, getTimeFromMins} from '../helpers';
+import {getRandomArrayItem, getRandomInteger, randomDate, shuffleArray, getTimeFromMins} from '../helpers/common.js';
 import {COMMENTS, YEARS, RATING, DURATION, DESCRIPTION_MAX, FILM_TITLES, descriptions, genres} from '../constants';
 
 const RATING_DIVIDER = 10;
