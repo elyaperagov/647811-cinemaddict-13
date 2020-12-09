@@ -5,12 +5,12 @@ import Films from "../view/films.js";
 import FilmsList from "../view/films-list.js";
 import FilmCard from "../view/film-card.js";
 import ShowMoreButton from "../view/show-more.js";
-import FilmsExtra from "../view/films-extra.js";
+import MostCommented from "../view/most-commented.js";
+import TopRated from "../view/top-rated.js";
 import PopUpFilmCard from "../view/popup.js";
 import {RenderPosition, renderElement, remove} from '../helpers/render.js';
 
 const CARDS_IN_ROW = 5;
-const NUMBER_OF_EXTRA_CONTAINERS = 2;
 const MOST_COMMENTED_FILMS = 2;
 const TOP_RATED_FILMS = 2;
 const siteBody = document.querySelector(`body`);
@@ -22,6 +22,8 @@ export default class MoviesList {
     this._filmsComponent = new Films();
     this._sortComponent = new Sort();
     this._filmsListComponent = new FilmsList();
+    this._filmsTopRatedComponent = new TopRated();
+    this._filmsMostCommentedComponent = new MostCommented();
   }
 
   init(films) {
@@ -93,7 +95,6 @@ export default class MoviesList {
   }
 
   _renderBoard() {
-
     this._renderSort();
     this._renderMoviesList();
     this._renderExtraMoviesList();
@@ -110,13 +111,8 @@ export default class MoviesList {
   }
 
   _renderExtraMoviesList() {
-    let headers = [`Top rated`, `Most recommended`];
-    for (let i = 0; i < NUMBER_OF_EXTRA_CONTAINERS; i++) {
-      renderElement(this._filmsComponent, new FilmsExtra(headers[i]), RenderPosition.BEFOREEND);
-    }
-
-    const topRated = document.querySelector(`.films-list--extra .films-list__container`);
-    const mostCommented = document.querySelector(`.films-list--extra:last-child .films-list__container`);
+    renderElement(this._filmsComponent, this._filmsTopRatedComponent, RenderPosition.BEFOREEND);
+    renderElement(this._filmsComponent, this._filmsMostCommentedComponent, RenderPosition.BEFOREEND);
 
     const topRatedFilms = [...this._films]
       .sort(function (a, b) {
@@ -125,10 +121,10 @@ export default class MoviesList {
       .slice(-TOP_RATED_FILMS);
 
     topRatedFilms
-      .forEach((film) => this._renderFilm(topRated, film));
+      .forEach((film) => this._renderFilm(this._filmsTopRatedComponent, film));
 
     this._films
       .slice(0, MOST_COMMENTED_FILMS)
-      .forEach((film) => this._renderFilm(mostCommented, film));
+      .forEach((film) => this._renderFilm(this._filmsMostCommentedComponent, film));
   }
 }
