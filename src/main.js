@@ -1,7 +1,7 @@
 import Profile from "./view/profile.js";
 import Navigation from "./view/navigation.js";
 import {generateCard} from './mock/cards.js';
-import MoviesList from "./presenter/presenter.js";
+import MoviesList from "./presenter/movies-list.js";
 import {RenderPosition, renderElement} from './helpers/render.js';
 
 const FILM_CARDS_QUANTITY = 15;
