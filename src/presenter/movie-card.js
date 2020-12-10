@@ -11,15 +11,15 @@ export default class Movie {
 
   init(container, film) {
     this._film = film;
-
     this._filmCardComponent = new FilmCard(film);
     this._popUpFilmCardComponent = new PopUpFilmCard(film);
+    this._popupClickHandler = this._popupClickHandler.bind(this);
+    this._closePopupClickHandler = this._closePopupClickHandler.bind(this);
 
-    this._filmCardComponent.setPopupClickHandler(() => {
-      this._openPopup();
-    });
+    this._filmCardComponent.setPosterClickHandler(this._popupClickHandler);
+    this._filmCardComponent.setTitleClickHandler(this._popupClickHandler);
+    this._filmCardComponent.setCommentsClickHandler(this._popupClickHandler);
     const filmslistContainer = container.getElement().querySelector(`.films-list__container`); // сделал временно
-
     renderElement(filmslistContainer, this._filmCardComponent, RenderPosition.BEFOREEND);
   }
 
@@ -37,19 +37,21 @@ export default class Movie {
   }
 
   _openPopup() {
-    // this._popUpFilmCardComponent = new PopUpFilmCard(film); //  почему this._popUpFilmCardComponent не берется из замыкания
     renderElement(siteBody, this._popUpFilmCardComponent, RenderPosition.BEFOREEND);
     const closePopupBtn = this._popUpFilmCardComponent.getElement().querySelector(`.film-details__close-btn`);
     siteBody.classList.add(`hide-overflow`);
-    closePopupBtn.addEventListener(`click`, (() => {
-      this._closePopup();
-    })
-    );
-    document.addEventListener(`keydown`, ((evt) => {
-      this._onEscKeyDown(evt);
-    })
-    );
+    closePopupBtn.addEventListener(`click`, this._closePopupClickHandler);
+    document.addEventListener(`keydown`, this._closePopupClickHandler);
   }
+
+  _popupClickHandler() {
+    this._openPopup();
+  }
+
+  _closePopupClickHandler() {
+    this._closePopup();
+  }
+
 
   // closePopupBtn.addEventListener(`click`, (() => {
   //   this._closePopup();
