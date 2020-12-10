@@ -7,6 +7,7 @@ import ShowMoreButton from "../view/show-more.js";
 import MostCommented from "../view/most-commented.js";
 import TopRated from "../view/top-rated.js";
 import Movie from "./movie-card.js";
+import {updateItem} from "../helpers/common.js";
 import {RenderPosition, renderElement, remove} from '../helpers/render.js';
 
 const CARDS_IN_ROW = 5;
@@ -17,6 +18,7 @@ export default class MoviesList {
   constructor(container) {
     this._container = container;
     this._renderedFilmsCount = CARDS_IN_ROW;
+    this._filmsPresenter = {};
 
     this._profileComponent = new Profile();
     this._filmsComponent = new Films();
@@ -26,6 +28,7 @@ export default class MoviesList {
     this._filmsMostCommentedComponent = new MostCommented();
     this._showMoreButtonComponent = new ShowMoreButton();
 
+    this._handleFilmChange = this._handleFilmChange.bind(this);
     this._handleLoadMoreButtonClick = this._handleLoadMoreButtonClick.bind(this);
   }
 
@@ -36,6 +39,11 @@ export default class MoviesList {
     renderElement(this._filmsComponent, this._filmsListComponent, RenderPosition.BEFOREEND);
 
     this._renderBoard();
+  }
+
+  _handleFilmChange(updatedFilm) {
+    this._films = updateItem(this._films, updatedFilm);
+    this._filmsPresenter[updatedFilm.id].init(this._filmsListComponent, updatedFilm);
   }
 
   _renderSort() {
@@ -53,8 +61,9 @@ export default class MoviesList {
   }
 
   _renderFilm(filmListElement, film) {
-    const moviePresenter = new Movie(this._filmsListComponent);
+    const moviePresenter = new Movie(this._filmsListComponent, this._handleFilmChange);
     moviePresenter.init(filmListElement, film);
+    this._filmsPresenter[film.id] = moviePresenter;
   }
 
   _handleLoadMoreButtonClick() {
@@ -73,6 +82,15 @@ export default class MoviesList {
     renderElement(this._filmsComponent, this._showMoreButtonComponent, RenderPosition.BEFOREEND);
 
     this._showMoreButtonComponent.loadMoreClickHandler(this._handleLoadMoreButtonClick);
+  }
+
+  _clearMoviesList() {
+    Object
+      .values(this._filmsPresenter)
+      .forEach((presenter) => presenter.destroy());
+    this._filmsPresenter = {};
+    this._renderedFilmsCount = CARDS_IN_ROW;
+    remove(this._showMoreButtonComponent);
   }
 
   _renderBoard() {
