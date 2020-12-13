@@ -35,7 +35,7 @@ export const replace = (newChild, oldChild) => {
 
   const parent = oldChild.parentElement;
 
-  if (parent === null || oldChild === null || newChild === null) {
+  if (!parent || !oldChild || !newChild) {
     throw new Error(`Can't replace unexisting elements`);
   }
 
@@ -66,10 +66,20 @@ const remove = (component) => {
   component.removeElement();
 };
 
+const getMostRatedFilms = (films) => {
+  return films.slice().sort((a, b) => b.rating - a.rating);
+};
+
+const getMostCommentedFilms = (films) => {
+  return films.slice().sort((a, b) => b.comments - a.comments);
+};
+
 export {
   renderTemplate,
   renderElement,
   createElement,
   remove,
-  RenderPosition
+  RenderPosition,
+  getMostRatedFilms,
+  getMostCommentedFilms
 };

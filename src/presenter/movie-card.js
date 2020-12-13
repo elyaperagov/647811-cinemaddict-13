@@ -1,14 +1,13 @@
 import FilmCard from "../view/film-card.js";
 import PopUpFilmCard from "../view/popup.js";
-import FilmsList from "../view/films-list.js";
 import {RenderPosition, renderElement, replace} from '../helpers/render.js';
 
 const siteBody = document.querySelector(`body`);
 
 export default class Movie {
-  constructor(filmsContainer, changeData) {
+  constructor(movieContainer, changeData) {
     // debugger;
-    this._filmsContainer = filmsContainer;
+    this._movieContainer = movieContainer;
     this._changeData = changeData;
 
     this._filmCardComponent = null;
@@ -22,24 +21,24 @@ export default class Movie {
     this._handleFavoriteClick = this._handleFavoriteClick.bind(this);
   }
 
-  init(container, film) {
+  init(film) {
     this._film = film;
 
     const prevFilmComponent = this._filmCardComponent;
     const prevPopupComponent = this._popUpFilmCardComponent;
 
-    this._filmsListComponent = new FilmsList();
     this._filmCardComponent = new FilmCard(film);
     this._popUpFilmCardComponent = new PopUpFilmCard(film);
 
-    const filmslistContainer = container.getElement().querySelector(`.films-list__container`); // сделал временно
+    // const filmslistContainer = container.getElement().querySelector(`.films-list__container`); // сделал временно
+    // const filmsElement = this._filmsComponent.getElement();
+    // const filmsListElement = filmsElement.querySelector(`.films-list`);
+    // const filmsListContainerElement = this._filmListContainerComponent.getElement();
 
-    // if (prevFilmComponent === null || prevPopupComponent === null) {
+    // if (prevFilmComponent && prevPopupComponent) {
     //   renderElement(filmslistContainer, this._filmCardComponent, RenderPosition.BEFOREEND);
-    // } else {
-    //   replace(this._filmCardComponent, prevFilmComponent);
-    //   replace(this._popUpFilmCardComponent, prevPopupComponent);
-    // }   почему эта конструк4ция не работает?
+    //   return;
+    // }
 
     this._filmCardComponent.setWatchListClickHandler(this._handleWatchListClick);
     this._filmCardComponent.setWatchedClickHandler(this._handleWatchedClick);
@@ -48,30 +47,26 @@ export default class Movie {
     this._filmCardComponent.setTitleClickHandler(this._popupClickHandler);
     this._filmCardComponent.setCommentsClickHandler(this._popupClickHandler);
 
-    renderElement(filmslistContainer, this._filmCardComponent, RenderPosition.BEFOREEND);
 
     if (prevFilmComponent && prevPopupComponent) {
       replace(this._filmCardComponent, prevFilmComponent);
       replace(this._popUpFilmCardComponent, prevPopupComponent);
     } else {
-      renderElement(filmslistContainer, this._filmCardComponent, RenderPosition.BEFOREEND);
+      renderElement(this._movieContainer, this._filmCardComponent, RenderPosition.BEFOREEND);
     }
 
-    // if (this._filmsListComponent.getElement().contains(prevFilmComponent.getElement())) {
+    // renderElement(this._movieContainer, this._filmCardComponent, RenderPosition.BEFOREEND);
+
+    // if (this._filmCardComponent.getElement().contains(prevFilmComponent.getElement())) {
     //   replace(this._filmCardComponent, prevFilmComponent);
     // }
     //
-    // if (this._filmsListComponent.getElement().contains(prevPopupComponent.getElement())) {
+    // if (this._filmCardComponent.getElement().contains(prevPopupComponent.getElement())) {
     //   replace(this._filmCardComponent, prevPopupComponent);
     // }
     // remove(prevFilmComponent);
     // remove(prevPopupComponent);
   }
-
-  // destroy() {
-  //   remove(this._filmCardComponent);
-  //   remove(this._popUpFilmCardComponent);
-  // }
 
   _closePopup() {
     this._popUpFilmCardComponent.getElement().remove();
@@ -120,7 +115,7 @@ export default class Movie {
             {},
             this._film,
             {
-              isFavorite: !this._film.isFavorite
+              isFavorite: !this._film.isFavorite,
             }
         )
     );

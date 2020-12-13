@@ -19,4 +19,4 @@ renderElement(siteMainElement, new Navigation(isInWatchListCount, watchedCount, 
 
 const moviesPresenter = new MoviesList(siteMainElement);
 
-moviesPresenter.init(generatedCards);
+moviesPresenter.render(generatedCards);

@@ -1,6 +1,6 @@
 const COMMENTS = {
   MIN: 0,
-  MAX: 5
+  MAX: 15
 };
 
 const YEARS = {

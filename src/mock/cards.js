@@ -26,7 +26,6 @@ const generateCards = (itemCount) => {
   const cards = [];
   for (let i = 0; i < itemCount; i++) {
     cards.push(generateCard());
-
   }
   return cards;
 };

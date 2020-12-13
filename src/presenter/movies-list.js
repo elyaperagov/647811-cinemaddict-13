@@ -5,10 +5,11 @@ import Films from "../view/films.js";
 import FilmsList from "../view/films-list.js";
 import ShowMoreButton from "../view/show-more.js";
 import MostCommented from "../view/most-commented.js";
+import FilmsListContainer from "../view/film-list-container.js";
 import TopRated from "../view/top-rated.js";
 import Movie from "./movie-card.js";
 import {updateItem} from "../helpers/common.js";
-import {RenderPosition, renderElement, remove} from '../helpers/render.js';
+import {RenderPosition, renderElement, remove, getMostRatedFilms, getMostCommentedFilms} from '../helpers/render.js';
 
 const CARDS_IN_ROW = 5;
 const MOST_COMMENTED_FILMS = 2;
@@ -24,26 +25,31 @@ export default class MoviesList {
     this._filmsComponent = new Films();
     this._sortComponent = new Sort();
     this._filmsListComponent = new FilmsList();
-    this._filmsTopRatedComponent = new TopRated();
-    this._filmsMostCommentedComponent = new MostCommented();
+    this._filmListContainerComponent = new FilmsListContainer();
+
     this._showMoreButtonComponent = new ShowMoreButton();
 
     this._handleFilmChange = this._handleFilmChange.bind(this);
     this._handleLoadMoreButtonClick = this._handleLoadMoreButtonClick.bind(this);
   }
 
-  init(films) {
+  render(films) {
     this._films = films.slice();
 
     renderElement(this._container, this._filmsComponent, RenderPosition.BEFOREEND);
     renderElement(this._filmsComponent, this._filmsListComponent, RenderPosition.BEFOREEND);
+
+    const filmsElement = this._filmsComponent.getElement();
+    const filmsListElement = filmsElement.querySelector(`.films-list`);
+
+    renderElement(filmsListElement, this._filmListContainerComponent, RenderPosition.BEFOREEND);
 
     this._renderBoard();
   }
 
   _handleFilmChange(updatedFilm) {
     this._films = updateItem(this._films, updatedFilm);
-    this._filmsPresenter[updatedFilm.id].init(this._filmsListComponent, updatedFilm);
+    this._filmsPresenter[updatedFilm.id].init(updatedFilm);
   }
 
   _renderSort() {
@@ -52,7 +58,7 @@ export default class MoviesList {
 
   _renderMoviesList() {
     for (let i = 0; i < this._renderedFilmsCount; i++) {
-      this._renderFilm(this._filmsListComponent, this._films[i]);
+      this._renderFilm(this._filmListContainerComponent, this._films[i]);
     }
 
     if (this._films.length > this._renderedFilmsCount) {
@@ -60,16 +66,16 @@ export default class MoviesList {
     }
   }
 
-  _renderFilm(filmListElement, film) {
-    const moviePresenter = new Movie(this._filmsListComponent, this._handleFilmChange);
-    moviePresenter.init(filmListElement, film);
+  _renderFilm(container, film) {
+    const moviePresenter = new Movie(container, this._handleFilmChange);
+    moviePresenter.init(film);
     this._filmsPresenter[film.id] = moviePresenter;
   }
 
   _handleLoadMoreButtonClick() {
     this._films
       .slice(this._renderedFilmsCount, this._renderedFilmsCount + CARDS_IN_ROW)
-      .forEach((film) => this._renderFilm(this._filmsListComponent, film));
+      .forEach((film) => this._renderFilm(this._filmListContainerComponent, film));
 
     this._renderedFilmsCount += CARDS_IN_ROW;
 
@@ -100,20 +106,34 @@ export default class MoviesList {
   }
 
   _renderExtraMoviesList() {
+    this._filmsTopRatedComponent = new TopRated();
+    this._filmsMostCommentedComponent = new MostCommented();
+
     renderElement(this._filmsComponent, this._filmsTopRatedComponent, RenderPosition.BEFOREEND);
     renderElement(this._filmsComponent, this._filmsMostCommentedComponent, RenderPosition.BEFOREEND);
 
-    const topRatedFilms = [...this._films]
-      .sort(function (a, b) {
-        return a.rating - b.rating;
-      })
-      .slice(-TOP_RATED_FILMS);
+
+    const topRatedContainerElements = this._filmsTopRatedComponent.getElement().querySelector(`.films-list--extra .films-list__container`);
+    const mostCommentedContainerElements = this._filmsMostCommentedComponent.getElement().querySelector(`.films-list--extra:last-child .films-list__container`);
+    //
+    // const filmsElement = this._filmsComponent.getElement();
+    // const filmsListElement = filmsElement.querySelector(`.films-list`);
+    // const filmsListContainerElement = this._filmListContainerComponent.getElement();
+    // console.log(filmsListContainerElement)
+
+    // renderElement(this._filmsTopRatedComponent, this._filmsTopRatedComponent, RenderPosition.BEFOREEND);
+    // renderElement(this._filmsMostCommentedComponent, this._filmsMostCommentedComponent, RenderPosition.BEFOREEND);
+
+    const topRatedFilms = getMostRatedFilms(this._films);
+
+    const mostCommentedFilms = getMostCommentedFilms(this._films);
 
     topRatedFilms
-      .forEach((film) => this._renderFilm(this._filmsTopRatedComponent, film));
+      .slice(0, TOP_RATED_FILMS)
+      .forEach((film) => this._renderFilm(topRatedContainerElements, film));
 
-    this._films
+    mostCommentedFilms
       .slice(0, MOST_COMMENTED_FILMS)
-      .forEach((film) => this._renderFilm(this._filmsMostCommentedComponent, film));
+      .forEach((film) => this._renderFilm(mostCommentedContainerElements, film));
   }
 }
