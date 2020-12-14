@@ -2,16 +2,23 @@ import FilmCard from "../view/film-card.js";
 import PopUpFilmCard from "../view/popup.js";
 import {RenderPosition, renderElement, replace} from '../helpers/render.js';
 
+const Mode = {
+  DEFAULT: `DEFAULT`,
+  EDITING: `EDITING`
+};
+
 const siteBody = document.querySelector(`body`);
 
 export default class Movie {
-  constructor(movieContainer, changeData) {
+  constructor(movieContainer, changeData, changeMode) {
     // debugger;
     this._movieContainer = movieContainer;
     this._changeData = changeData;
+    this._changeMode = changeMode;
 
     this._filmCardComponent = null;
     this._popUpFilmCardComponent = null;
+    this._mode = Mode.DEFAULT;
 
     this._popupClickHandler = this._popupClickHandler.bind(this);
     this._closePopupClickHandler = this._closePopupClickHandler.bind(this);
@@ -48,7 +55,7 @@ export default class Movie {
     this._filmCardComponent.setCommentsClickHandler(this._popupClickHandler);
 
 
-    if (prevFilmComponent && prevPopupComponent) {
+    if (prevFilmComponent && prevPopupComponent && this._mode === Mode.DEFAULT) {
       replace(this._filmCardComponent, prevFilmComponent);
       replace(this._popUpFilmCardComponent, prevPopupComponent);
     } else {
@@ -95,6 +102,26 @@ export default class Movie {
 
   _closePopupClickHandler() {
     this._closePopup();
+  }
+
+  setDefaultView() {
+    if (this._mode !== Mode.DEFAULT) {
+      this._removeDetails();
+    }
+  }
+
+  _removeDetails() {
+    this._popUpFilmCardComponent.reset();
+
+    remove(this._popUpFilmCardComponent);
+    this._mode = Mode.DEFAULT;
+  }
+
+  _renderDetails() {
+    this._changeMode();
+    debugger;
+    render(siteBody, this._popUpFilmCardComponent, RenderPosition.BEFOREEND);
+    this._mode = Mode.DETAILS;
   }
 
   _handleWatchListClick() {
