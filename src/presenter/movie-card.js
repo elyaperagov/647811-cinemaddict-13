@@ -1,7 +1,6 @@
 import FilmCard from "../view/film-card.js";
 import PopUpFilmCard from "../view/popup.js";
-import FilmsListContainer from "../view/film-list-container.js";
-import {RenderPosition, renderElement, replace, remove} from '../helpers/render.js';
+import {RenderPosition, renderElement, replace} from '../helpers/render.js';
 
 const Mode = {
   DEFAULT: `DEFAULT`,
@@ -19,7 +18,6 @@ export default class Movie {
     this._filmCardComponent = null;
     this._popUpFilmCardComponent = null;
     this._mode = Mode.DEFAULT;
-    this._filmListContainerComponent = new FilmsListContainer();
 
     this._popupClickHandler = this._popupClickHandler.bind(this);
     this._closePopupClickHandler = this._closePopupClickHandler.bind(this);
@@ -29,12 +27,8 @@ export default class Movie {
     this._handleFavoriteClick = this._handleFavoriteClick.bind(this);
   }
 
-  init(film) {
+  _getCardInfo(film) {
     this._film = film;
-
-    const prevFilmComponent = this._filmCardComponent;
-    const prevPopupComponent = this._popUpFilmCardComponent;
-
     this._filmCardComponent = new FilmCard(film);
     this._popUpFilmCardComponent = new PopUpFilmCard(film);
 
@@ -44,27 +38,23 @@ export default class Movie {
     this._filmCardComponent.setPosterClickHandler(this._popupClickHandler);
     this._filmCardComponent.setTitleClickHandler(this._popupClickHandler);
     this._filmCardComponent.setCommentsClickHandler(this._popupClickHandler);
-
-    if (prevFilmComponent === null || prevPopupComponent === null) {
-      renderElement(this._movieContainer, this._filmCardComponent, RenderPosition.BEFOREEND);
-      return;
-    }
-
-    if (this._movieContainer.getElement().contains(prevFilmComponent.getElement())) {
-      replace(this._filmCardComponent, prevFilmComponent);
-    }
-
-    if (this._movieContainer.getElement().contains(prevPopupComponent.getElement())) {
-      replace(this._popUpFilmCardComponent, prevPopupComponent);
-    }
-
-    remove(prevFilmComponent);
-    remove(prevPopupComponent);
   }
 
-  destroy() {
-    remove(this._filmCardComponent);
-    remove(this._popUpFilmCardComponent);
+  init(film) {
+    this._getCardInfo(film);
+    renderElement(this._movieContainer, this._filmCardComponent, RenderPosition.BEFOREEND);
+  }
+
+  update(film) {
+    const prevFilmComponent = this._filmCardComponent;
+    const prevPopupComponent = this._popUpFilmCardComponent;
+
+    this._getCardInfo(film);
+    if (this._mode === Mode.DEFAULT) {
+      replace(this._filmCardComponent, prevFilmComponent);
+    } if (this._mode === Mode.POPUP) {
+      replace(this._popUpFilmCardComponent, prevPopupComponent);
+    }
   }
 
   _closePopup() {
@@ -101,7 +91,7 @@ export default class Movie {
 
   resetView() {
     if (this._mode !== Mode.DEFAULT) {
-      this._openPopup();
+      this._closePopup();
     }
   }
 

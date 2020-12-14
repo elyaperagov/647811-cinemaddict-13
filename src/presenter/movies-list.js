@@ -50,13 +50,11 @@ export default class MoviesList {
 
   _handleFilmChange(updatedFilm) {
     this._films = updateItem(this._films, updatedFilm);
-    this._filmsPresenter[updatedFilm.id].init(updatedFilm);
+    this._filmsPresenter[updatedFilm.id].update(updatedFilm);
   }
 
   _handleModeChange() {
-    Object
-    .values(this._filmsPresenter)
-    .forEach((presenter) => presenter.resetView());
+    Object.values(this._filmsPresenter).forEach((presenter) => presenter.resetView());
   }
 
   _renderSort() {
@@ -80,7 +78,6 @@ export default class MoviesList {
   }
 
   _handleLoadMoreButtonClick() {
-    // debugger;
     this._films
       .slice(this._renderedFilmsCount, this._renderedFilmsCount + CARDS_IN_ROW)
       .forEach((film) => this._renderFilm(this._filmListContainerComponent, film));
@@ -120,17 +117,8 @@ export default class MoviesList {
     renderElement(this._filmsComponent, this._filmsTopRatedComponent, RenderPosition.BEFOREEND);
     renderElement(this._filmsComponent, this._filmsMostCommentedComponent, RenderPosition.BEFOREEND);
 
-
     const topRatedContainerElements = this._filmsTopRatedComponent.getElement().querySelector(`.films-list--extra .films-list__container`);
     const mostCommentedContainerElements = this._filmsMostCommentedComponent.getElement().querySelector(`.films-list--extra:last-child .films-list__container`);
-
-    // const filmsElement = this._filmsComponent.getElement();
-    // const filmsListElement = filmsElement.querySelector(`.films-list`);
-    // const filmsListContainerElement = this._filmListContainerComponent.getElement();
-    // console.log(filmsListContainerElement)
-
-    // renderElement(this._filmsTopRatedComponent, this._filmsTopRatedComponent, RenderPosition.BEFOREEND);
-    // renderElement(this._filmsMostCommentedComponent, this._filmsMostCommentedComponent, RenderPosition.BEFOREEND);
 
     const topRatedFilms = getMostRatedFilms(this._films);
 
