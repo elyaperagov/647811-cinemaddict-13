@@ -1,6 +1,7 @@
 import FilmCard from "../view/film-card.js";
 import PopUpFilmCard from "../view/popup.js";
-import {RenderPosition, renderElement, replace} from '../helpers/render.js';
+import FilmsListContainer from "../view/film-list-container.js";
+import {RenderPosition, renderElement, replace, remove} from '../helpers/render.js';
 
 const Mode = {
   DEFAULT: `DEFAULT`,
@@ -18,6 +19,7 @@ export default class Movie {
     this._filmCardComponent = null;
     this._popUpFilmCardComponent = null;
     this._mode = Mode.DEFAULT;
+    this._filmListContainerComponent = new FilmsListContainer();
 
     this._popupClickHandler = this._popupClickHandler.bind(this);
     this._closePopupClickHandler = this._closePopupClickHandler.bind(this);
@@ -36,19 +38,6 @@ export default class Movie {
     this._filmCardComponent = new FilmCard(film);
     this._popUpFilmCardComponent = new PopUpFilmCard(film);
 
-
-    // ВРЕМЕННЫЕ КОММЕНТАРИИ ДЛЯ ВОПРОСОВ
-
-    // const filmslistContainer = container.getElement().querySelector(`.films-list__container`); // сделал временно
-    // const filmsElement = this._filmsComponent.getElement();
-    // const filmsListElement = filmsElement.querySelector(`.films-list`);
-    // const filmsListContainerElement = this._filmListContainerComponent.getElement();
-
-    // if (prevFilmComponent && prevPopupComponent) {
-    //   renderElement(filmslistContainer, this._filmCardComponent, RenderPosition.BEFOREEND);
-    //   return;
-    // }
-
     this._filmCardComponent.setWatchListClickHandler(this._handleWatchListClick);
     this._filmCardComponent.setWatchedClickHandler(this._handleWatchedClick);
     this._filmCardComponent.setFavoriteClickHandler(this._handleFavoriteClick);
@@ -56,38 +45,26 @@ export default class Movie {
     this._filmCardComponent.setTitleClickHandler(this._popupClickHandler);
     this._filmCardComponent.setCommentsClickHandler(this._popupClickHandler);
 
-    // if (prevFilmComponent && prevPopupComponent) {
-    //   replace(this._filmCardComponent, prevFilmComponent);
-    //   replace(this._popUpFilmCardComponent, prevPopupComponent);
-    // } else {
-    //   renderElement(this._movieContainer, this._filmCardComponent, RenderPosition.BEFOREEND);
-    // }
-
     if (prevFilmComponent === null || prevPopupComponent === null) {
       renderElement(this._movieContainer, this._filmCardComponent, RenderPosition.BEFOREEND);
       return;
     }
 
-    if (this._mode === Mode.DEFAULT) {
-      debugger;
+    if (this._movieContainer.getElement().contains(prevFilmComponent.getElement())) {
       replace(this._filmCardComponent, prevFilmComponent);
-    } if (this._mode === Mode.POPUP) {
+    }
+
+    if (this._movieContainer.getElement().contains(prevPopupComponent.getElement())) {
       replace(this._popUpFilmCardComponent, prevPopupComponent);
     }
 
-    // ВРЕМЕННЫЕ КОММЕНТАРИИ ДЛЯ ВОПРОСОВ
-
-    // if (this._filmCardComponent.getElement().contains(prevFilmComponent.getElement())) {
-    //   debugger;
-    //   console.log(prevFilmComponent.getElement());
-    //   replace(this._filmCardComponent, prevFilmComponent);
-    // }
-    //
-    // if (this._filmCardComponent.getElement().contains(prevPopupComponent.getElement())) {
-    //   replace(this._filmCardComponent, prevPopupComponent);
-    // }
     remove(prevFilmComponent);
     remove(prevPopupComponent);
+  }
+
+  destroy() {
+    remove(this._filmCardComponent);
+    remove(this._popUpFilmCardComponent);
   }
 
   _closePopup() {
@@ -163,15 +140,4 @@ export default class Movie {
         )
     );
   }
-
-  // ВРЕМЕННЫЕ КОММЕНТАРИИ ДЛЯ ВОПРОСОВ
-
-  // closePopupBtn.addEventListener(`click`, (() => {
-  //   this._closePopup();
-  //   })
-  // );
-  //
-  // closePopupBtn.addEventListener(`click`, this._closePopup);  // в чём разница??
-
-
 }

@@ -54,11 +54,10 @@ export default class MoviesList {
   }
 
   _handleModeChange() {
-  debugger;
-   Object
-     .values(this._filmsPresenter)
-     .forEach((presenter) => presenter.resetView());
-   }
+    Object
+    .values(this._filmsPresenter)
+    .forEach((presenter) => presenter.resetView());
+  }
 
   _renderSort() {
     renderElement(this._filmsComponent, this._sortComponent, RenderPosition.AFTERBEGIN);
