@@ -4,14 +4,13 @@ import {RenderPosition, renderElement, replace} from '../helpers/render.js';
 
 const Mode = {
   DEFAULT: `DEFAULT`,
-  EDITING: `EDITING`
+  POPUP: `POPUP`
 };
 
 const siteBody = document.querySelector(`body`);
 
 export default class Movie {
   constructor(movieContainer, changeData, changeMode) {
-    // debugger;
     this._movieContainer = movieContainer;
     this._changeData = changeData;
     this._changeMode = changeMode;
@@ -37,6 +36,9 @@ export default class Movie {
     this._filmCardComponent = new FilmCard(film);
     this._popUpFilmCardComponent = new PopUpFilmCard(film);
 
+
+    // ВРЕМЕННЫЕ КОММЕНТАРИИ ДЛЯ ВОПРОСОВ
+
     // const filmslistContainer = container.getElement().querySelector(`.films-list__container`); // сделал временно
     // const filmsElement = this._filmsComponent.getElement();
     // const filmsListElement = filmsElement.querySelector(`.films-list`);
@@ -54,30 +56,44 @@ export default class Movie {
     this._filmCardComponent.setTitleClickHandler(this._popupClickHandler);
     this._filmCardComponent.setCommentsClickHandler(this._popupClickHandler);
 
+    // if (prevFilmComponent && prevPopupComponent) {
+    //   replace(this._filmCardComponent, prevFilmComponent);
+    //   replace(this._popUpFilmCardComponent, prevPopupComponent);
+    // } else {
+    //   renderElement(this._movieContainer, this._filmCardComponent, RenderPosition.BEFOREEND);
+    // }
 
-    if (prevFilmComponent && prevPopupComponent && this._mode === Mode.DEFAULT) {
-      replace(this._filmCardComponent, prevFilmComponent);
-      replace(this._popUpFilmCardComponent, prevPopupComponent);
-    } else {
+    if (prevFilmComponent === null || prevPopupComponent === null) {
       renderElement(this._movieContainer, this._filmCardComponent, RenderPosition.BEFOREEND);
+      return;
     }
 
-    // renderElement(this._movieContainer, this._filmCardComponent, RenderPosition.BEFOREEND);
+    if (this._mode === Mode.DEFAULT) {
+      debugger;
+      replace(this._filmCardComponent, prevFilmComponent);
+    } if (this._mode === Mode.POPUP) {
+      replace(this._popUpFilmCardComponent, prevPopupComponent);
+    }
+
+    // ВРЕМЕННЫЕ КОММЕНТАРИИ ДЛЯ ВОПРОСОВ
 
     // if (this._filmCardComponent.getElement().contains(prevFilmComponent.getElement())) {
+    //   debugger;
+    //   console.log(prevFilmComponent.getElement());
     //   replace(this._filmCardComponent, prevFilmComponent);
     // }
     //
     // if (this._filmCardComponent.getElement().contains(prevPopupComponent.getElement())) {
     //   replace(this._filmCardComponent, prevPopupComponent);
     // }
-    // remove(prevFilmComponent);
-    // remove(prevPopupComponent);
+    remove(prevFilmComponent);
+    remove(prevPopupComponent);
   }
 
   _closePopup() {
     this._popUpFilmCardComponent.getElement().remove();
     siteBody.classList.remove(`hide-overflow`);
+    this._mode = Mode.DEFAULT;
   }
 
   _onEscKeyDown(evt) {
@@ -94,6 +110,8 @@ export default class Movie {
     siteBody.classList.add(`hide-overflow`);
     closePopupBtn.addEventListener(`click`, this._closePopupClickHandler);
     document.addEventListener(`keydown`, this._closePopupClickHandler);
+    this._changeMode();
+    this._mode = Mode.POPUP;
   }
 
   _popupClickHandler() {
@@ -104,24 +122,10 @@ export default class Movie {
     this._closePopup();
   }
 
-  setDefaultView() {
+  resetView() {
     if (this._mode !== Mode.DEFAULT) {
-      this._removeDetails();
+      this._openPopup();
     }
-  }
-
-  _removeDetails() {
-    this._popUpFilmCardComponent.reset();
-
-    remove(this._popUpFilmCardComponent);
-    this._mode = Mode.DEFAULT;
-  }
-
-  _renderDetails() {
-    this._changeMode();
-    debugger;
-    render(siteBody, this._popUpFilmCardComponent, RenderPosition.BEFOREEND);
-    this._mode = Mode.DETAILS;
   }
 
   _handleWatchListClick() {
@@ -160,6 +164,7 @@ export default class Movie {
     );
   }
 
+  // ВРЕМЕННЫЕ КОММЕНТАРИИ ДЛЯ ВОПРОСОВ
 
   // closePopupBtn.addEventListener(`click`, (() => {
   //   this._closePopup();
