@@ -27,7 +27,7 @@ export default class Movie {
     this._handleFavoriteClick = this._handleFavoriteClick.bind(this);
   }
 
-  _getCardInfo(film) {
+  _getCardData(film) {
     this._film = film;
     this._filmCardComponent = new FilmCard(film);
     this._popUpFilmCardComponent = new PopUpFilmCard(film);
@@ -41,7 +41,7 @@ export default class Movie {
   }
 
   init(film) {
-    this._getCardInfo(film);
+    this._getCardData(film);
     renderElement(this._movieContainer, this._filmCardComponent, RenderPosition.BEFOREEND);
   }
 
@@ -49,7 +49,7 @@ export default class Movie {
     const prevFilmComponent = this._filmCardComponent;
     const prevPopupComponent = this._popUpFilmCardComponent;
 
-    this._getCardInfo(film);
+    this._getCardData(film);
     if (this._mode === Mode.DEFAULT) {
       replace(this._filmCardComponent, prevFilmComponent);
     } if (this._mode === Mode.POPUP) {
