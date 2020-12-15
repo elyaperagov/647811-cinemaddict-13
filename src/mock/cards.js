@@ -3,8 +3,11 @@ import {COMMENTS, YEARS, RATING, DURATION, DESCRIPTION_MAX, FILM_TITLES, descrip
 
 const RATING_DIVIDER = 10;
 
+const generateId = () => Date.now() + parseInt(Math.random() * 10000, 10);
+
 const generateCard = () => {
   let card = {
+    id: generateId(),
     title: getRandomArrayItem(FILM_TITLES),
     description: shuffleArray(descriptions).slice(0, getRandomInteger(1, DESCRIPTION_MAX)).join(` `),
     duration: getTimeFromMins(getRandomInteger(DURATION.MIN, DURATION.MAX)),
@@ -23,7 +26,6 @@ const generateCards = (itemCount) => {
   const cards = [];
   for (let i = 0; i < itemCount; i++) {
     cards.push(generateCard());
-
   }
   return cards;
 };

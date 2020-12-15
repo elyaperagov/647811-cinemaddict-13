@@ -24,6 +24,24 @@ const renderElement = (container, child, place) => {
   }
 };
 
+export const replace = (newChild, oldChild) => {
+  if (oldChild instanceof Abstract) {
+    oldChild = oldChild.getElement();
+  }
+
+  if (newChild instanceof Abstract) {
+    newChild = newChild.getElement();
+  }
+
+  const parent = oldChild.parentElement;
+
+  if (!parent || !oldChild || !newChild) {
+    throw new Error(`Can't replace unexisting elements`);
+  }
+
+  parent.replaceChild(newChild, oldChild);
+};
+
 const createElement = (template) => {
   const newElement = document.createElement(`div`); // 1
   newElement.innerHTML = template; // 2
@@ -48,10 +66,20 @@ const remove = (component) => {
   component.removeElement();
 };
 
+const getMostRatedFilms = (films) => {
+  return films.slice().sort((a, b) => b.rating - a.rating);
+};
+
+const getMostCommentedFilms = (films) => {
+  return films.slice().sort((a, b) => b.comments - a.comments);
+};
+
 export {
   renderTemplate,
   renderElement,
   createElement,
   remove,
-  RenderPosition
+  RenderPosition,
+  getMostRatedFilms,
+  getMostCommentedFilms
 };
