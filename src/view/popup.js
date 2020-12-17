@@ -195,7 +195,6 @@ export default class PopUpFilmCard extends AbstractView {
   }
 
   updateData(update) {
-    // debugger;
     if (!update) {
       return;
     }

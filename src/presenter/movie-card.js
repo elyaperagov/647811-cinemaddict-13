@@ -20,8 +20,6 @@ export default class Movie {
     this._mode = Mode.DEFAULT;
 
     this._popupClickHandler = this._popupClickHandler.bind(this);
-    // this._closePopupClickHandler = this._closePopupClickHandler.bind(this);
-
     this._handleWatchListClick = this._handleWatchListClick.bind(this);
     this._handleWatchedClick = this._handleWatchedClick.bind(this);
     this._handleFavoriteClick = this._handleFavoriteClick.bind(this);
@@ -30,6 +28,11 @@ export default class Movie {
 
   _getCardData(film) {
     this._film = film;
+  }
+
+  init(film) {
+    this._getCardData(film);
+
     this._filmCardComponent = new FilmCard(film);
     this._popUpFilmCardComponent = new PopUpFilmCard(film);
 
@@ -40,10 +43,7 @@ export default class Movie {
     this._filmCardComponent.setTitleClickHandler(this._popupClickHandler);
     this._filmCardComponent.setCommentsClickHandler(this._popupClickHandler);
     this._popUpFilmCardComponent.setClosePopupClickHandler(this._handleClosePopupClick);
-  }
 
-  init(film) {
-    this._getCardData(film);
     renderElement(this._movieContainer, this._filmCardComponent, RenderPosition.BEFOREEND);
   }
 
@@ -54,7 +54,8 @@ export default class Movie {
     this._getCardData(film);
     if (this._mode === Mode.DEFAULT) {
       replace(this._filmCardComponent, prevFilmComponent);
-    } if (this._mode === Mode.POPUP) {
+    }
+    if (this._mode === Mode.POPUP) {
       replace(this._popUpFilmCardComponent, prevPopupComponent);
     }
   }
