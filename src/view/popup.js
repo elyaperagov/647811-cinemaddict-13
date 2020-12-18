@@ -191,10 +191,11 @@ export default class PopUpFilmCard extends AbstractView {
     this._watchListClickHandler = this._watchListClickHandler.bind(this);
     this._watchedClickHandler = this._watchedClickHandler.bind(this);
     this._favoriteClickHandler = this._favoriteClickHandler.bind(this);
-    this._setInnerHandlers();
+    // this._setInnerHandlers();
   }
 
   updateData(update) {
+    // debugger;
     if (!update) {
       return;
     }
@@ -228,18 +229,10 @@ export default class PopUpFilmCard extends AbstractView {
   }
 
   _setInnerHandlers() {
-    this.getElement()
-      .querySelector(`.film-details__control-label--watchlist`)
-      .addEventListener(`click`, this._watchListClickHandler);
-    this.getElement()
-      .querySelector(`.film-details__control-label--watched`)
-      .addEventListener(`click`, this._watchedClickHandler);
-    this.getElement()
-      .querySelector(`.film-details__control-label--favorite`)
-      .addEventListener(`click`, this._favoriteClickHandler);
-    this.getElement()
-      .querySelector(`.film-details__close-btn`)
-      .addEventListener(`click`, this._closePopupClickHandler);
+    this.setClosePopupClickHandler(this._callback.closePopupClick);
+    this.setFavoriteClickHandler(this._callback.favoriteClick);
+    this.setWatchListClickHandler(this._callback.watchListClick);
+    this.setWatchedClickHandler(this._callback.watchedClick);
   }
 
   _watchListClickHandler(evt) {
@@ -268,7 +261,8 @@ export default class PopUpFilmCard extends AbstractView {
 
   _closePopupClickHandler(evt) {
     evt.preventDefault();
-    this._callback.closePopupClick();
+    this._callback.closePopupClick(PopUpFilmCard.parseDataToFilm(this._data));
+    // this._callback.formSubmit(TaskEdit.parseDataToTask(this._data));
   }
 
   setWatchListClickHandler(callback) {
@@ -303,9 +297,9 @@ export default class PopUpFilmCard extends AbstractView {
     );
   }
 
-  // static parseDataToFilm(data) {
-  //   data = Object.assign({}, data);
+  static parseDataToFilm(film) {
+    film = Object.assign({}, film);
 
-  //   return data;
-  // }
+    return film;
+  }
 }

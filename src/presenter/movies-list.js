@@ -50,7 +50,7 @@ export default class MoviesList {
 
   _handleFilmChange(updatedFilm) {
     this._films = updateItem(this._films, updatedFilm);
-    this._filmsPresenter[updatedFilm.id].update(updatedFilm);
+    this._filmsPresenter[updatedFilm.id].init(updatedFilm);
   }
 
   _handleModeChange() {
