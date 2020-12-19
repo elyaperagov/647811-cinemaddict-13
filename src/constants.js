@@ -44,6 +44,13 @@ const genres = [
   `Drama`
 ];
 
+const emojies = [
+  `angry`,
+  `puke`,
+  `sleeping`,
+  `smile`
+];
+
 const FILM_TITLES = [
   `Made for each other`,
   `Popeye meets sinbad`,
@@ -62,5 +69,6 @@ export {
   DESCRIPTION_MAX,
   FILM_TITLES,
   descriptions,
-  genres
+  genres,
+  emojies
 };

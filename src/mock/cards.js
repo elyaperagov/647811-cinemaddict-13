@@ -1,5 +1,5 @@
 import {getRandomArrayItem, getRandomInteger, randomDate, shuffleArray, getTimeFromMins} from '../helpers/common.js';
-import {COMMENTS, YEARS, RATING, DURATION, DESCRIPTION_MAX, FILM_TITLES, descriptions, genres} from '../constants';
+import {COMMENTS, YEARS, RATING, DURATION, DESCRIPTION_MAX, FILM_TITLES, descriptions, genres, emojies} from '../constants';
 
 const RATING_DIVIDER = 10;
 
@@ -18,6 +18,7 @@ const generateCard = () => {
     isInWatchList: Boolean(getRandomInteger()),
     isWatched: Boolean(getRandomInteger()),
     isFavorite: Boolean(getRandomInteger()),
+    allEmojies: emojies
   };
   return card;
 };

@@ -83,7 +83,9 @@ export default class Movie {
   _openPopup() {
     renderElement(siteBody, this._popUpFilmCardComponent, RenderPosition.BEFOREEND);
     siteBody.classList.add(`hide-overflow`);
-    document.addEventListener(`keydown`, this._handleClosePopupClick);
+    document.addEventListener(`keydown`, (evt) => {
+      this._onEscKeyDown(evt);
+    });
     // this._popUpFilmCardComponent.setClosePopupClickHandler(this._handleClosePopupClick);
     // this._popUpFilmCardComponent.setWatchListClickHandler(this._handleWatchListClick);
     // this._popUpFilmCardComponent.setWatchedClickHandler(this._handleWatchedClick);
