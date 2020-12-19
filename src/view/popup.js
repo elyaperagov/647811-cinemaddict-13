@@ -1,4 +1,4 @@
-import AbstractView from "./abstract.js";
+import Smart from "./smart.js";
 import {getPosterName} from '../helpers/common.js';
 
 export const createFilmPopupTemplate = (data) => {
@@ -175,7 +175,7 @@ export const createFilmPopupTemplate = (data) => {
 };
 
 
-export default class PopUpFilmCard extends AbstractView {
+export default class PopUpFilmCard extends Smart {
   constructor(filmCard) {
     super();
     this._filmCard = filmCard;
@@ -185,35 +185,6 @@ export default class PopUpFilmCard extends AbstractView {
     this._watchedClickHandler = this._watchedClickHandler.bind(this);
     this._favoriteClickHandler = this._favoriteClickHandler.bind(this);
     // this._setInnerHandlers();
-  }
-
-  updateData(update, justDataUpdating) {
-    // debugger;
-    if (!update) {
-      return;
-    }
-
-    this._data = Object.assign(
-        {},
-        this._data,
-        update
-    );
-
-    if (justDataUpdating) {
-      return;
-    }
-
-    this.updateElement();
-  }
-
-  updateElement() {
-    let prevElement = this.getElement();
-    const parent = prevElement.parentElement;
-    this.removeElement();
-
-    const newElement = this.getElement();
-    parent.replaceChild(newElement, prevElement);
-    this.restoreHandlers();
   }
 
   restoreHandlers() {

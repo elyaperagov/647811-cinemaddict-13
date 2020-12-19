@@ -52,18 +52,28 @@ export default class Movie {
       return;
     }
 
-    if (prevFilmComponent && prevPopupComponent) {
+    // if (prevFilmComponent && prevPopupComponent) {
+    //   replace(this._filmCardComponent, prevFilmComponent);
+    //   replace(this._popUpFilmCardComponent, prevPopupComponent);
+    // }  ДЛЯ ВОПРОСА НА СОЗВОНЕ!
+
+    if (siteBody.contains(prevFilmComponent.getElement())) {
       replace(this._filmCardComponent, prevFilmComponent);
+    }
+
+    if (siteBody.contains(prevPopupComponent.getElement())) {
       replace(this._popUpFilmCardComponent, prevPopupComponent);
     }
 
     remove(prevPopupComponent);
     remove(prevFilmComponent);
+    //  ДЛЯ ВОПРОСА НА СОЗВОНЕ!
   }
 
   destroy() {
     remove(this._filmCardComponent);
     remove(this._popUpFilmCardComponent);
+    //  ДЛЯ ВОПРОСА НА СОЗВОНЕ!
   }
 
   _closePopup() {
