@@ -1,9 +1,15 @@
 import {getRandomArrayItem, getRandomInteger, randomDate, shuffleArray, getTimeFromMins} from '../helpers/common.js';
-import {COMMENTS, YEARS, RATING, DURATION, DESCRIPTION_MAX, FILM_TITLES, descriptions, genres} from '../constants';
+import {COMMENTS, YEARS, RATING, DURATION, DESCRIPTION_MAX, FILM_TITLES, descriptions, genres, EMOJIES} from '../constants';
 
 const RATING_DIVIDER = 10;
 
 const generateId = () => Date.now() + parseInt(Math.random() * 10000, 10);
+
+const getRandomEmoji = () => {
+  const randomIndex = getRandomInteger(0, EMOJIES.length - 1);
+
+  return EMOJIES[randomIndex];
+};
 
 const generateCard = () => {
   let card = {
@@ -18,6 +24,7 @@ const generateCard = () => {
     isInWatchList: Boolean(getRandomInteger()),
     isWatched: Boolean(getRandomInteger()),
     isFavorite: Boolean(getRandomInteger()),
+    emojies: getRandomEmoji(),
   };
   return card;
 };

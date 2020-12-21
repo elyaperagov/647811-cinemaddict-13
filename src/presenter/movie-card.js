@@ -1,6 +1,6 @@
 import FilmCard from "../view/film-card.js";
 import PopUpFilmCard from "../view/popup.js";
-import {RenderPosition, renderElement, replace} from '../helpers/render.js';
+import {RenderPosition, renderElement, replace, remove} from '../helpers/render.js';
 
 const Mode = {
   DEFAULT: `DEFAULT`,
@@ -20,15 +20,18 @@ export default class Movie {
     this._mode = Mode.DEFAULT;
 
     this._popupClickHandler = this._popupClickHandler.bind(this);
-    this._closePopupClickHandler = this._closePopupClickHandler.bind(this);
-
     this._handleWatchListClick = this._handleWatchListClick.bind(this);
     this._handleWatchedClick = this._handleWatchedClick.bind(this);
     this._handleFavoriteClick = this._handleFavoriteClick.bind(this);
+    this._handleClosePopupClick = this._handleClosePopupClick.bind(this);
   }
 
-  _getCardData(film) {
+  init(film) {
     this._film = film;
+
+    const prevFilmComponent = this._filmCardComponent;
+    const prevPopupComponent = this._popUpFilmCardComponent;
+
     this._filmCardComponent = new FilmCard(film);
     this._popUpFilmCardComponent = new PopUpFilmCard(film);
 
@@ -38,23 +41,32 @@ export default class Movie {
     this._filmCardComponent.setPosterClickHandler(this._popupClickHandler);
     this._filmCardComponent.setTitleClickHandler(this._popupClickHandler);
     this._filmCardComponent.setCommentsClickHandler(this._popupClickHandler);
-  }
 
-  init(film) {
-    this._getCardData(film);
-    renderElement(this._movieContainer, this._filmCardComponent, RenderPosition.BEFOREEND);
-  }
+    this._popUpFilmCardComponent.setClosePopupClickHandler(this._handleClosePopupClick);
+    this._popUpFilmCardComponent.setWatchListClickHandler(this._handleWatchListClick);
+    this._popUpFilmCardComponent.setFavoriteClickHandler(this._handleFavoriteClick);
+    this._popUpFilmCardComponent.setWatchedClickHandler(this._handleWatchedClick);
 
-  update(film) {
-    const prevFilmComponent = this._filmCardComponent;
-    const prevPopupComponent = this._popUpFilmCardComponent;
+    if (prevFilmComponent === null || prevPopupComponent === null) {
+      renderElement(this._movieContainer, this._filmCardComponent, RenderPosition.BEFOREEND);
+      return;
+    }
 
-    this._getCardData(film);
-    if (this._mode === Mode.DEFAULT) {
+    if (siteBody.contains(prevFilmComponent.getElement())) {
       replace(this._filmCardComponent, prevFilmComponent);
-    } if (this._mode === Mode.POPUP) {
+    }
+
+    if (siteBody.contains(prevPopupComponent.getElement())) {
       replace(this._popUpFilmCardComponent, prevPopupComponent);
     }
+
+    remove(prevPopupComponent);
+    remove(prevFilmComponent);
+  }
+
+  destroy() {
+    remove(this._filmCardComponent);
+    remove(this._popUpFilmCardComponent);
   }
 
   _closePopup() {
@@ -73,10 +85,10 @@ export default class Movie {
 
   _openPopup() {
     renderElement(siteBody, this._popUpFilmCardComponent, RenderPosition.BEFOREEND);
-    const closePopupBtn = this._popUpFilmCardComponent.getElement().querySelector(`.film-details__close-btn`);
     siteBody.classList.add(`hide-overflow`);
-    closePopupBtn.addEventListener(`click`, this._closePopupClickHandler);
-    document.addEventListener(`keydown`, this._closePopupClickHandler);
+    document.addEventListener(`keydown`, (evt) => {
+      this._onEscKeyDown(evt);
+    });
     this._changeMode();
     this._mode = Mode.POPUP;
   }
@@ -85,7 +97,7 @@ export default class Movie {
     this._openPopup();
   }
 
-  _closePopupClickHandler() {
+  _handleClosePopupClick() {
     this._closePopup();
   }
 

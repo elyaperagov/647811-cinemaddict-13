@@ -7,16 +7,16 @@ const createFilmCardTemplate = (filmCard) => {
   const posterName = `./images/posters/` + getPosterName(title) + `.png`;
 
   const isInWatchListClassName = isInWatchList
-    ? `film-card__controls-item--add-to-watchlist`
-    : `film-card__controls-item--add-to-watchlist film-card__controls-item--active`;
+    ? `film-card__controls-item--add-to-watchlist film-card__controls-item--active`
+    : `film-card__controls-item--add-to-watchlist`;
 
   const isWatchedClassName = isWatched
-    ? `film-card__controls-item--mark-as-watched`
-    : `film-card__controls-item--mark-as-watched film-card__controls-item--active`;
+    ? `film-card__controls-item--mark-as-watched  film-card__controls-item--active`
+    : `film-card__controls-item--mark-as-watched`;
 
   const isfavoriteClassName = isFavorite
-    ? `film-card__controls-item--favorite`
-    : `film-card__controls-item--favorite film-card__controls-item--active`;
+    ? `film-card__controls-item--favorite  film-card__controls-item--active`
+    : `film-card__controls-item--favorite`;
 
   return `<article class="film-card">
     <h3 class="film-card__title">${title}</h3>
