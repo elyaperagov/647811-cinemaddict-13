@@ -44,7 +44,7 @@ const genres = [
   `Drama`
 ];
 
-const emojies = [
+const EMOJIES = [
   `angry`,
   `puke`,
   `sleeping`,
@@ -70,5 +70,5 @@ export {
   FILM_TITLES,
   descriptions,
   genres,
-  emojies
+  EMOJIES
 };

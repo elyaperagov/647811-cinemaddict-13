@@ -52,11 +52,6 @@ export default class Movie {
       return;
     }
 
-    // if (prevFilmComponent && prevPopupComponent) {
-    //   replace(this._filmCardComponent, prevFilmComponent);
-    //   replace(this._popUpFilmCardComponent, prevPopupComponent);
-    // }  ДЛЯ ВОПРОСА НА СОЗВОНЕ!
-
     if (siteBody.contains(prevFilmComponent.getElement())) {
       replace(this._filmCardComponent, prevFilmComponent);
     }
@@ -67,13 +62,11 @@ export default class Movie {
 
     remove(prevPopupComponent);
     remove(prevFilmComponent);
-    //  ДЛЯ ВОПРОСА НА СОЗВОНЕ!
   }
 
   destroy() {
     remove(this._filmCardComponent);
     remove(this._popUpFilmCardComponent);
-    //  ДЛЯ ВОПРОСА НА СОЗВОНЕ!
   }
 
   _closePopup() {
@@ -96,10 +89,6 @@ export default class Movie {
     document.addEventListener(`keydown`, (evt) => {
       this._onEscKeyDown(evt);
     });
-    // this._popUpFilmCardComponent.setClosePopupClickHandler(this._handleClosePopupClick);
-    // this._popUpFilmCardComponent.setWatchListClickHandler(this._handleWatchListClick);
-    // this._popUpFilmCardComponent.setWatchedClickHandler(this._handleWatchedClick);
-    // this._popUpFilmCardComponent.setFavoriteClickHandler(this._handleFavoriteClick);
     this._changeMode();
     this._mode = Mode.POPUP;
   }

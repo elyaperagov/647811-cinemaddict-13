@@ -1,8 +1,9 @@
 import Smart from "./smart.js";
 import {getPosterName} from '../helpers/common.js';
+import {EMOJIES} from "../constants.js";
 
 export const createFilmPopupTemplate = (data) => {
-  let {title, description, genre, year, rating, duration, isInWatchList, isWatched, isFavorite, allEmojies} = data;
+  let {title, description, genre, year, rating, duration, isInWatchList, isWatched, isFavorite, emojies} = data;
 
   const isInWatchListButton = isInWatchList ? `checked` : ``;
   const isWatchedButton = isWatched ? `checked` : ``;
@@ -10,16 +11,16 @@ export const createFilmPopupTemplate = (data) => {
 
   const posterName = `./images/posters/` + getPosterName(title) + `.png`;
 
-  const generateEmoji = (emojies) => {
-    return emojies.map((emoji) => {
-      `<input class="film-details__emoji-item visually-hidden" name="comment-emoji" type="radio" id="emoji-${emoji}" value="${emoji}">
+  const generateEmoji = (currentEmoji) => {
+    return EMOJIES.map((emoji) => {
+      return `<input class="film-details__emoji-item visually-hidden" name="comment-emoji" type="radio" id="emoji-${emoji}" value="${emoji}" ${currentEmoji === emoji ? `checked` : ``}>
       <label class="film-details__emoji-label" for="emoji-${emoji}">
         <img src="./images/emoji/${emoji}.png" width="30" height="30" alt="${emoji}">
       </label>`;
-    });
+    }).join(``);
   };
 
-  const generateEmojiesTemplate = generateEmoji(allEmojies);
+  const generateEmojiesTemplate = generateEmoji(emojies);
 
   return `<section class="film-details">
     <form class="film-details__inner" action="" method="get">
@@ -158,7 +159,7 @@ export const createFilmPopupTemplate = (data) => {
           </ul>
 
           <div class="film-details__new-comment">
-            <div class="film-details__add-emoji-label"></div>
+            <div class="film-details__add-emoji-label"><img src="images/emoji/${emojies}.png" width="55" height="55" alt="emoji-${emojies}"></img></div>
 
             <label class="film-details__comment-label">
               <textarea class="film-details__comment-input" placeholder="Select reaction below and write comment here" name="comment"></textarea>
@@ -184,7 +185,8 @@ export default class PopUpFilmCard extends Smart {
     this._watchListClickHandler = this._watchListClickHandler.bind(this);
     this._watchedClickHandler = this._watchedClickHandler.bind(this);
     this._favoriteClickHandler = this._favoriteClickHandler.bind(this);
-    // this._setInnerHandlers();
+    this._emojiChangeHandler = this._emojiChangeHandler.bind(this);
+    this._setInnerHandlers();
   }
 
   restoreHandlers() {
@@ -200,8 +202,7 @@ export default class PopUpFilmCard extends Smart {
     evt.preventDefault();
     this.updateData({
       emojies: evt.target.value
-    }
-    );
+    });
   }
 
   _setInnerHandlers() {
@@ -209,6 +210,7 @@ export default class PopUpFilmCard extends Smart {
     this.setFavoriteClickHandler(this._callback.favoriteClick);
     this.setWatchListClickHandler(this._callback.watchListClick);
     this.setWatchedClickHandler(this._callback.watchedClick);
+    this.getElement().querySelector(`.film-details__emoji-list`).addEventListener(`change`, this._emojiChangeHandler);
   }
 
   _watchListClickHandler(evt) {
