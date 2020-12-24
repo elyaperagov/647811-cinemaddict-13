@@ -9,7 +9,7 @@ import FilmsListContainer from "../view/film-list-container.js";
 import TopRated from "../view/top-rated.js";
 import NoFilms from "../view/no-films.js";
 import Movie from "./movie-card.js";
-import {updateItem} from "../helpers/common.js";
+// import {updateItem} from "../helpers/common.js";
 import {SortType, UpdateType, UserAction} from "../constants.js";
 import {RenderPosition, renderElement, remove, getMostRatedFilms, getMostCommentedFilms} from '../helpers/render.js';
 
@@ -34,6 +34,7 @@ export default class MoviesList {
     this._handleModelEvent = this._handleModelEvent.bind(this);
     this._handleModeChange = this._handleModeChange.bind(this);
     this._handleLoadMoreButtonClick = this._handleLoadMoreButtonClick.bind(this);
+    this._handleSortTypeChange = this._handleSortTypeChange.bind(this);
 
     this._moviesModel.addObserver(this._handleModelEvent);
   }
@@ -55,10 +56,10 @@ export default class MoviesList {
   _getFilms() {
     switch (this._currentSortType) {
       // case SortType.DATE:
-      //   return this._moviesModel.getTasks().slice().sort(sortTaskUp);
+      //   return this._moviesModel.getFilms().slice().sort(sortTaskUp);
       case SortType.RATING:
-        return this._moviesModel.getTasks().sort((a, b) => {
-          return b.raiting - a.raiting;
+        return this._moviesModel.getFilms().sort((a, b) => {
+          return b.rating - a.rating;
         });
     }
 
@@ -95,7 +96,7 @@ export default class MoviesList {
       this._renderedFilmsCount = CARDS_IN_ROW;
     } else {
       this._renderedFilmsCount = Math.min(filmsCount, this._renderedFilmsCount);
-    } /*СПРОСИТЬ НА СОЗВОНЕ*/
+    } /*  СПРОСИТЬ НА СОЗВОНЕ */
 
     if (resetSortType) {
       this._currentSortType = SortType.DEFAULT;
@@ -163,7 +164,6 @@ export default class MoviesList {
     const newRenderedFilmsCount = Math.min(filmsCount, this._renderedFilmsCount + CARDS_IN_ROW);
     const films = this._getFilms().slice(this._getFilms, newRenderedFilmsCount);
 
-    debugger;
     // СПРОСИТЬ НА СОЗВОНЕ ПРО ЛОГИКУ newRenderedFilmsCount
     this._renderFilms(films);
     this._renderedFilmsCount = newRenderedFilmsCount;
@@ -176,7 +176,7 @@ export default class MoviesList {
   _renderLoadMoreButton() {
     if (this._loadMoreButtonComponent !== null) {
       this._loadMoreButtonComponent = null;
-    } /*НЕ ПОНЯЛ ЭТО УСЛОВИЕ*/
+    } /*  НЕ ПОНЯЛ ЭТО УСЛОВИЕ  */
 
     this._showMoreButtonComponent = new ShowMoreButton();
     this._showMoreButtonComponent.loadMoreClickHandler(this._handleLoadMoreButtonClick);
