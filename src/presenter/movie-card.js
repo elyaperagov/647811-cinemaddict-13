@@ -1,5 +1,6 @@
 import FilmCard from "../view/film-card.js";
 import PopUpFilmCard from "../view/popup.js";
+import {UserAction, UpdateType} from "../constants.js";
 import {RenderPosition, renderElement, replace, remove} from '../helpers/render.js';
 
 const Mode = {
@@ -109,6 +110,8 @@ export default class Movie {
 
   _handleWatchListClick() {
     this._changeData(
+        UserAction.UPDATE_FILM,
+        UpdateType.MINOR,
         Object.assign(
             {},
             this._film,
@@ -121,6 +124,8 @@ export default class Movie {
 
   _handleFavoriteClick() {
     this._changeData(
+        UserAction.UPDATE_FILM,
+        UpdateType.MINOR,
         Object.assign(
             {},
             this._film,
@@ -133,6 +138,8 @@ export default class Movie {
 
   _handleWatchedClick() {
     this._changeData(
+        UserAction.UPDATE_FILM,
+        UpdateType.MINOR,
         Object.assign(
             {},
             this._film,
