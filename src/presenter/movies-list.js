@@ -95,6 +95,7 @@ export default class MoviesList {
     if (resetRenderedFilmsCount) {
       this._renderedFilmsCount = CARDS_IN_ROW;
     } else {
+      debugger;
       this._renderedFilmsCount = Math.min(filmsCount, this._renderedFilmsCount);
     } /*  СПРОСИТЬ НА СОЗВОНЕ */
 

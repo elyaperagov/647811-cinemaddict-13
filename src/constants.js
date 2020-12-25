@@ -79,6 +79,13 @@ const UpdateType = {
   MAJOR: `MAJOR`
 };
 
+const FilterType = {
+  All: `All movies`,
+  WATCHLIST: `Watchlist`,
+  HISTORY: `History`,
+  FAVORITES: `Favorites`
+};
+
 export {
   COMMENTS,
   YEARS,
@@ -91,5 +98,6 @@ export {
   SortType,
   UserAction,
   UpdateType,
+  FilterType,
   EMOJIES
 };

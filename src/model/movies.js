@@ -28,6 +28,7 @@ export default class Movies extends Observer {
     ];
 
     this._notify(updateType, update);
+    debugger;
   }
 
   addComment(updateType, update) {
