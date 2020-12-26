@@ -1,4 +1,4 @@
-import FilterView from "../view/filter.js";
+import FilterView from "../view/navigation.js";
 import {renderElement, RenderPosition, replace, remove} from "../helpers/render.js";
 import {filter} from "../helpers/filter.js";
 import {FilterType, UpdateType} from "../constants.js";
@@ -15,7 +15,7 @@ export default class Filter {
     this._handleModelEvent = this._handleModelEvent.bind(this);
     this._handleFilterTypeChange = this._handleFilterTypeChange.bind(this);
 
-    this._tasksModel.addObserver(this._handleModelEvent);
+    this._moviesModel.addObserver(this._handleModelEvent);
     this._filterModel.addObserver(this._handleModelEvent);
   }
 
@@ -29,7 +29,7 @@ export default class Filter {
     this._filterComponent.setFilterTypeChangeHandler(this._handleFilterTypeChange);
 
     if (prevFilterComponent === null) {
-      render(this._filterContainer, this._filterComponent, RenderPosition.BEFOREEND);
+      renderElement(this._filterContainer, this._filterComponent, RenderPosition.BEFOREEND);
       return;
     }
 
@@ -51,6 +51,7 @@ export default class Filter {
 
   _getFilters() {
     const films = this._moviesModel.getFilms();
+    // debugger;
 
     return [
       {

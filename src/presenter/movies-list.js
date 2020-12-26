@@ -57,13 +57,15 @@ export default class MoviesList {
   _getFilms() {
     // const filterType = this._filterModel.getFilter();
     // const films = this._moviesModel.getFilms();
-    // const filtredFilms = filter[filterType](films);  НУЖНО КОГДА НАСТРОЮ ПРЕЗЕНТЕР ФИЛЬТРОВ
+    // const filtredFilms = filter[filterType](films);
 
     switch (this._currentSortType) {
-      // case SortType.DATE:
-      //   return this._moviesModel.getFilms().slice().sort(sortTaskUp);
+      case SortType.DATE:
+        return this._moviesModel.getFilms().slice().sort((a, b) => {
+          return b.year - a.year;
+        });
       case SortType.RATING:
-        return this._moviesModel.getFilms().sort((a, b) => {
+        return this._moviesModel.getFilms().slice().sort((a, b) => {
           return b.rating - a.rating;
         });
     }
