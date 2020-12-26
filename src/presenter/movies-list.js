@@ -18,8 +18,9 @@ const MOST_COMMENTED_FILMS = 2;
 const TOP_RATED_FILMS = 2;
 
 export default class MoviesList {
-  constructor(container, moviesModel) {
+  constructor(container, moviesModel, filterModel) {
     this._moviesModel = moviesModel;
+    this._filterModel = filterModel;
     this._container = container;
     this._renderedFilmsCount = CARDS_IN_ROW;
     this._filmsPresenter = {};
@@ -54,6 +55,10 @@ export default class MoviesList {
   }
 
   _getFilms() {
+    // const filterType = this._filterModel.getFilter();
+    // const films = this._moviesModel.getFilms();
+    // const filtredFilms = filter[filterType](films);  НУЖНО КОГДА НАСТРОЮ ПРЕЗЕНТЕР ФИЛЬТРОВ
+
     switch (this._currentSortType) {
       // case SortType.DATE:
       //   return this._moviesModel.getFilms().slice().sort(sortTaskUp);
@@ -63,6 +68,7 @@ export default class MoviesList {
         });
     }
 
+    // return filtredFilms;
     return this._moviesModel.getFilms();
   }
 
@@ -95,7 +101,6 @@ export default class MoviesList {
     if (resetRenderedFilmsCount) {
       this._renderedFilmsCount = CARDS_IN_ROW;
     } else {
-      debugger;
       this._renderedFilmsCount = Math.min(filmsCount, this._renderedFilmsCount);
     } /*  СПРОСИТЬ НА СОЗВОНЕ */
 

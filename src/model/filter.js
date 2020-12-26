@@ -1,7 +1,7 @@
 import Observer from "../helpers/observer.js";
 import {FilterType} from "../constants.js";
 
-export default class Filter extends Observer {
+export default class FilterModel extends Observer {
   constructor() {
     super();
     this._activeFilter = FilterType.ALL;
