@@ -51,8 +51,6 @@ export default class Filter {
 
   _getFilters() {
     const films = this._moviesModel.getFilms();
-    // debugger;
-
     return [
       {
         type: FilterType.ALL,

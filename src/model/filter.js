@@ -13,6 +13,7 @@ export default class FilterModel extends Observer {
   }
 
   getFilter() {
+    // debugger;
     return this._activeFilter;
   }
 }

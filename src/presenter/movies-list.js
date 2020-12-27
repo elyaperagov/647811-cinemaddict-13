@@ -8,10 +8,11 @@ import MostCommented from "../view/most-commented.js";
 import FilmsListContainer from "../view/film-list-container.js";
 import TopRated from "../view/top-rated.js";
 import NoFilms from "../view/no-films.js";
+// import {FilterType} from "../constants.js";
 import Movie from "./movie-card.js";
-// import {updateItem} from "../helpers/common.js";
+import {filter} from "../helpers/filter.js";
 import {SortType, UpdateType, UserAction} from "../constants.js";
-import {RenderPosition, renderElement, remove, getMostRatedFilms, getMostCommentedFilms} from '../helpers/render.js';
+import {RenderPosition, renderElement, remove, getMostRatedFilms, getMostCommentedFilms, getDateSortedFilms} from '../helpers/render.js';
 
 const CARDS_IN_ROW = 5;
 const MOST_COMMENTED_FILMS = 2;
@@ -38,6 +39,7 @@ export default class MoviesList {
     this._handleSortTypeChange = this._handleSortTypeChange.bind(this);
 
     this._moviesModel.addObserver(this._handleModelEvent);
+    this._filterModel.addObserver(this._handleModelEvent);
   }
 
   render() {
@@ -45,6 +47,7 @@ export default class MoviesList {
     renderElement(this._filmsComponent, this._filmsListComponent, RenderPosition.BEFOREEND);
 
     this._moviesModel.addObserver(this._handleModelEvent);
+    this._filterModel.addObserver(this._handleModelEvent);
 
     const filmsElement = this._filmsComponent.getElement();
     const filmsListElement = filmsElement.querySelector(`.films-list`);
@@ -55,23 +58,19 @@ export default class MoviesList {
   }
 
   _getFilms() {
-    // const filterType = this._filterModel.getFilter();
-    // const films = this._moviesModel.getFilms();
-    // const filtredFilms = filter[filterType](films);
+    const filterType = this._filterModel.getFilter();
+    const films = this._moviesModel.getFilms();
+    const filtredFilms = filter[filterType](films);
 
     switch (this._currentSortType) {
       case SortType.DATE:
-        return this._moviesModel.getFilms().slice().sort((a, b) => {
-          return b.year - a.year;
-        });
+        return getDateSortedFilms(filtredFilms);
       case SortType.RATING:
-        return this._moviesModel.getFilms().slice().sort((a, b) => {
-          return b.rating - a.rating;
-        });
+        return getMostRatedFilms(filtredFilms);
     }
 
-    // return filtredFilms;
-    return this._moviesModel.getFilms();
+    return filtredFilms;
+    // return this._moviesModel.getFilms();
   }
 
   _handleSortTypeChange(sortType) {

@@ -80,7 +80,7 @@ const UpdateType = {
 };
 
 const FilterType = {
-  All: `All movies`,
+  ALL: `All`,
   WATCHLIST: `Watchlist`,
   HISTORY: `History`,
   FAVORITES: `Favorites`
