@@ -10,7 +10,6 @@ import TopRated from "../view/top-rated.js";
 import NoFilms from "../view/no-films.js";
 // import {FilterType} from "../constants.js";
 import Movie from "./movie-card.js";
-// import {generateComment} from "../mock/comments.js";
 import {filter} from "../helpers/filter.js";
 import {SortType, UpdateType, UserAction} from "../constants.js";
 import {RenderPosition, renderElement, remove, getMostRatedFilms, getMostCommentedFilms, getDateSortedFilms} from '../helpers/render.js';
@@ -163,6 +162,7 @@ export default class MoviesList {
 
   _renderFilm(container, film) {
     const moviePresenter = new Movie(container, this._handleViewAction, this._handleModeChange, this._commentsModel);
+
     moviePresenter.init(film);
     this._filmsPresenter[film.id] = moviePresenter;
   }

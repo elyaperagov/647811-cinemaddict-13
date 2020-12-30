@@ -18,6 +18,8 @@ const DURATION = {
   MAX: 300
 };
 
+const COMMENTS_QUANTITY = 50;
+
 const DESCRIPTION_MAX = 5;
 
 const messages = [
@@ -115,6 +117,7 @@ export {
   DURATION,
   DESCRIPTION_MAX,
   FILM_TITLES,
+  COMMENTS_QUANTITY,
   descriptions,
   genres,
   SortType,

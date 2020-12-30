@@ -1,9 +1,9 @@
 import FilmCard from "../view/film-card.js";
 import PopUpFilmCard from "../view/popup.js";
 import {UserAction, UpdateType} from "../constants.js";
-// import {generateComment} from "../mock/comments.js";
-// import CommentsModel from "../model/comments-model.js";
 import {RenderPosition, renderElement, replace, remove} from '../helpers/render.js';
+import {getRandomInteger, getMeRandomElements} from '../helpers/common.js';
+import {COMMENTS_QUANTITY} from '../constants.js';
 
 const Mode = {
   DEFAULT: `DEFAULT`,
@@ -32,14 +32,15 @@ export default class Movie {
 
   init(film) {
     this._film = film;
-    // const comments = this._commentsModel.getComments(film);
-    // console.log(comments);
 
     const prevFilmComponent = this._filmCardComponent;
     const prevPopupComponent = this._popUpFilmCardComponent;
 
-    this._filmCardComponent = new FilmCard(film);
-    this._popUpFilmCardComponent = new PopUpFilmCard(film);
+    const commentsCollection = getMeRandomElements(this._commentsModel, getRandomInteger(0, COMMENTS_QUANTITY));
+
+    this._filmCardComponent = new FilmCard(film, commentsCollection);
+    this._popUpFilmCardComponent = new PopUpFilmCard(film, commentsCollection);
+
 
     this._filmCardComponent.setWatchListClickHandler(this._handleWatchListClick);
     this._filmCardComponent.setWatchedClickHandler(this._handleWatchedClick);

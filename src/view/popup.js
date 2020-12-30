@@ -2,36 +2,36 @@ import Smart from "./smart.js";
 import {getPosterName} from '../helpers/common.js';
 import {EMOJIES} from "../constants.js";
 
-export const createFilmPopupTemplate = (data) => {
-  let {title, description, genre, year, rating, duration, isInWatchList, isWatched, isFavorite, emojies, comments} = data;
+const createPopupCommentsTemplate = (commentaries) => {
+  const commentsList = commentaries.map((comment) => createCommentsTemplate(comment)).join(``);
+  return commentsList;
+};
+
+const createCommentsTemplate = (comment) => {
+  const {id, message, emoji, author, date} = comment;
+  return `<li class="film-details__comment" data-comment-id="${id}">
+  <span class="film-details__comment-${emoji}">
+    <img src="./images/emoji/${emoji}.png" width="55" height="55" alt="emoji-${emoji}">
+  </span>
+  <div>
+    <p class="film-details__comment-text">${message}</p>
+    <p class="film-details__comment-info">
+      <span class="film-details__comment-author">${author}</span>
+      <span class="film-details__comment-day">${date}</span>
+      <button class="film-details__comment-delete">Delete</button>
+    </p>
+  </div>
+</li>`;
+};
+
+export const createFilmPopupTemplate = (data, comments) => {
+  let {title, description, genre, year, rating, duration, isInWatchList, isWatched, isFavorite, emojies} = data;
 
   const isInWatchListButton = isInWatchList ? `checked` : ``;
   const isWatchedButton = isWatched ? `checked` : ``;
   const isFavoriteButton = isFavorite ? `checked` : ``;
 
   const posterName = `./images/posters/` + getPosterName(title) + `.png`;
-
-  const createCommentsTemplate = (comment) => {
-    const {id, message, emoji, author, date} = comment;
-    return `<li class="film-details__comment" data-comment-id="${id}">
-    <span class="film-details__comment-${emoji}">
-      <img src="./images/emoji/${emoji}.png" width="55" height="55" alt="emoji-${emoji}">
-    </span>
-    <div>
-      <p class="film-details__comment-text">${message}</p>
-      <p class="film-details__comment-info">
-        <span class="film-details__comment-author">${author}</span>
-        <span class="film-details__comment-day">${date}</span>
-        <button class="film-details__comment-delete">Delete</button>
-      </p>
-    </div>
-  </li>`;
-  };
-
-  const createPopupCommentsTemplate = (commentaries) => {
-    const commentsList = commentaries.map((comment) => createCommentsTemplate(comment)).join(``);
-    return commentsList;
-  };
 
   const generateEmoji = (currentEmoji) => {
     return EMOJIES.map((emoji) => {
@@ -148,9 +148,10 @@ export const createFilmPopupTemplate = (data) => {
 
 
 export default class PopUpFilmCard extends Smart {
-  constructor(filmCard) {
+  constructor(filmCard, comments) {
     super();
     this._filmCard = filmCard;
+    this._comments = comments;
     this._data = PopUpFilmCard.parseFilmToData(filmCard);
     this._closePopupClickHandler = this._closePopupClickHandler.bind(this);
     this._watchListClickHandler = this._watchListClickHandler.bind(this);
@@ -166,7 +167,7 @@ export default class PopUpFilmCard extends Smart {
   }
 
   getTemplate() {
-    return createFilmPopupTemplate(this._data);
+    return createFilmPopupTemplate(this._data, this._comments);
   }
 
   _emojiChangeHandler(evt) {

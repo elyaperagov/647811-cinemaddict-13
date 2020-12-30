@@ -1,8 +1,8 @@
 import AbstractView from "./abstract.js";
 import {getPosterName} from '../helpers/common.js';
 
-const createFilmCardTemplate = (filmCard) => {
-  let {title, description, genre, comments, year, rating, duration, isInWatchList, isWatched, isFavorite} = filmCard;
+const createFilmCardTemplate = (filmCard, comments) => {
+  let {title, description, genre, year, rating, duration, isInWatchList, isWatched, isFavorite} = filmCard;
 
   const posterName = `./images/posters/` + getPosterName(title) + `.png`;
 
@@ -39,9 +39,10 @@ const createFilmCardTemplate = (filmCard) => {
 
 
 export default class FilmCard extends AbstractView {
-  constructor(filmCard) {
+  constructor(filmCard, comments) {
     super();
     this._filmCard = filmCard;
+    this._comments = comments;
 
     this._popupClickHandler = this._popupClickHandler.bind(this);
     this._watchListClickHandler = this._watchListClickHandler.bind(this);
@@ -50,7 +51,7 @@ export default class FilmCard extends AbstractView {
   }
 
   getTemplate() {
-    return createFilmCardTemplate(this._filmCard);
+    return createFilmCardTemplate(this._filmCard, this._comments);
   }
 
   _popupClickHandler(evt) {
