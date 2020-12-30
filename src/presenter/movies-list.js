@@ -10,6 +10,7 @@ import TopRated from "../view/top-rated.js";
 import NoFilms from "../view/no-films.js";
 // import {FilterType} from "../constants.js";
 import Movie from "./movie-card.js";
+// import {generateComment} from "../mock/comments.js";
 import {filter} from "../helpers/filter.js";
 import {SortType, UpdateType, UserAction} from "../constants.js";
 import {RenderPosition, renderElement, remove, getMostRatedFilms, getMostCommentedFilms, getDateSortedFilms} from '../helpers/render.js';
@@ -19,9 +20,10 @@ const MOST_COMMENTED_FILMS = 2;
 const TOP_RATED_FILMS = 2;
 
 export default class MoviesList {
-  constructor(container, moviesModel, filterModel) {
+  constructor(container, moviesModel, filterModel, commentsModel) {
     this._moviesModel = moviesModel;
     this._filterModel = filterModel;
+    this._commentsModel = commentsModel;
     this._container = container;
     this._renderedFilmsCount = CARDS_IN_ROW;
     this._filmsPresenter = {};
@@ -160,8 +162,7 @@ export default class MoviesList {
   }
 
   _renderFilm(container, film) {
-    const moviePresenter = new Movie(container, this._handleViewAction, this._handleModeChange);
-    // const moviePresenter = new Movie(this._filmListContainerComponent, this._handleViewAction, this._handleModeChange);
+    const moviePresenter = new Movie(container, this._handleViewAction, this._handleModeChange, this._commentsModel);
     moviePresenter.init(film);
     this._filmsPresenter[film.id] = moviePresenter;
   }

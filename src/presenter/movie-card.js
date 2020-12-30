@@ -1,6 +1,8 @@
 import FilmCard from "../view/film-card.js";
 import PopUpFilmCard from "../view/popup.js";
 import {UserAction, UpdateType} from "../constants.js";
+// import {generateComment} from "../mock/comments.js";
+// import CommentsModel from "../model/comments-model.js";
 import {RenderPosition, renderElement, replace, remove} from '../helpers/render.js';
 
 const Mode = {
@@ -11,10 +13,11 @@ const Mode = {
 const siteBody = document.querySelector(`body`);
 
 export default class Movie {
-  constructor(movieContainer, changeData, changeMode) {
+  constructor(movieContainer, changeData, changeMode, commentsModel) {
     this._movieContainer = movieContainer;
     this._changeData = changeData;
     this._changeMode = changeMode;
+    this._commentsModel = commentsModel;
 
     this._filmCardComponent = null;
     this._popUpFilmCardComponent = null;
@@ -29,6 +32,8 @@ export default class Movie {
 
   init(film) {
     this._film = film;
+    // const comments = this._commentsModel.getComments(film);
+    // console.log(comments);
 
     const prevFilmComponent = this._filmCardComponent;
     const prevPopupComponent = this._popUpFilmCardComponent;
