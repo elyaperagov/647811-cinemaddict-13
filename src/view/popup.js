@@ -1,5 +1,7 @@
 import Smart from "./smart.js";
 import {getPosterName} from '../helpers/common.js';
+import {renderElement} from '../helpers/render.js';
+import CommentsView from './comments-view.js';
 import {EMOJIES} from "../constants.js";
 
 const createPopupCommentsTemplate = (commentaries) => {
@@ -158,6 +160,7 @@ export default class PopUpFilmCard extends Smart {
     this._watchedClickHandler = this._watchedClickHandler.bind(this);
     this._favoriteClickHandler = this._favoriteClickHandler.bind(this);
     this._emojiChangeHandler = this._emojiChangeHandler.bind(this);
+    this._deleteCommentHandler = this._deleteCommentHandler.bind(this);
     this._setInnerHandlers();
   }
 
@@ -215,6 +218,21 @@ export default class PopUpFilmCard extends Smart {
     // this._callback.formSubmit(TaskEdit.parseDataToTask(this._data));
   }
 
+  _deleteCommentHandler(evt) {
+    evt.preventDefault();
+    const commentId = evt.target.closest(`.film-details__comment`).dataset.commentId;
+    // const val = Number.parseInt(commentId)
+    const index = this._comments.findIndex((comment) => comment.id == commentId);
+
+    this.updateData({
+      comments: [
+        ...this._comments.slice(0, index),
+        ...this._comments.slice(index + 1)
+      ],
+    });
+    this._callback.deleteCommentClick(commentId);
+  }
+
   setWatchListClickHandler(callback) {
     this._callback.watchListClick = callback;
     this.getElement().querySelector(`.film-details__control-label--watchlist`).addEventListener(`click`, this._watchListClickHandler);
@@ -233,6 +251,14 @@ export default class PopUpFilmCard extends Smart {
   setClosePopupClickHandler(callback) {
     this._callback.closePopupClick = callback;
     this.getElement().querySelector(`.film-details__close-btn`).addEventListener(`click`, this._closePopupClickHandler);
+  }
+
+  setDeleteCommentHandler(callback) {
+    this._callback.deleteCommentClick = callback;
+    const comments = this.getElement().querySelectorAll(`.film-details__comment-delete`);
+    comments.forEach(element => {
+      element.addEventListener(`click`, this._deleteCommentHandler);
+    });
   }
 
   static parseFilmToData(film) {

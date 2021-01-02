@@ -30,7 +30,7 @@ commentsModel.setComments(comments);
 
 renderElement(siteHeaderElement, new Profile(), RenderPosition.BEFOREEND);
 
-const moviesPresenter = new MoviesList(siteMainElement, moviesModel, filterModel, commentsModel.getComments());
+const moviesPresenter = new MoviesList(siteMainElement, moviesModel, filterModel, commentsModel);
 const filterPresenter = new FilterPresenter(siteMainElement, filterModel, moviesModel);
 
 filterPresenter.init();

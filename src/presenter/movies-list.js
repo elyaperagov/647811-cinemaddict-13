@@ -120,7 +120,7 @@ export default class MoviesList {
         this._moviesModel.addComment(updateType, update);
         break;
       case UserAction.DELETE_COMMENT:
-        this._moviesModel.deleteComment(updateType, update);
+        this._commentsModel.deleteComment(updateType, update);
         break;
     }
   }
@@ -161,7 +161,7 @@ export default class MoviesList {
   }
 
   _renderFilm(container, film) {
-    const moviePresenter = new Movie(container, this._handleViewAction, this._handleModeChange, this._commentsModel);
+    const moviePresenter = new Movie(container, this._handleViewAction, this._handleModeChange, this._commentsModel.getComments());
 
     moviePresenter.init(film);
     this._filmsPresenter[film.id] = moviePresenter;
