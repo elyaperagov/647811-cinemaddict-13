@@ -13,6 +13,7 @@ import Movie from "./movie-card.js";
 import {filter} from "../helpers/filter.js";
 import {SortType, UpdateType, UserAction} from "../constants.js";
 import {RenderPosition, renderElement, remove, getMostRatedFilms, getMostCommentedFilms, getDateSortedFilms} from '../helpers/render.js';
+import { getRandomInteger } from "../helpers/common.js";
 
 const CARDS_IN_ROW = 5;
 const MOST_COMMENTED_FILMS = 2;
@@ -63,14 +64,22 @@ export default class MoviesList {
     const films = this._moviesModel.getFilms();
     const filtredFilms = filter[filterType](films);
 
+    const comments = this._commentsModel.getComments();
+
+    const updatedFilms = filtredFilms.map((film) => {
+      film.comments = comments[getRandomInteger(0, comments.length - 1)];
+
+      return film;
+    })
+
     switch (this._currentSortType) {
       case SortType.DATE:
-        return getDateSortedFilms(filtredFilms);
+        return getDateSortedFilms(updatedFilms);
       case SortType.RATING:
-        return getMostRatedFilms(filtredFilms);
+        return getMostRatedFilms(updatedFilms);
     }
 
-    return filtredFilms;
+    return updatedFilms;
     // return this._moviesModel.getFilms();
   }
 
@@ -161,7 +170,7 @@ export default class MoviesList {
   }
 
   _renderFilm(container, film) {
-    const moviePresenter = new Movie(container, this._handleViewAction, this._handleModeChange, this._commentsModel.getComments());
+    const moviePresenter = new Movie(container, this._handleViewAction, this._handleModeChange);
 
     moviePresenter.init(film);
     this._filmsPresenter[film.id] = moviePresenter;

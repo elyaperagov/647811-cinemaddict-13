@@ -14,11 +14,10 @@ const Mode = {
 const siteBody = document.querySelector(`body`);
 
 export default class Movie {
-  constructor(movieContainer, changeData, changeMode, commentsModel) {
+  constructor(movieContainer, changeData, changeMode) {
     this._movieContainer = movieContainer;
     this._changeData = changeData;
     this._changeMode = changeMode;
-    this._commentsModel = commentsModel;
 
     this._filmCardComponent = null;
     this._popUpFilmCardComponent = null;
@@ -38,11 +37,8 @@ export default class Movie {
     const prevFilmComponent = this._filmCardComponent;
     const prevPopupComponent = this._popUpFilmCardComponent;
 
-    const commentsCollection = getMeRandomElements(this._commentsModel, getRandomInteger(0, COMMENTS_QUANTITY));
-
-    this._filmCardComponent = new FilmCard(film, commentsCollection);
-    this._popUpFilmCardComponent = new PopUpFilmCard(film, commentsCollection);
-
+    this._filmCardComponent = new FilmCard(film);
+    this._popUpFilmCardComponent = new PopUpFilmCard(film);
 
     this._filmCardComponent.setWatchListClickHandler(this._handleWatchListClick);
     this._filmCardComponent.setWatchedClickHandler(this._handleWatchedClick);
@@ -118,11 +114,11 @@ export default class Movie {
     this._closePopup();
   }
 
-  _deleteCommentClick(commentId) {
+  _deleteCommentClick(updatedComments) {
     this._changeData(
-      // UserAction.DELETE_COMMENT,
-      // UpdateType.PATCH,
-      // Object.assign({}, this._commentsModel, {comments: commentId})
+      UserAction.DELETE_COMMENT,
+      UpdateType.PATCH,
+      Object.assign({}, this._film, {comments: updatedComments})
     );
   }
 

@@ -11,7 +11,10 @@ import {RenderPosition, renderElement} from './helpers/render.js';
 const FILM_CARDS_QUANTITY = 15;
 const COMMENTS_QUANTITY = 50;
 
-const comments = new Array(COMMENTS_QUANTITY).fill().map(generateComment);
+const commentsCollection = new Array(COMMENTS_QUANTITY).fill([]).map((arr, index) => {
+  const filmComments = new Array(index + 1).fill().map(generateComment);
+  return filmComments;
+}) /* СПРОСИТЬ */
 
 const generatedCards = new Array(FILM_CARDS_QUANTITY).fill().map(generateCard);
 const siteHeaderElement = document.querySelector(`.header`);
@@ -22,7 +25,7 @@ const filterModel = new FilterModel();
 const commentsModel = new CommentsModel();
 
 moviesModel.setFilms(generatedCards);
-commentsModel.setComments(comments);
+commentsModel.setComments(commentsCollection);
 
 // const favorCount = generatedCards.filter((card) => card.isFavorite).length;
 // const watchedCount = generatedCards.filter((card) => card.isWatched).length;

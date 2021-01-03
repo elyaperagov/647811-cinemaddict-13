@@ -26,8 +26,8 @@ const createCommentsTemplate = (comment) => {
 </li>`;
 };
 
-export const createFilmPopupTemplate = (data, comments) => {
-  let {title, description, genre, year, rating, duration, isInWatchList, isWatched, isFavorite, emojies} = data;
+export const createFilmPopupTemplate = (data) => {
+  let {title, description, genre, year, rating, duration, isInWatchList, isWatched, isFavorite, emojies, comments} = data;
 
   const isInWatchListButton = isInWatchList ? `checked` : ``;
   const isWatchedButton = isWatched ? `checked` : ``;
@@ -150,10 +150,9 @@ export const createFilmPopupTemplate = (data, comments) => {
 
 
 export default class PopUpFilmCard extends Smart {
-  constructor(filmCard, comments) {
+  constructor(filmCard) {
     super();
     this._filmCard = filmCard;
-    this._comments = comments;
     this._data = PopUpFilmCard.parseFilmToData(filmCard);
     this._closePopupClickHandler = this._closePopupClickHandler.bind(this);
     this._watchListClickHandler = this._watchListClickHandler.bind(this);
@@ -170,7 +169,7 @@ export default class PopUpFilmCard extends Smart {
   }
 
   getTemplate() {
-    return createFilmPopupTemplate(this._data, this._comments);
+    return createFilmPopupTemplate(this._data);
   }
 
   _emojiChangeHandler(evt) {
@@ -185,6 +184,7 @@ export default class PopUpFilmCard extends Smart {
     this.setFavoriteClickHandler(this._callback.favoriteClick);
     this.setWatchListClickHandler(this._callback.watchListClick);
     this.setWatchedClickHandler(this._callback.watchedClick);
+    this.setDeleteCommentHandler(this._callback.deleteCommentClick)
     this.getElement().querySelector(`.film-details__emoji-list`).addEventListener(`change`, this._emojiChangeHandler);
   }
 
@@ -222,18 +222,19 @@ export default class PopUpFilmCard extends Smart {
     evt.preventDefault();
     const commentId = evt.target.closest(`.film-details__comment`).dataset.commentId;
     // const val = Number.parseInt(commentId)
-    const index = this._comments.findIndex((comment) => comment.id == commentId);
+    const index = this._filmCard.comments.findIndex((comment) => comment.id == commentId);
 
+    const updatedComments = [
+      ...this._filmCard.comments.slice(0, index),
+      ...this._filmCard.comments.slice(index + 1)
+    ];
     this.updateData({
       comments: [
-        ...this._comments.slice(0, index),
-        ...this._comments.slice(index + 1)
-      ],
+        ...this._filmCard.comments.slice(0, index),
+        ...this._filmCard.comments.slice(index + 1)
+      ]
     });
-
-    // console.log(this._data.comments);
-
-    this._callback.deleteCommentClick(commentId);
+    this._callback.deleteCommentClick(updatedComments);
   }
 
   setWatchListClickHandler(callback) {
