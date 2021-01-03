@@ -230,6 +230,9 @@ export default class PopUpFilmCard extends Smart {
         ...this._comments.slice(index + 1)
       ],
     });
+
+    // console.log(this._data.comments);
+
     this._callback.deleteCommentClick(commentId);
   }
 

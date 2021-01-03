@@ -120,9 +120,9 @@ export default class Movie {
 
   _deleteCommentClick(commentId) {
     this._changeData(
-      UserAction.DELETE_COMMENT,
-      UpdateType.PATCH,
-      Object.assign({}, this._film, {comments: commentId})
+      // UserAction.DELETE_COMMENT,
+      // UpdateType.PATCH,
+      // Object.assign({}, this._commentsModel, {comments: commentId})
     );
   }
 
