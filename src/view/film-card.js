@@ -1,12 +1,11 @@
 import AbstractView from "./abstract.js";
-import {getPosterName} from '../helpers/common.js';
 
 const createFilmCardTemplate = (filmCard) => {
-  let {title, description, genre, year, rating, duration, isInWatchList, isWatched, isFavorite, comments} = filmCard;
+  let {title, description, genre, year, rating, duration, isInWatchlist, isWatched, isFavorite, comments, poster} = filmCard;
 
-  const posterName = `./images/posters/` + getPosterName(title) + `.png`;
+  const releaseYear = year.getUTCFullYear();
 
-  const isInWatchListClassName = isInWatchList
+  const isInWatchlistClassName = isInWatchlist
     ? `film-card__controls-item--add-to-watchlist film-card__controls-item--active`
     : `film-card__controls-item--add-to-watchlist`;
 
@@ -22,15 +21,15 @@ const createFilmCardTemplate = (filmCard) => {
     <h3 class="film-card__title">${title}</h3>
     <p class="film-card__rating">${rating}</p>
     <p class="film-card__info">
-      <span class="film-card__year">${year}</span>
-      <span class="film-card__duration">${duration}</span>
-      <span class="film-card__genre">${genre}</span>
+      <span class="film-card__year">${releaseYear}</span>
+      <span class="film-card__duration">${duration} min.</span>
+      <span class="film-card__genre">${genre[0]}</span>
     </p>
-    <img src="${posterName}" alt="" class="film-card__poster">
+    <img src="${poster}" alt="" class="film-card__poster">
     <p class="film-card__description">${description}</p>
     <a class="film-card__comments">${comments.length} comments</a>
     <div class="film-card__controls">
-      <button class="film-card__controls-item button ${isInWatchListClassName}" type="button">Add to watchlist</button>
+      <button class="film-card__controls-item button ${isInWatchlistClassName}" type="button">Add to watchlist</button>
       <button class="film-card__controls-item button ${isWatchedClassName}" type="button">Mark as watched</button>
       <button class="film-card__controls-item button ${isfavoriteClassName}" type="button">Mark as favorite</button>
     </div>

@@ -1,7 +1,5 @@
 import Smart from "./smart.js";
-import {getPosterName} from '../helpers/common.js';
-import {renderElement} from '../helpers/render.js';
-import CommentsView from './comments-view.js';
+// import CommentsView from './comments-view.js';
 import {EMOJIES} from "../constants.js";
 
 const createPopupCommentsTemplate = (commentaries) => {
@@ -27,13 +25,11 @@ const createCommentsTemplate = (comment) => {
 };
 
 export const createFilmPopupTemplate = (data) => {
-  let {title, description, genre, year, rating, duration, isInWatchList, isWatched, isFavorite, emojies, comments} = data;
+  let {title, age, description, genre, year, rating, actors, duration, isInWatchList, isWatched, isFavorite, emojies, comments, poster, writers, director, alternativeTitle, releaseCountry} = data;
 
   const isInWatchListButton = isInWatchList ? `checked` : ``;
   const isWatchedButton = isWatched ? `checked` : ``;
   const isFavoriteButton = isFavorite ? `checked` : ``;
-
-  const posterName = `./images/posters/` + getPosterName(title) + `.png`;
 
   const generateEmoji = (currentEmoji) => {
     return EMOJIES.map((emoji) => {
@@ -54,16 +50,16 @@ export const createFilmPopupTemplate = (data) => {
         </div>
         <div class="film-details__info-wrap">
           <div class="film-details__poster">
-            <img class="film-details__poster-img" src="${posterName}" alt="">
+            <img class="film-details__poster-img" src="${poster}" alt="">
 
-            <p class="film-details__age">18+</p>
+            <p class="film-details__age">${age}+</p>
           </div>
 
           <div class="film-details__info">
             <div class="film-details__info-head">
               <div class="film-details__title-wrap">
                 <h3 class="film-details__title">${title}</h3>
-                <p class="film-details__title-original">Original: ${title}</p>
+                <p class="film-details__title-original">Original: ${alternativeTitle}</p>
               </div>
 
               <div class="film-details__rating">
@@ -74,15 +70,15 @@ export const createFilmPopupTemplate = (data) => {
             <table class="film-details__table">
               <tr class="film-details__row">
                 <td class="film-details__term">Director</td>
-                <td class="film-details__cell">Anthony Mann</td>
+                <td class="film-details__cell">${director}</td>
               </tr>
               <tr class="film-details__row">
                 <td class="film-details__term">Writers</td>
-                <td class="film-details__cell">Anne Wigton, Heinz Herald, Richard Weil</td>
+                <td class="film-details__cell">${writers}</td>
               </tr>
               <tr class="film-details__row">
                 <td class="film-details__term">Actors</td>
-                <td class="film-details__cell">Erich von Stroheim, Mary Beth Hughes, Dan Duryea</td>
+                <td class="film-details__cell">${actors}</td>
               </tr>
               <tr class="film-details__row">
                 <td class="film-details__term">Release Date</td>
@@ -94,14 +90,13 @@ export const createFilmPopupTemplate = (data) => {
               </tr>
               <tr class="film-details__row">
                 <td class="film-details__term">Country</td>
-                <td class="film-details__cell">USA</td>
+                <td class="film-details__cell">${releaseCountry}</td>
               </tr>
               <tr class="film-details__row">
                 <td class="film-details__term">Genres</td>
                 <td class="film-details__cell">
                   <span class="film-details__genre">${genre}</span>
-                  <span class="film-details__genre">${genre}</span>
-                  <span class="film-details__genre">${genre}</span></td>
+                  </td>
               </tr>
             </table>
 
@@ -184,7 +179,7 @@ export default class PopUpFilmCard extends Smart {
     this.setFavoriteClickHandler(this._callback.favoriteClick);
     this.setWatchListClickHandler(this._callback.watchListClick);
     this.setWatchedClickHandler(this._callback.watchedClick);
-    this.setDeleteCommentHandler(this._callback.deleteCommentClick)
+    this.setDeleteCommentHandler(this._callback.deleteCommentClick);
     this.getElement().querySelector(`.film-details__emoji-list`).addEventListener(`change`, this._emojiChangeHandler);
   }
 
@@ -222,7 +217,7 @@ export default class PopUpFilmCard extends Smart {
     evt.preventDefault();
     const commentId = evt.target.closest(`.film-details__comment`).dataset.commentId;
     // const val = Number.parseInt(commentId)
-    const index = this._filmCard.comments.findIndex((comment) => comment.id == commentId);
+    const index = this._filmCard.comments.findIndex((comment) => comment.id === commentId);
 
     const updatedComments = [
       ...this._filmCard.comments.slice(0, index),
@@ -260,7 +255,7 @@ export default class PopUpFilmCard extends Smart {
   setDeleteCommentHandler(callback) {
     this._callback.deleteCommentClick = callback;
     const comments = this.getElement().querySelectorAll(`.film-details__comment-delete`);
-    comments.forEach(element => {
+    comments.forEach((element) => {
       element.addEventListener(`click`, this._deleteCommentHandler);
     });
   }

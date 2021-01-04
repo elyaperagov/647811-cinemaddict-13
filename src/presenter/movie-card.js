@@ -2,9 +2,8 @@ import FilmCard from "../view/film-card.js";
 import PopUpFilmCard from "../view/popup.js";
 import {UserAction, UpdateType} from "../constants.js";
 import {RenderPosition, renderElement, replace, remove} from '../helpers/render.js';
-import {getRandomInteger, getMeRandomElements} from '../helpers/common.js';
-import CommentsView from '../view/comments-view.js';
-import {COMMENTS_QUANTITY} from '../constants.js';
+// import {getRandomInteger, getMeRandomElements} from '../helpers/common.js';
+// import CommentsView from '../view/comments-view.js';
 
 const Mode = {
   DEFAULT: `DEFAULT`,
@@ -116,9 +115,9 @@ export default class Movie {
 
   _deleteCommentClick(updatedComments) {
     this._changeData(
-      UserAction.DELETE_COMMENT,
-      UpdateType.PATCH,
-      Object.assign({}, this._film, {comments: updatedComments})
+        UserAction.DELETE_COMMENT,
+        UpdateType.PATCH,
+        Object.assign({}, this._film, {comments: updatedComments})
     );
   }
 
