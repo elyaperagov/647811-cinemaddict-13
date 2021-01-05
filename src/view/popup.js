@@ -1,6 +1,12 @@
 import Smart from "./smart.js";
-// import CommentsView from './comments-view.js';
+import CommentsModel from '../model/comments-model.js';
+import ApiComments from '../api-comments.js';
 import {EMOJIES} from "../constants.js";
+
+// const apiComments = new ApiComments(END_POINT, AUTHORIZATOIN);
+
+// const commentsModel = new CommentsModel();
+// commentsModel.setComments(commentsCollection);
 
 const createPopupCommentsTemplate = (commentaries) => {
   const commentsList = commentaries.map((comment) => createCommentsTemplate(comment)).join(``);

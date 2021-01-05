@@ -7,6 +7,7 @@ import FilterModel from "./model/filter.js";
 import FilterPresenter from "./presenter/filter.js";
 import {RenderPosition, renderElement} from './helpers/render.js';
 import {UpdateType} from "./constants.js";
+import ApiComments from "./api-comments.js";
 import Api from "./api.js";
 
 const COMMENTS_QUANTITY = 50;
@@ -15,6 +16,7 @@ const AUTHORIZATION = `Basic 14211421`;
 const END_POINT = `https://13.ecmascript.pages.academy/cinemaddict`;
 
 const api = new Api(END_POINT, AUTHORIZATION);
+const apiComments = new ApiComments(END_POINT, AUTHORIZATION);
 
 const commentsCollection = new Array(COMMENTS_QUANTITY).fill([]).map((arr, index) => {
   const filmComments = new Array(index + 1).fill().map(generateComment);
@@ -38,11 +40,6 @@ const filterPresenter = new FilterPresenter(siteMainElement, filterModel, movies
 filterPresenter.init();
 moviesPresenter.render();
 
-
-// api.getMovies().then((movies) => {
-//   console.log(movies);
-// });
-
 api.getMovies()
   .then((movies) => {
     moviesModel.setFilms(UpdateType.INIT, movies);
@@ -51,3 +48,6 @@ api.getMovies()
     moviesModel.setFilms(UpdateType.INIT, []);
   });
 
+  apiComments.getComments().then((comments) => {
+    console.log(comments);
+  });
