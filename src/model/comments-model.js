@@ -49,7 +49,7 @@ export default class CommentsModel extends Observer {
     return adaptedComments;
   }
 
-  static adaptToServer(comments) {
+  // static adaptToServer(comments) {
   //   const adaptedComments = Object.assign(
   //       {},
   //       comments,
@@ -61,10 +61,6 @@ export default class CommentsModel extends Observer {
   //         author: comments.author
   //       });
 
-  //   delete adaptedComments.emotion;
-  //   delete adaptedComments.id;
-  //   delete adaptedComments.comment;
-
   //   return adaptedComments;
-  }
+  // }
 }

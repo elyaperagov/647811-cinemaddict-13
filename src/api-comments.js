@@ -16,17 +16,17 @@ export default class CommentsApi {
     this._authorization = authorization;
   }
 
-  getComments(film) {
-    return this._load({url: `/comments/${film.id}`})
+  getComments(filmId) {
+    return this._load({url: `comments/${filmId}`})
       .then(CommentsApi.toJSON)
       .then((comments) => comments.map(CommentsModel.adaptToClient));
   }
 
-  updateComments(film) {
+  updateComments(filmId) {
     return this._load({
-      url: `comments/${film.id}`,
+      url: `comments/${filmId}`,
       method: Method.PUT,
-      body: JSON.stringify(CommentsModel.adaptToServer(film)),
+      body: JSON.stringify(CommentsModel.adaptToServer(filmId)),
       headers: new Headers({"Content-Type": `application/json`})
     })
       .then(CommentsApi.toJSON)
@@ -57,7 +57,6 @@ export default class CommentsApi {
       throw new Error(`${response.status}: ${response.statusText}`);
     }
 
-    console.log(response)
     return response;
   }
 

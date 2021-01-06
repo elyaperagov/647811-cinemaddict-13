@@ -1,12 +1,6 @@
 import Smart from "./smart.js";
-import CommentsModel from '../model/comments-model.js';
-import ApiComments from '../api-comments.js';
 import {EMOJIES} from "../constants.js";
 
-// const apiComments = new ApiComments(END_POINT, AUTHORIZATOIN);
-
-// const commentsModel = new CommentsModel();
-// commentsModel.setComments(commentsCollection);
 
 const createPopupCommentsTemplate = (commentaries) => {
   const commentsList = commentaries.map((comment) => createCommentsTemplate(comment)).join(``);
@@ -133,7 +127,7 @@ export const createFilmPopupTemplate = (data) => {
           </ul>
 
           <div class="film-details__new-comment">
-            <div class="film-details__add-emoji-label"><img src="images/emoji/${emojies}.png" width="55" height="55" alt="emoji-${emojies}"></img></div>
+            <div class="film-details__add-emoji-label">${emojies ? `<img src="images/emoji/${emojies}.png" width="55" height="55" alt="emoji-${emojies}">` : ``}</img></div>
 
             <label class="film-details__comment-label">
               <textarea class="film-details__comment-input" placeholder="Select reaction below and write comment here" name="comment"></textarea>

@@ -1,11 +1,11 @@
 import AbstractView from "./abstract.js";
 
 const createFilmCardTemplate = (filmCard) => {
-  let {title, description, genre, year, rating, duration, isInWatchlist, isWatched, isFavorite, comments, poster} = filmCard;
+  let {title, description, genre, year, rating, duration, isInWatchList, isWatched, isFavorite, comments, poster} = filmCard;
 
   const releaseYear = year.getUTCFullYear();
 
-  const isInWatchlistClassName = isInWatchlist
+  const isInWatchListClassName = isInWatchList
     ? `film-card__controls-item--add-to-watchlist film-card__controls-item--active`
     : `film-card__controls-item--add-to-watchlist`;
 
@@ -29,7 +29,7 @@ const createFilmCardTemplate = (filmCard) => {
     <p class="film-card__description">${description}</p>
     <a class="film-card__comments">${comments.length} comments</a>
     <div class="film-card__controls">
-      <button class="film-card__controls-item button ${isInWatchlistClassName}" type="button">Add to watchlist</button>
+      <button class="film-card__controls-item button ${isInWatchListClassName}" type="button">Add to watchlist</button>
       <button class="film-card__controls-item button ${isWatchedClassName}" type="button">Mark as watched</button>
       <button class="film-card__controls-item button ${isfavoriteClassName}" type="button">Mark as favorite</button>
     </div>
