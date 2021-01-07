@@ -137,7 +137,7 @@ export default class MoviesList {
         this._moviesModel.addComment(updateType, update);
         break;
       case UserAction.DELETE_COMMENT:
-        this._commentsModel.deleteComment(updateType, update);
+        this._moviesModel.deleteComment(updateType, update);
         break;
     }
   }

@@ -32,6 +32,18 @@ export default class Movies extends Observer {
     this._notify(updateType, update);
   }
 
+  deleteComment(updateType, update) {
+    const index = this._films.findIndex((comment) => comment !== update.comments); // это надо додумать
+
+    if (index === -1) {
+      throw new Error(`Can't delete unexisting comment`);
+    }
+
+    this._films.splice(index, 1);
+
+    this._notify(updateType, update);
+  }
+
   static adaptToClient(movie) {
     const adaptedMovie = Object.assign(
         {},

@@ -49,6 +49,7 @@ api.getMovies()
 
     Promise.all(commentsCollection).then(() => {
       moviesModel.setFilms(UpdateType.INIT, movies);
+
     });
   })
 .catch(() => {
