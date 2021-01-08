@@ -15,12 +15,13 @@ export default class Filter {
     this._handleModelEvent = this._handleModelEvent.bind(this);
     this._handleFilterTypeChange = this._handleFilterTypeChange.bind(this);
 
-    this._moviesModel.addObserver(this._handleModelEvent);
-    this._filterModel.addObserver(this._handleModelEvent);
   }
 
   init() {
     this._currentFilter = this._filterModel.getFilter();
+
+    this._moviesModel.addObserver(this._handleModelEvent);
+    this._filterModel.addObserver(this._handleModelEvent);
 
     const filters = this._getFilters();
     const prevFilterComponent = this._filterComponent;

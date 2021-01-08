@@ -40,22 +40,35 @@ moviesPresenter.render();
 
 api.getMovies()
   .then((movies) => {
-
-    const commentsCollection = movies.map((movie) => {
-      return api.getComments(movie.id).then((comments) => {
-        movie.comments = comments;
-      });
-    });
-
-    Promise.all(commentsCollection).then(() => {
-      moviesModel.setFilms(UpdateType.INIT, movies);
-
-    });
+    moviesModel.setFilms(UpdateType.INIT, movies);
   })
 .catch(() => {
   moviesModel.setFilms(UpdateType.INIT, []);
 });
 
-// apiComments.getComments().then((comments) => {
-//   console.log(comments);
+// api.getMovies()
+//   .then((movies) => {
+//     moviesModel.setFilms(UpdateType.INIT, movies);
+//     const promises = movies.map((movie) => {
+//       return api.getComments(movie.id);
+//     });
+//     return Promise.all(promises);
+//   })
+//   .then((comments) => {
+//     commentsModel.setComments(comments);
+//   });
+
+// api.getMovies()
+//   .then((movies) => {
+//     const commentsCollection = movies.map((movie) => {
+//       return api.getComments(movie.id).then((comments) => {
+//         movie.comments = comments;
+//       });
+//     });
+//     Promise.all(commentsCollection).then(() => {
+//       moviesModel.setFilms(UpdateType.INIT, movies);
+//     });
+//   })
+// .catch(() => {
+//   moviesModel.setFilms(UpdateType.INIT, []);
 // });

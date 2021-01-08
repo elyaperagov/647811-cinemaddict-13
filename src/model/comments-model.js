@@ -8,6 +8,7 @@ export default class CommentsModel extends Observer {
 
   setComments(comments) {
     this._comments = comments.slice();
+    console.log(this._comments);
   }
 
   getComments() {
@@ -45,9 +46,10 @@ export default class CommentsModel extends Observer {
           author: comments.author,
           date: comments.date
         });
-
+    // console.log(adaptedComments)
     return adaptedComments;
   }
+
 
   // static adaptToServer(comments) {
   //   const adaptedComments = Object.assign(
