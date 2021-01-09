@@ -1,5 +1,4 @@
 import MoviesModel from "./model/movies.js";
-import CommentsModel from "./model/comments-model.js";
 
 const Method = {
   GET: `GET`,
@@ -17,29 +16,57 @@ export default class Api {
     this._authorization = authorization;
   }
 
-  // getMovies() {
-  //   return this._load({url: `movies`})
-  //     .then(Api.toJSON)
-  //     .then((movies) => movies.map(MoviesModel.adaptToClient));
-  // }
   getMovies() {
     return this._load({url: `movies`})
       .then(Api.toJSON)
-      .then(async (movies) => {
-        let adaptedFilms = [];
-        for (let movie of movies) {
-          let adaptedFilm = await MoviesModel.adaptToClient(movie)
-          adaptedFilms.push(adaptedFilm);
-        }
-        return adaptedFilms;
-      });
+      .then((movies) => movies.map(MoviesModel.adaptToClient));
   }
+  // getMovies() {
+  //   return this._load({url: `movies`})
+  //     .then(Api.toJSON)
+  //     .then(async (movies) => {
+  //       let adaptedFilms = [];
+  //       for (let movie of movies) {
+  //         let adaptedFilm = await MoviesModel.adaptToClient(movie)
+  //         adaptedFilms.push(adaptedFilm);
+  //       }
+  //       return adaptedFilms;
+  //     });
+  // }
 
   getComments(filmId) {
     return this._load({url: `comments/${filmId}`})
       .then(Api.toJSON)
-      .then((comments) => comments.map(CommentsModel.adaptToClient))
+      .then((comments) => comments.map(this._adaptToClient));
+  }
 
+  _adaptToClient(comments) {
+    const adaptedComments = Object.assign(
+        {},
+        comments,
+        {
+          id: comments.id,
+          message: comments.comment,
+          emoji: comments.emotion,
+          author: comments.author,
+          date: comments.date
+        });
+    return adaptedComments;
+  }
+
+
+  _adaptToServer(comments) {
+    const adaptedComments = Object.assign(
+        {},
+        comments,
+        {
+          id: comments.id,
+          message: comments.comment,
+          emoji: comments.emotion,
+          date: comments.date,
+          author: comments.author
+        });
+    return adaptedComments;
   }
 
   updateMovie(movie) {

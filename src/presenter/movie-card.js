@@ -28,6 +28,7 @@ export default class Movie {
     this._handleFavoriteClick = this._handleFavoriteClick.bind(this);
     this._handleClosePopupClick = this._handleClosePopupClick.bind(this);
     this._deleteCommentClick = this._deleteCommentClick.bind(this);
+
   }
 
   init(film) {
@@ -88,13 +89,6 @@ export default class Movie {
     }
   }
 
-  // _renderComment() {
-  //   const commentsView = new CommentsView();
-  //   // commentsView.setDeleteCommentHandler(this._callback.deleteComment);
-  //   console.log(commentsView);
-  //   renderElement(this._popUpFilmCardComponent.getElement().querySelector(`.film-details__comments-list`), commentsView, RenderPosition.BEFOREEND);
-  // }
-
   _openPopup() {
     renderElement(siteBody, this._popUpFilmCardComponent, RenderPosition.BEFOREEND);
     siteBody.classList.add(`hide-overflow`);
@@ -113,11 +107,11 @@ export default class Movie {
     this._closePopup();
   }
 
-  _deleteCommentClick(updatedComments) {
+  _deleteCommentClick(commentId) {
     this._changeData(
         UserAction.DELETE_COMMENT,
         UpdateType.PATCH,
-        Object.assign({}, this._film, {comments: updatedComments})
+        Object.assign({}, {id: this._film.id}, {comment: commentId})
     );
   }
 

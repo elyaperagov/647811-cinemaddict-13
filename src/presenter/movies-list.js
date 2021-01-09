@@ -240,7 +240,7 @@ export default class MoviesList {
       this._renderLoadMoreButton();
     }
 
-    this._renderExtraMoviesList();
+    // this._renderExtraMoviesList();
   }
 
   _renderExtraMoviesList() {
