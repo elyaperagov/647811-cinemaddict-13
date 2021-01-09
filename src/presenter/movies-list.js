@@ -187,7 +187,7 @@ export default class MoviesList {
   }
 
   _renderFilm(container, film) {
-    const moviePresenter = new Movie(container, this._handleViewAction, this._handleModeChange, this._commentsModel);
+    const moviePresenter = new Movie(container, this._handleViewAction, this._handleModeChange);
 
     moviePresenter.init(film);
     this._filmsPresenter[film.id] = moviePresenter;
@@ -240,7 +240,7 @@ export default class MoviesList {
       this._renderLoadMoreButton();
     }
 
-    this._renderExtraMoviesList();
+    // this._renderExtraMoviesList();
   }
 
   _renderExtraMoviesList() {

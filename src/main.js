@@ -1,13 +1,10 @@
 import Profile from "./view/profile.js";
 import MoviesList from "./presenter/movies-list.js";
 import MoviesModel from "./model/movies.js";
-// import { generateComment } from "./mock/cards";
-import CommentsModel from "./model/comments-model.js";
 import FilterModel from "./model/filter.js";
 import FilterPresenter from "./presenter/filter.js";
 import {RenderPosition, renderElement} from './helpers/render.js';
 import {UpdateType} from "./constants.js";
-// import ApiComments from "./api-comments.js";
 import Api from "./api.js";
 
 const AUTHORIZATION = `Basic 14211421`;
@@ -26,11 +23,10 @@ const siteMainElement = document.querySelector(`.main`);
 
 const moviesModel = new MoviesModel();
 const filterModel = new FilterModel();
-const commentsModel = new CommentsModel();
 
 renderElement(siteHeaderElement, new Profile(), RenderPosition.BEFOREEND);
 
-const moviesPresenter = new MoviesList(siteMainElement, moviesModel, filterModel, commentsModel);
+const moviesPresenter = new MoviesList(siteMainElement, moviesModel, filterModel);
 const filterPresenter = new FilterPresenter(siteMainElement, filterModel, moviesModel);
 
 filterPresenter.init();
@@ -44,18 +40,31 @@ moviesPresenter.render();
 //   moviesModel.setFilms(UpdateType.INIT, []);
 // });
 
+// api.getMovies()
+//   .then((movies) => {
+//     moviesModel.setFilms(UpdateType.INIT, movies);
+//     const promises = movies.map((movie) => {
+//       return api.getComments(movie.id);
+//     });
+//     return Promise.all(promises);
+//   })
+//   .then((comments) => {
+//     commentsModel.setComments(comments);
+//   });
+
+//   console.log(commentsModel);
+
 api.getMovies()
   .then((movies) => {
-    moviesModel.setFilms(UpdateType.INIT, movies);
-    const promises = movies.map((movie) => {
-      return api.getComments(movie.id);
+    const commentsCollection = movies.map((movie) => {
+      return api.getComments(movie.id).then((comments) => {
+        movie.comments = comments;
+      });
     });
-    return Promise.all(promises);
+    Promise.all(commentsCollection).then(() => {
+      moviesModel.setFilms(UpdateType.INIT, movies);
+    });
   })
-  .then((comments) => {
-    commentsModel.setComments(comments);
-  });
-
-  console.log(commentsModel);
-
-
+.catch(() => {
+  moviesModel.setFilms(UpdateType.INIT, []);
+});

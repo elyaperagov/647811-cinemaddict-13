@@ -13,11 +13,10 @@ const Mode = {
 const siteBody = document.querySelector(`body`);
 
 export default class Movie {
-  constructor(movieContainer, changeData, changeMode, commentsModel) {
+  constructor(movieContainer, changeData, changeMode) {
     this._movieContainer = movieContainer;
     this._changeData = changeData;
     this._changeMode = changeMode;
-    this._commentsModel = commentsModel;
 
     this._filmCardComponent = null;
     this._popUpFilmCardComponent = null;
@@ -29,6 +28,7 @@ export default class Movie {
     this._handleFavoriteClick = this._handleFavoriteClick.bind(this);
     this._handleClosePopupClick = this._handleClosePopupClick.bind(this);
     this._deleteCommentClick = this._deleteCommentClick.bind(this);
+
   }
 
   init(film) {
@@ -37,11 +37,8 @@ export default class Movie {
     const prevFilmComponent = this._filmCardComponent;
     const prevPopupComponent = this._popUpFilmCardComponent;
 
-    const comments = this._commentsModel.getComments();
-    console.log(comments);
-
     this._filmCardComponent = new FilmCard(film);
-    this._popUpFilmCardComponent = new PopUpFilmCard(film, comments);
+    this._popUpFilmCardComponent = new PopUpFilmCard(film);
 
     this._filmCardComponent.setWatchListClickHandler(this._handleWatchListClick);
     this._filmCardComponent.setWatchedClickHandler(this._handleWatchedClick);
@@ -92,13 +89,6 @@ export default class Movie {
     }
   }
 
-  // _renderComment() {
-  //   const commentsView = new CommentsView();
-  //   // commentsView.setDeleteCommentHandler(this._callback.deleteComment);
-  //   console.log(commentsView);
-  //   renderElement(this._popUpFilmCardComponent.getElement().querySelector(`.film-details__comments-list`), commentsView, RenderPosition.BEFOREEND);
-  // }
-
   _openPopup() {
     renderElement(siteBody, this._popUpFilmCardComponent, RenderPosition.BEFOREEND);
     siteBody.classList.add(`hide-overflow`);
@@ -117,11 +107,11 @@ export default class Movie {
     this._closePopup();
   }
 
-  _deleteCommentClick(updatedComments) {
+  _deleteCommentClick(commentId) {
     this._changeData(
         UserAction.DELETE_COMMENT,
         UpdateType.PATCH,
-        Object.assign({}, this._film, {comments: updatedComments})
+        Object.assign({}, {id: this._film.id}, {comment: commentId})
     );
   }
 
