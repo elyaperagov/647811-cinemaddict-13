@@ -24,8 +24,8 @@ const createCommentsTemplate = (comment) => {
 </li>`;
 };
 
-export const createFilmPopupTemplate = (data) => {
-  let {title, age, description, genre, year, rating, actors, duration, isInWatchList, isWatched, isFavorite, emojies, comments, poster, writers, director, alternativeTitle, releaseCountry} = data;
+export const createFilmPopupTemplate = (data, comments) => {
+  let {title, age, description, genre, year, rating, actors, duration, isInWatchList, isWatched, isFavorite, emojies, poster, writers, director, alternativeTitle, releaseCountry} = data;
 
   const isInWatchListButton = isInWatchList ? `checked` : ``;
   const isWatchedButton = isWatched ? `checked` : ``;
@@ -145,9 +145,10 @@ export const createFilmPopupTemplate = (data) => {
 
 
 export default class PopUpFilmCard extends Smart {
-  constructor(filmCard) {
+  constructor(filmCard, comments) {
     super();
     this._filmCard = filmCard;
+    this._comments = comments;
     this._data = PopUpFilmCard.parseFilmToData(filmCard);
     this._closePopupClickHandler = this._closePopupClickHandler.bind(this);
     this._watchListClickHandler = this._watchListClickHandler.bind(this);
@@ -164,7 +165,7 @@ export default class PopUpFilmCard extends Smart {
   }
 
   getTemplate() {
-    return createFilmPopupTemplate(this._data);
+    return createFilmPopupTemplate(this._data, this._comments);
   }
 
   _emojiChangeHandler(evt) {

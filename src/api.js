@@ -17,23 +17,23 @@ export default class Api {
     this._authorization = authorization;
   }
 
-  // getMovies() {
-  //   return this._load({url: `movies`})
-  //     .then(Api.toJSON)
-  //     .then((movies) => movies.map(MoviesModel.adaptToClient));
-  // }
   getMovies() {
     return this._load({url: `movies`})
       .then(Api.toJSON)
-      .then(async (movies) => {
-        let adaptedFilms = [];
-        for (let movie of movies) {
-          let adaptedFilm = await MoviesModel.adaptToClient(movie)
-          adaptedFilms.push(adaptedFilm);
-        }
-        return adaptedFilms;
-      });
+      .then((movies) => movies.map(MoviesModel.adaptToClient));
   }
+  // getMovies() {
+  //   return this._load({url: `movies`})
+  //     .then(Api.toJSON)
+  //     .then(async (movies) => {
+  //       let adaptedFilms = [];
+  //       for (let movie of movies) {
+  //         let adaptedFilm = await MoviesModel.adaptToClient(movie)
+  //         adaptedFilms.push(adaptedFilm);
+  //       }
+  //       return adaptedFilms;
+  //     });
+  // }
 
   getComments(filmId) {
     return this._load({url: `comments/${filmId}`})
