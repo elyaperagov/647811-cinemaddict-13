@@ -40,7 +40,7 @@ export default class Movie {
     const comments = this._commentsModel.getComments();
     console.log(comments);
 
-    this._filmCardComponent = new FilmCard(film, comments);
+    this._filmCardComponent = new FilmCard(film);
     this._popUpFilmCardComponent = new PopUpFilmCard(film, comments);
 
     this._filmCardComponent.setWatchListClickHandler(this._handleWatchListClick);

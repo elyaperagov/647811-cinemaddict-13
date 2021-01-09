@@ -58,17 +58,4 @@ api.getMovies()
 
   console.log(commentsModel);
 
-// api.getMovies()
-//   .then((movies) => {
-//     const commentsCollection = movies.map((movie) => {
-//       return api.getComments(movie.id).then((comments) => {
-//         movie.comments = comments;
-//       });
-//     });
-//     Promise.all(commentsCollection).then(() => {
-//       moviesModel.setFilms(UpdateType.INIT, movies);
-//     });
-//   })
-// .catch(() => {
-//   moviesModel.setFilms(UpdateType.INIT, []);
-// });
+
