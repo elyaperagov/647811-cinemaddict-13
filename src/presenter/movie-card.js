@@ -47,6 +47,8 @@ export default class Movie {
     this._filmCardComponent.setTitleClickHandler(this._popupClickHandler);
     this._filmCardComponent.setCommentsClickHandler(this._popupClickHandler);
 
+
+    this._popUpFilmCardComponent.setAddCommentHandler(this._addCommentClick);
     this._popUpFilmCardComponent.setDeleteCommentHandler(this._deleteCommentClick);
     this._popUpFilmCardComponent.setClosePopupClickHandler(this._handleClosePopupClick);
     this._popUpFilmCardComponent.setWatchListClickHandler(this._handleWatchListClick);
@@ -95,6 +97,9 @@ export default class Movie {
     document.addEventListener(`keydown`, (evt) => {
       this._onEscKeyDown(evt);
     });
+    document.addEventListener(`keydown`, (evt) => {
+      this._addCommentClick(evt);
+    });
     this._changeMode();
     this._mode = Mode.POPUP;
   }
@@ -113,6 +118,28 @@ export default class Movie {
         UpdateType.PATCH,
         Object.assign({}, {id: this._film.id}, {comment: commentId})
     );
+  }
+
+  // _addCommentClick(userComment) {
+  //   this._changeData(
+  //       UserAction.ADD_COMMENT,
+  //       UpdateType.PATCH,
+  //       Object.assign({}, this._film, {userComment: userComment})
+  //   );
+  // }
+
+  _addCommentClick(evt) {
+    if (evt.key === `Enter`) {
+      const message = this._popUpFilmCardComponent.getElement().querySelector(`.film-details__comment-input`);
+      const emoji = this._popUpFilmCardComponent.getElement().querySelector(`.film-details__emoji-item[checked]`);
+      if (message.value !== `` && emoji) {
+        this._changeData(
+            UserAction.ADD_COMMENT,
+            UpdateType.MINOR,
+            Object.assign({}, {id: this._film.id}, {comment: { id: '123456', comment: message.value, author: `author`, date: '1', emotion: emoji.value}})
+        );
+      }
+    }
   }
 
   resetView() {

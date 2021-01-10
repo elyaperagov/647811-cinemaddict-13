@@ -25,7 +25,7 @@ const createCommentsTemplate = (comment) => {
 };
 
 export const createFilmPopupTemplate = (data) => {
-  let {title, age, description, genre, year, rating, actors, duration, isInWatchList, isWatched, comments, isFavorite, emojies, poster, writers, director, alternativeTitle, releaseCountry} = data;
+  let {title, age, description, genre, year, rating, actors, duration, isInWatchList, isWatched, comments, isFavorite, emojies, poster, writers, director, alternativeTitle, releaseCountry, newComment} = data;
 
   const isInWatchListButton = isInWatchList ? `checked` : ``;
   const isWatchedButton = isWatched ? `checked` : ``;
@@ -130,7 +130,7 @@ export const createFilmPopupTemplate = (data) => {
             <div class="film-details__add-emoji-label">${emojies ? `<img src="images/emoji/${emojies}.png" width="55" height="55" alt="emoji-${emojies}">` : ``}</img></div>
 
             <label class="film-details__comment-label">
-              <textarea class="film-details__comment-input" placeholder="Select reaction below and write comment here" name="comment"></textarea>
+              <textarea class="film-details__comment-input" placeholder="Select reaction below and write comment here" name="comment">${newComment ? `${newComment}` : ``}</textarea>
             </label>
 
             <div class="film-details__emoji-list">
@@ -154,6 +154,7 @@ export default class PopUpFilmCard extends Smart {
     this._watchedClickHandler = this._watchedClickHandler.bind(this);
     this._favoriteClickHandler = this._favoriteClickHandler.bind(this);
     this._emojiChangeHandler = this._emojiChangeHandler.bind(this);
+    this._textInputHandler = this._textInputHandler.bind(this);
     this._deleteCommentHandler = this._deleteCommentHandler.bind(this);
     this._setInnerHandlers();
   }
@@ -180,6 +181,7 @@ export default class PopUpFilmCard extends Smart {
     this.setWatchListClickHandler(this._callback.watchListClick);
     this.setWatchedClickHandler(this._callback.watchedClick);
     this.setDeleteCommentHandler(this._callback.deleteCommentClick);
+    this.setAddCommentHandler(this._callback.setAddCommentHandler);
     this.getElement().querySelector(`.film-details__emoji-list`).addEventListener(`change`, this._emojiChangeHandler);
   }
 
@@ -219,6 +221,18 @@ export default class PopUpFilmCard extends Smart {
     this._callback.deleteCommentClick(commentId);
   }
 
+  // _textInputHandler(evt) {
+  //   evt.preventDefault();
+  //   this.updateData({
+  //     newComment: evt.target.value
+  //   });
+  // }
+
+  _textInputHandler(evt) {
+    evt.preventDefault();
+    this._callback.addCommentClick(evt);
+  }
+
   setWatchListClickHandler(callback) {
     this._callback.watchListClick = callback;
     this.getElement().querySelector(`.film-details__control-label--watchlist`).addEventListener(`click`, this._watchListClickHandler);
@@ -245,6 +259,11 @@ export default class PopUpFilmCard extends Smart {
     comments.forEach((element) => {
       element.addEventListener(`click`, this._deleteCommentHandler);
     });
+  }
+
+  setAddCommentHandler(callback) {
+    this._callback.addCommentClick = callback;
+    this.getElement().querySelector(`.film-details__comment-input`).addEventListener(`input`, this._textInputHandler);
   }
 
   static parseFilmToData(film) {
