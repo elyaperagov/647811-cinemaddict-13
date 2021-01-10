@@ -37,8 +37,8 @@ export default class Movies extends Observer {
 
     // const pushed = film[0].comments.push(update.comment)  // неправильно
 
-    const movie = Object.assign({}, film[0].comments, update);
-    // const movie = Object.assign({}, film[0], {comments: update.comment});
+    // var comments = Object.assign({}, film[0].comments, update);
+    const movie = Object.assign({}, film[0], {comments: update.comment});
 
     this.updateFilm(updateType, movie);
   }
