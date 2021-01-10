@@ -35,12 +35,12 @@ export default class Movies extends Observer {
   addComment(updateType, update) {
     const film = this._films.filter((movie) => movie.id === update.id);
 
-    // const pushed = film[0].comments.push(update.comment)  // неправильно
+    film[0].comments.push(update.comment)  // неправильно
 
     // var comments = Object.assign({}, film[0].comments, update);
-    const movie = Object.assign({}, film[0], {comments: update.comment});
+    // const movie = Object.assign({}, film[0], {comments: update.comment});
 
-    this.updateFilm(updateType, movie);
+    this.updateFilm(updateType, film[0]);
   }
 
   deleteComment(updateType, update) {
