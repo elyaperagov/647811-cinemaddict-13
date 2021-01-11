@@ -181,7 +181,7 @@ export default class PopUpFilmCard extends Smart {
     this.setWatchListClickHandler(this._callback.watchListClick);
     this.setWatchedClickHandler(this._callback.watchedClick);
     this.setDeleteCommentHandler(this._callback.deleteCommentClick);
-    this.setAddCommentHandler(this._callback.setAddCommentHandler);
+    this.setAddCommentHandler(this._callback.addCommentClick);
     this.getElement().querySelector(`.film-details__emoji-list`).addEventListener(`change`, this._emojiChangeHandler);
   }
 

@@ -135,7 +135,6 @@ export default class MoviesList {
         break;
       case UserAction.ADD_COMMENT:
         this._moviesModel.addComment(updateType, update);
-        console.log("dfdfdf")
         break;
       case UserAction.DELETE_COMMENT:
         this._moviesModel.deleteComment(updateType, update);

@@ -28,7 +28,7 @@ export default class Movie {
     this._handleFavoriteClick = this._handleFavoriteClick.bind(this);
     this._handleClosePopupClick = this._handleClosePopupClick.bind(this);
     this._deleteCommentClick = this._deleteCommentClick.bind(this);
-
+    this._addCommentClick = this._addCommentClick.bind(this);
   }
 
   init(film) {
@@ -46,7 +46,6 @@ export default class Movie {
     this._filmCardComponent.setPosterClickHandler(this._popupClickHandler);
     this._filmCardComponent.setTitleClickHandler(this._popupClickHandler);
     this._filmCardComponent.setCommentsClickHandler(this._popupClickHandler);
-
 
     this._popUpFilmCardComponent.setAddCommentHandler(this._addCommentClick);
     this._popUpFilmCardComponent.setDeleteCommentHandler(this._deleteCommentClick);
@@ -135,8 +134,8 @@ export default class Movie {
       if (message.value !== `` && emoji) {
         this._changeData(
             UserAction.ADD_COMMENT,
-            UpdateType.MINOR,
-            Object.assign({}, {id: this._film.id}, {comment: { id: '123456', comment: message.value, author: `author`, date: '1', emotion: emoji.value}})
+            UpdateType.PATCH,
+            Object.assign({}, {id: this._film.id}, {comment: { id: '123456', author: `author`, emotion: emoji.value, comment: message.value,  date: '1'}})
         );
       }
     }
