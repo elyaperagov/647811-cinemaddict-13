@@ -1,5 +1,6 @@
 import Smart from "./smart.js";
 import {EMOJIES} from "../constants.js";
+import he from "he";
 
 const createPopupCommentsTemplate = (commentaries) => {
   const commentsList = commentaries.map((comment) => createCommentsTemplate(comment)).join(``);
@@ -13,7 +14,7 @@ const createCommentsTemplate = (comment) => {
     <img src="./images/emoji/${emoji}.png" width="55" height="55" alt="emoji-${emoji}">
   </span>
   <div>
-    <p class="film-details__comment-text">${message}</p>
+    <p class="film-details__comment-text">${he.encode(message)}</p>
     <p class="film-details__comment-info">
       <span class="film-details__comment-author">${author}</span>
       <span class="film-details__comment-day">${date}</span>
@@ -130,6 +131,7 @@ export const createFilmPopupTemplate = (data) => {
 
             <label class="film-details__comment-label">
               <textarea class="film-details__comment-input" placeholder="Select reaction below and write comment here" name="comment">${newComment ? `${newComment}` : ``}</textarea>
+              
             </label>
 
             <div class="film-details__emoji-list">
@@ -229,6 +231,9 @@ export default class PopUpFilmCard extends Smart {
 
   _textInputHandler(evt) {
     evt.preventDefault();
+    this.updateData({
+      newComment: evt.target.value
+    }, true);
     this._callback.addCommentClick(evt);
   }
 

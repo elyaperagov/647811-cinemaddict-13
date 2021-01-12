@@ -79,6 +79,7 @@ export default class Movie {
   _closePopup() {
     this._popUpFilmCardComponent.getElement().remove();
     siteBody.classList.remove(`hide-overflow`);
+    this._popUpFilmCardComponent.getElement().querySelector(`.film-details__comment-input`).value = ``;
     this._mode = Mode.DEFAULT;
   }
 
@@ -127,7 +128,7 @@ export default class Movie {
         this._changeData(
             UserAction.ADD_COMMENT,
             UpdateType.PATCH,
-            Object.assign({}, {id: this._film.id}, {comment: {id: toString(generateId()), author: `author`, emoji: emoji.value, message: message.value, date: new Date()}})
+            Object.assign({}, {id: this._film.id}, {comment: {id: generateId().toString(10), author: `author`, emoji: emoji.value, message: message.value, date: new Date()}})
         );
       }
     }
