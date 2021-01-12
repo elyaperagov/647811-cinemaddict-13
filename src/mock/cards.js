@@ -50,5 +50,6 @@ const generateCards = (itemCount) => {
 export {
   generateCard,
   generateCards,
-  generateComment
+  generateComment,
+  generateId
 };

@@ -78,6 +78,8 @@ const getMostCommentedFilms = (films) => {
   return films.slice().sort((a, b) => b.comments - a.comments);
 };
 
+const generateId = () => Date.now() + parseInt(Math.random() * 10000, 10);
+
 export {
   renderTemplate,
   renderElement,
@@ -86,5 +88,6 @@ export {
   RenderPosition,
   getMostRatedFilms,
   getMostCommentedFilms,
-  getDateSortedFilms
+  getDateSortedFilms,
+  generateId
 };

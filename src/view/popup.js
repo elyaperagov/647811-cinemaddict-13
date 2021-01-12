@@ -1,7 +1,6 @@
 import Smart from "./smart.js";
 import {EMOJIES} from "../constants.js";
 
-
 const createPopupCommentsTemplate = (commentaries) => {
   const commentsList = commentaries.map((comment) => createCommentsTemplate(comment)).join(``);
   return commentsList;

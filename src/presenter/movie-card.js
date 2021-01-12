@@ -1,7 +1,7 @@
 import FilmCard from "../view/film-card.js";
 import PopUpFilmCard from "../view/popup.js";
 import {UserAction, UpdateType} from "../constants.js";
-import {RenderPosition, renderElement, replace, remove} from '../helpers/render.js';
+import {RenderPosition, renderElement, replace, remove, generateId} from '../helpers/render.js';
 // import {getRandomInteger, getMeRandomElements} from '../helpers/common.js';
 // import CommentsView from '../view/comments-view.js';
 
@@ -119,14 +119,6 @@ export default class Movie {
     );
   }
 
-  // _addCommentClick(userComment) {
-  //   this._changeData(
-  //       UserAction.ADD_COMMENT,
-  //       UpdateType.PATCH,
-  //       Object.assign({}, this._film, {userComment: userComment})
-  //   );
-  // }
-
   _addCommentClick(evt) {
     if (evt.key === `Enter`) {
       const message = this._popUpFilmCardComponent.getElement().querySelector(`.film-details__comment-input`);
@@ -135,7 +127,7 @@ export default class Movie {
         this._changeData(
             UserAction.ADD_COMMENT,
             UpdateType.PATCH,
-            Object.assign({}, {id: this._film.id}, {comment: { id: '123456', author: `author`, emotion: emoji.value, comment: message.value,  date: '1'}})
+            Object.assign({}, {id: this._film.id}, {comment: {id: toString(generateId()), author: `author`, emoji: emoji.value, message: message.value, date: new Date()}})
         );
       }
     }
