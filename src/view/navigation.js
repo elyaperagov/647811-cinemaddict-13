@@ -1,29 +1,44 @@
 import AbstractView from "./abstract.js";
 
-const createNavigationTemplate = (watchList, history, favorites) => {
-  // let {watchList, history, favorites} = stats;
+const createFilterItemTemplate = (filter, currentFilterType) => {
+  const {type, name, count} = filter;
+  return (
+    `<a href="#watchlist" class="main-navigation__item ${type === currentFilterType ? `main-navigation__item--active` : ``}" data-filter-type="${type}">${name}<span class="main-navigation__item-count" data-filter-type="${type}">${count}</span></a>`
+  );
+};
+
+export const createFilterTemplate = (filterItems, currentFilterType) => {
+  const filterItemsTemplate = filterItems
+    .map((filter) => createFilterItemTemplate(filter, currentFilterType))
+    .join(``);
 
   return `<nav class="main-navigation">
-    <div class="main-navigation__items">
-      <a href="#all" class="main-navigation__item">All movies</a>
-      <a href="#watchlist" class="main-navigation__item">Watchlist <span class="main-navigation__item-count">${watchList}</span></a>
-      <a href="#history" class="main-navigation__item">History <span class="main-navigation__item-count">${history}</span></a>
-      <a href="#favorites" class="main-navigation__item">Favorites <span class="main-navigation__item-count">${favorites}</span></a>
-    </div>
-    <a href="#stats" class="main-navigation__additional main-navigation__additional--active">Stats</a>
-  </nav>`;
+  <div class="main-navigation__items">
+    ${filterItemsTemplate}
+    </div>`;
 };
 
 
-export default class Navigation extends AbstractView {
-  constructor(watchList, history, favorites) {
+export default class Filter extends AbstractView {
+  constructor(filters, currentFilterType) {
     super();
-    this._watchList = watchList;
-    this._history = history;
-    this._favorites = favorites;
+    this._filters = filters;
+    this._currentFilter = currentFilterType;
+
+    this._filterTypeChangeHandler = this._filterTypeChangeHandler.bind(this);
   }
 
   getTemplate() {
-    return createNavigationTemplate(this._watchList, this._history, this._favorites);
+    return createFilterTemplate(this._filters, this._currentFilter);
+  }
+
+  _filterTypeChangeHandler(evt) {
+    evt.preventDefault();
+    this._callback.filterTypeChange(evt.target.dataset.filterType);
+  }
+
+  setFilterTypeChangeHandler(callback) {
+    this._callback.filterTypeChange = callback;
+    this.getElement().querySelector(`.main-navigation__items`).addEventListener(`click`, this._filterTypeChangeHandler);
   }
 }

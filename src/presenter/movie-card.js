@@ -1,6 +1,9 @@
 import FilmCard from "../view/film-card.js";
 import PopUpFilmCard from "../view/popup.js";
-import {RenderPosition, renderElement, replace, remove} from '../helpers/render.js';
+import {UserAction, UpdateType} from "../constants.js";
+import {RenderPosition, renderElement, replace, remove, generateId} from '../helpers/render.js';
+// import {getRandomInteger, getMeRandomElements} from '../helpers/common.js';
+// import CommentsView from '../view/comments-view.js';
 
 const Mode = {
   DEFAULT: `DEFAULT`,
@@ -24,6 +27,8 @@ export default class Movie {
     this._handleWatchedClick = this._handleWatchedClick.bind(this);
     this._handleFavoriteClick = this._handleFavoriteClick.bind(this);
     this._handleClosePopupClick = this._handleClosePopupClick.bind(this);
+    this._deleteCommentClick = this._deleteCommentClick.bind(this);
+    this._addCommentClick = this._addCommentClick.bind(this);
   }
 
   init(film) {
@@ -42,6 +47,8 @@ export default class Movie {
     this._filmCardComponent.setTitleClickHandler(this._popupClickHandler);
     this._filmCardComponent.setCommentsClickHandler(this._popupClickHandler);
 
+    this._popUpFilmCardComponent.setAddCommentHandler(this._addCommentClick);
+    this._popUpFilmCardComponent.setDeleteCommentHandler(this._deleteCommentClick);
     this._popUpFilmCardComponent.setClosePopupClickHandler(this._handleClosePopupClick);
     this._popUpFilmCardComponent.setWatchListClickHandler(this._handleWatchListClick);
     this._popUpFilmCardComponent.setFavoriteClickHandler(this._handleFavoriteClick);
@@ -72,6 +79,7 @@ export default class Movie {
   _closePopup() {
     this._popUpFilmCardComponent.getElement().remove();
     siteBody.classList.remove(`hide-overflow`);
+    this._popUpFilmCardComponent.getElement().querySelector(`.film-details__comment-input`).value = ``;
     this._mode = Mode.DEFAULT;
   }
 
@@ -89,6 +97,9 @@ export default class Movie {
     document.addEventListener(`keydown`, (evt) => {
       this._onEscKeyDown(evt);
     });
+    document.addEventListener(`keydown`, (evt) => {
+      this._addCommentClick(evt);
+    });
     this._changeMode();
     this._mode = Mode.POPUP;
   }
@@ -101,6 +112,28 @@ export default class Movie {
     this._closePopup();
   }
 
+  _deleteCommentClick(commentId) {
+    this._changeData(
+        UserAction.DELETE_COMMENT,
+        UpdateType.PATCH,
+        Object.assign({}, {id: this._film.id}, {comment: commentId})
+    );
+  }
+
+  _addCommentClick(evt) {
+    if (evt.key === `Enter`) {
+      const message = this._popUpFilmCardComponent.getElement().querySelector(`.film-details__comment-input`);
+      const emoji = this._popUpFilmCardComponent.getElement().querySelector(`.film-details__emoji-item[checked]`);
+      if (message.value !== `` && emoji) {
+        this._changeData(
+            UserAction.ADD_COMMENT,
+            UpdateType.PATCH,
+            Object.assign({}, {id: this._film.id}, {comment: {id: generateId().toString(10), author: `author`, emoji: emoji.value, message: message.value, date: new Date()}})
+        );
+      }
+    }
+  }
+
   resetView() {
     if (this._mode !== Mode.DEFAULT) {
       this._closePopup();
@@ -109,6 +142,8 @@ export default class Movie {
 
   _handleWatchListClick() {
     this._changeData(
+        UserAction.UPDATE_FILM,
+        UpdateType.PATCH,
         Object.assign(
             {},
             this._film,
@@ -121,6 +156,8 @@ export default class Movie {
 
   _handleFavoriteClick() {
     this._changeData(
+        UserAction.UPDATE_FILM,
+        UpdateType.PATCH,
         Object.assign(
             {},
             this._film,
@@ -133,6 +170,8 @@ export default class Movie {
 
   _handleWatchedClick() {
     this._changeData(
+        UserAction.UPDATE_FILM,
+        UpdateType.PATCH,
         Object.assign(
             {},
             this._film,

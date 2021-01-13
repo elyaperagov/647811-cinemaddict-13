@@ -1,22 +1,70 @@
 import Profile from "./view/profile.js";
-import Navigation from "./view/navigation.js";
-import {generateCard} from './mock/cards.js';
 import MoviesList from "./presenter/movies-list.js";
+import MoviesModel from "./model/movies.js";
+import FilterModel from "./model/filter.js";
+import FilterPresenter from "./presenter/filter.js";
 import {RenderPosition, renderElement} from './helpers/render.js';
+import {UpdateType} from "./constants.js";
+import Api from "./api.js";
 
-const FILM_CARDS_QUANTITY = 15;
+const AUTHORIZATION = `Basic 14211421`;
+const END_POINT = `https://13.ecmascript.pages.academy/cinemaddict`;
 
-const generatedCards = new Array(FILM_CARDS_QUANTITY).fill().map(generateCard);
+const api = new Api(END_POINT, AUTHORIZATION);
+// const apiComments = new ApiComments(END_POINT, AUTHORIZATION);
+
+// const commentsCollection = new Array(COMMENTS_QUANTITY).fill([]).map((arr, index) => {
+//     const filmComments = new Array(index + 1).fill().map(generateComment);
+//     return filmComments;
+// }); /* СПРОСИТЬ */
+
 const siteHeaderElement = document.querySelector(`.header`);
 const siteMainElement = document.querySelector(`.main`);
 
-const favorCount = generatedCards.filter((card) => card.isFavorite).length;
-const watchedCount = generatedCards.filter((card) => card.isWatched).length;
-const isInWatchListCount = generatedCards.filter((card) => card.isInWatchList).length;
+const moviesModel = new MoviesModel();
+const filterModel = new FilterModel();
 
 renderElement(siteHeaderElement, new Profile(), RenderPosition.BEFOREEND);
-renderElement(siteMainElement, new Navigation(isInWatchListCount, watchedCount, favorCount), RenderPosition.BEFOREEND);
 
-const moviesPresenter = new MoviesList(siteMainElement);
+const moviesPresenter = new MoviesList(siteMainElement, moviesModel, filterModel);
+const filterPresenter = new FilterPresenter(siteMainElement, filterModel, moviesModel);
 
-moviesPresenter.render(generatedCards);
+filterPresenter.init();
+moviesPresenter.render();
+
+// api.getMovies()
+//   .then((movies) => {
+//     moviesModel.setFilms(UpdateType.INIT, movies);
+//   })
+// .catch(() => {
+//   moviesModel.setFilms(UpdateType.INIT, []);
+// });
+
+// api.getMovies()
+//   .then((movies) => {
+//     moviesModel.setFilms(UpdateType.INIT, movies);
+//     const promises = movies.map((movie) => {
+//       return api.getComments(movie.id);
+//     });
+//     return Promise.all(promises);
+//   })
+//   .then((comments) => {
+//     commentsModel.setComments(comments);
+//   });
+
+//   console.log(commentsModel);
+
+api.getMovies()
+  .then((movies) => {
+    const commentsCollection = movies.map((movie) => {
+      return api.getComments(movie.id).then((comments) => {
+        movie.comments = comments;
+      });
+    });
+    Promise.all(commentsCollection).then(() => {
+      moviesModel.setFilms(UpdateType.INIT, movies);
+    });
+  })
+.catch(() => {
+  moviesModel.setFilms(UpdateType.INIT, []);
+});

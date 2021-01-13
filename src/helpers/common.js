@@ -46,6 +46,14 @@ const updateItem = (items, update) => {
   ];
 };
 
+const getMeRandomElements = function (sourceArray, neededElements) {
+  let result = [];
+  for (let i = 0; i < neededElements; i++) {
+    result.push(sourceArray[Math.floor(Math.random() * sourceArray.length)]);
+  }
+  return result;
+};
+
 export {
   getRandomArrayItem,
   getRandomInteger,
@@ -53,5 +61,6 @@ export {
   shuffleArray,
   getTimeFromMins,
   getPosterName,
-  updateItem
+  updateItem,
+  getMeRandomElements
 };

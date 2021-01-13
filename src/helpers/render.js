@@ -70,9 +70,15 @@ const getMostRatedFilms = (films) => {
   return films.slice().sort((a, b) => b.rating - a.rating);
 };
 
+const getDateSortedFilms = (films) => {
+  return films.slice().sort((a, b) => b.year - a.year);
+};
+
 const getMostCommentedFilms = (films) => {
   return films.slice().sort((a, b) => b.comments - a.comments);
 };
+
+const generateId = () => Date.now() + parseInt(Math.random() * 10000, 10);
 
 export {
   renderTemplate,
@@ -81,5 +87,7 @@ export {
   remove,
   RenderPosition,
   getMostRatedFilms,
-  getMostCommentedFilms
+  getMostCommentedFilms,
+  getDateSortedFilms,
+  generateId
 };
