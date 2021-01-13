@@ -52,10 +52,7 @@ export default class MoviesList {
     this._moviesModel.addObserver(this._handleModelEvent);
     this._filterModel.addObserver(this._handleModelEvent);
 
-    const filmsElement = this._filmsComponent.getElement();
-    const filmsListElement = filmsElement.querySelector(`.films-list`);
-
-    renderElement(filmsListElement, this._filmListContainerComponent, RenderPosition.BEFOREEND);
+    renderElement(this._filmsListComponent, this._filmListContainerComponent, RenderPosition.BEFOREEND);
 
     this._renderBoard();
   }
@@ -196,7 +193,7 @@ export default class MoviesList {
   _handleLoadMoreButtonClick() {
     const filmsCount = this._getFilms().length;
     const newRenderedFilmsCount = Math.min(filmsCount, this._renderedFilmsCount + CARDS_IN_ROW);
-    const films = this._getFilms().slice(this._getFilms, newRenderedFilmsCount);
+    const films = this._getFilms().slice(this._renderedFilmsCount, newRenderedFilmsCount);
 
     // СПРОСИТЬ НА СОЗВОНЕ ПРО ЛОГИКУ newRenderedFilmsCount
     this._renderFilms(films);
