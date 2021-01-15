@@ -24,9 +24,7 @@ const siteMainElement = document.querySelector(`.main`);
 const moviesModel = new MoviesModel();
 const filterModel = new FilterModel();
 
-renderElement(siteHeaderElement, new Profile(), RenderPosition.BEFOREEND);
-
-const moviesPresenter = new MoviesList(siteMainElement, moviesModel, filterModel);
+const moviesPresenter = new MoviesList(siteMainElement, moviesModel, filterModel, api);
 const filterPresenter = new FilterPresenter(siteMainElement, filterModel, moviesModel);
 
 filterPresenter.init();
@@ -64,7 +62,9 @@ api.getMovies()
     Promise.all(commentsCollection).then(() => {
       moviesModel.setFilms(UpdateType.INIT, movies);
     });
+    renderElement(siteHeaderElement, new Profile(), RenderPosition.BEFOREEND);
   })
 .catch(() => {
   moviesModel.setFilms(UpdateType.INIT, []);
+  renderElement(siteHeaderElement, new Profile(), RenderPosition.BEFOREEND);
 });

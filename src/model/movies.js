@@ -71,35 +71,66 @@ export default class Movies extends Observer {
           description: movie.film_info.description,
           isInWatchlist: movie.user_details.watchlist,
           isWatched: movie.user_details.already_watched,
-          // watching_date: movie.user_details.watching_date,
+          watchingDate: movie.user_details.watching_date,
           isFavorite: movie.user_details.favorite,
         }
     );
 
-    // Ненужные ключи мы удаляем
-    // delete adaptedMovie.is_archived;
-    // delete adaptedMovie.is_favorite;
     return adaptedMovie;
   }
-
-  // static adaptToClient(movie) {
-  //   return api.getComments(movie.id).then((comments) => {
-  //     const adaptedMovie = Object.assign(
 
   static adaptToServer(movie) {
     const adaptedMovie = Object.assign(
         {},
         movie,
         {
-          "is_archived": movie.isArchive,
-          "is_favorite": movie.isFavorite
+          "id": movie.id,
+          "comments": movie.comments,
+          "film_info": {
+            "title": movie.title,
+            "alternative_title": movie.alternativeTitle,
+            "total_rating": movie.rating,
+            "poster": movie.poster,
+            "age_rating": movie.age,
+            "director": movie.director,
+            "writers": movie.writers,
+            "actors": movie.actors,
+            "release": {
+              "date": movie.year.toISOString(),
+              "release_country": movie.releaseCountry
+            },
+            "runtime": movie.duration,
+            "genre": movie.genre,
+            "description": movie.description
+          },
+          "user_details": {
+            "watchlist": movie.isInWatchlist,
+            "already_watched": movie.isWatched,
+            "watching_date": movie.watchingDate,
+            "favorite": movie.isFavorite,
+          }
         }
     );
 
-    // Ненужные ключи мы удаляем
-    delete adaptedMovie.isArchive;
+    delete adaptedMovie.actors;
+    delete adaptedMovie.age;
+    delete adaptedMovie.releaseCountry;
+    delete adaptedMovie.description;
+    delete adaptedMovie.duration;
+    delete adaptedMovie.genre;
+    delete adaptedMovie.isInWatchlist;
     delete adaptedMovie.isFavorite;
+    delete adaptedMovie.isWatched;
+    delete adaptedMovie.alternativeTitle;
+    delete adaptedMovie.title;
+    delete adaptedMovie.poster;
+    delete adaptedMovie.rating;
+    delete adaptedMovie.year;
+    delete adaptedMovie.watchingDate;
+    delete adaptedMovie.writers;
+    delete adaptedMovie.director;
 
+    console.log(adaptedMovie)
     return adaptedMovie;
   }
 }

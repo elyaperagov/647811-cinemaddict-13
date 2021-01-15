@@ -60,12 +60,14 @@ export default class Api {
         {},
         comments,
         {
-          id: comments.id,
-          message: comments.comment,
-          emoji: comments.emotion,
-          date: comments.date,
-          author: comments.author
+          "id": comments.id,
+          "comment": comments.message,
+          "emotion": comments.emoji,
+          "date": comments.date,
+          "author": comments.author
         });
+
+    console.log(adaptedComments)
     return adaptedComments;
   }
 
@@ -104,6 +106,7 @@ export default class Api {
       throw new Error(`${response.status}: ${response.statusText}`);
     }
 
+    console.log(response.status)
     return response;
   }
 
