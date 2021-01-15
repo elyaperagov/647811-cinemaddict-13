@@ -67,7 +67,12 @@ export default class Api {
           "author": comments.author
         });
 
-    console.log(adaptedComments)
+        delete adaptedComments.author;
+        delete adaptedComments.comment;
+        delete adaptedComments.date;
+        delete adaptedComments.emotion;
+        delete adaptedComments.id;
+
     return adaptedComments;
   }
 
@@ -75,6 +80,7 @@ export default class Api {
     return this._load({
       url: `movies/${movie.id}`,
       method: Method.PUT,
+      // body: JSON.stringify(MoviesModel.adaptToServer(movie), this._adaptToServer(movie.comments)),
       body: JSON.stringify(MoviesModel.adaptToServer(movie)),
       headers: new Headers({"Content-Type": `application/json`})
     })
@@ -89,6 +95,7 @@ export default class Api {
     headers = new Headers()
   }) {
     headers.append(`Authorization`, this._authorization);
+    console.log(body)
 
     return fetch(
         `${this._endPoint}/${url}`,

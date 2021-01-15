@@ -79,13 +79,22 @@ export default class Movies extends Observer {
     return adaptedMovie;
   }
 
+  static takeCommentId (comments) {
+    let comments_ids = [];
+      comments.forEach(comment => {
+      comments_ids.push(comment.id);
+    });
+
+    return comments_ids;
+  }
+
   static adaptToServer(movie) {
     const adaptedMovie = Object.assign(
         {},
         movie,
         {
           "id": movie.id,
-          "comments": movie.comments,
+          "comments": this.takeCommentId(movie.comments),
           "film_info": {
             "title": movie.title,
             "alternative_title": movie.alternativeTitle,
@@ -130,7 +139,6 @@ export default class Movies extends Observer {
     delete adaptedMovie.writers;
     delete adaptedMovie.director;
 
-    console.log(adaptedMovie)
     return adaptedMovie;
   }
 }
