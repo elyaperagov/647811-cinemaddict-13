@@ -1,4 +1,10 @@
 import Observer from "../helpers/observer.js";
+import Api from "../api.js";
+
+const AUTHORIZATION = `Basic 14211421`;
+const END_POINT = `https://13.ecmascript.pages.academy/cinemaddict`;
+
+const api = new Api(END_POINT, AUTHORIZATION);
 
 export default class Movies extends Observer {
   constructor() {
@@ -55,7 +61,7 @@ export default class Movies extends Observer {
         movie,
         {
           id: movie.id,
-          comments: movie.comments,
+          comments: api.getComments(movie.id),
           title: movie.film_info.title,
           alternativeTitle: movie.film_info.alternative_title,
           rating: movie.film_info.total_rating,

@@ -51,6 +51,7 @@ export default class Api {
           author: comments.author,
           date: comments.date
         });
+    console.log(adaptedComments)
     return adaptedComments;
   }
 
@@ -113,7 +114,6 @@ export default class Api {
       throw new Error(`${response.status}: ${response.statusText}`);
     }
 
-    console.log(response.status)
     return response;
   }
 
