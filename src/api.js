@@ -17,22 +17,12 @@ export default class Api {
   }
 
   getMovies() {
-    return this._load({url: `movies`})
+    return this._load({
+      url: `movies`
+    })
       .then(Api.toJSON)
       .then((movies) => movies.map(MoviesModel.adaptToClient));
   }
-  // getMovies() {
-  //   return this._load({url: `movies`})
-  //     .then(Api.toJSON)
-  //     .then(async (movies) => {
-  //       let adaptedFilms = [];
-  //       for (let movie of movies) {
-  //         let adaptedFilm = await MoviesModel.adaptToClient(movie)
-  //         adaptedFilms.push(adaptedFilm);
-  //       }
-  //       return adaptedFilms;
-  //     });
-  // }
 
   getComments(filmId) {
     return this._load({url: `comments/${filmId}`})
@@ -40,11 +30,22 @@ export default class Api {
       .then((comments) => comments.map(this._adaptToClient));
   }
 
+  getUpdatedComments(filmId) {
+    return new Promise((resolve) => {
+      this._load({
+        url: `comments/${filmId}`
+      })
+        .then(Api.toJSON)
+        .then((comments) => {
+          const result = comments.map(this._adaptToClient);
+          resolve(result);
+        });
+    });
+  }
+
   _adaptToClient(comments) {
-    const adaptedComments = Object.assign(
-        {},
-        comments,
-        {
+    const adaptedComments = Object.assign({},
+        comments, {
           id: comments.id,
           message: comments.comment,
           emoji: comments.emotion,
@@ -54,30 +55,17 @@ export default class Api {
     return adaptedComments;
   }
 
-
-  _adaptToServer(comments) {
-    const adaptedComments = Object.assign(
-        {},
-        comments,
-        {
-          id: comments.id,
-          message: comments.comment,
-          emoji: comments.emotion,
-          date: comments.date,
-          author: comments.author
-        });
-    return adaptedComments;
-  }
-
   updateMovie(movie) {
     return this._load({
       url: `movies/${movie.id}`,
       method: Method.PUT,
       body: JSON.stringify(MoviesModel.adaptToServer(movie)),
-      headers: new Headers({"Content-Type": `application/json`})
+      headers: new Headers({
+        "Content-Type": `application/json`
+      })
     })
       .then(Api.toJSON)
-      .then(MoviesModel.adaptToClient);
+      .then(MoviesModel.updateToClient);
   }
 
   _load({
@@ -89,8 +77,11 @@ export default class Api {
     headers.append(`Authorization`, this._authorization);
 
     return fetch(
-        `${this._endPoint}/${url}`,
-        {method, body, headers}
+        `${this._endPoint}/${url}`, {
+          method,
+          body,
+          headers
+        }
     )
       .then(Api.checkStatus)
       .catch(Api.catchError);

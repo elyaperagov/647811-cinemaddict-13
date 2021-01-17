@@ -7,10 +7,10 @@ import {RenderPosition, renderElement} from './helpers/render.js';
 import {UpdateType} from "./constants.js";
 import Api from "./api.js";
 
-const AUTHORIZATION = `Basic 14211421`;
-const END_POINT = `https://13.ecmascript.pages.academy/cinemaddict`;
+export const AUTHORIZATION = `Basic 14211421`;
+export const END_POINT = `https://13.ecmascript.pages.academy/cinemaddict`;
 
-const api = new Api(END_POINT, AUTHORIZATION);
+export const api = new Api(END_POINT, AUTHORIZATION);
 // const apiComments = new ApiComments(END_POINT, AUTHORIZATION);
 
 // const commentsCollection = new Array(COMMENTS_QUANTITY).fill([]).map((arr, index) => {
@@ -24,9 +24,7 @@ const siteMainElement = document.querySelector(`.main`);
 const moviesModel = new MoviesModel();
 const filterModel = new FilterModel();
 
-renderElement(siteHeaderElement, new Profile(), RenderPosition.BEFOREEND);
-
-const moviesPresenter = new MoviesList(siteMainElement, moviesModel, filterModel);
+const moviesPresenter = new MoviesList(siteMainElement, moviesModel, filterModel, api);
 const filterPresenter = new FilterPresenter(siteMainElement, filterModel, moviesModel);
 
 filterPresenter.init();
@@ -64,7 +62,9 @@ api.getMovies()
     Promise.all(commentsCollection).then(() => {
       moviesModel.setFilms(UpdateType.INIT, movies);
     });
+    renderElement(siteHeaderElement, new Profile(), RenderPosition.BEFOREEND);
   })
 .catch(() => {
   moviesModel.setFilms(UpdateType.INIT, []);
+  renderElement(siteHeaderElement, new Profile(), RenderPosition.BEFOREEND);
 });

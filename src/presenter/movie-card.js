@@ -2,8 +2,6 @@ import FilmCard from "../view/film-card.js";
 import PopUpFilmCard from "../view/popup.js";
 import {UserAction, UpdateType} from "../constants.js";
 import {RenderPosition, renderElement, replace, remove, generateId} from '../helpers/render.js';
-// import {getRandomInteger, getMeRandomElements} from '../helpers/common.js';
-// import CommentsView from '../view/comments-view.js';
 
 const Mode = {
   DEFAULT: `DEFAULT`,
@@ -121,7 +119,7 @@ export default class Movie {
   }
 
   _addCommentClick(evt) {
-    if (evt.key === `Enter`) {
+    if (evt.key === `Enter` && evt.ctrlKey) {
       const message = this._popUpFilmCardComponent.getElement().querySelector(`.film-details__comment-input`);
       const emoji = this._popUpFilmCardComponent.getElement().querySelector(`.film-details__emoji-item[checked]`);
       if (message.value !== `` && emoji) {
@@ -148,7 +146,7 @@ export default class Movie {
             {},
             this._film,
             {
-              isInWatchList: !this._film.isInWatchList
+              isInWatchlist: !this._film.isInWatchlist
             }
         )
     );

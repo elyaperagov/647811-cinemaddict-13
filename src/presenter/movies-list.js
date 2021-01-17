@@ -20,14 +20,14 @@ const MOST_COMMENTED_FILMS = 2;
 const TOP_RATED_FILMS = 2;
 
 export default class MoviesList {
-  constructor(container, moviesModel, filterModel, commentsModel) {
+  constructor(container, moviesModel, filterModel, api) {
     this._moviesModel = moviesModel;
     this._filterModel = filterModel;
-    this._commentsModel = commentsModel;
     this._container = container;
     this._renderedFilmsCount = CARDS_IN_ROW;
     this._filmsPresenter = {};
     this._isLoading = true;
+    this._api = api;
 
     this._profileComponent = new Profile();
     this._filmsComponent = new Films();
@@ -128,7 +128,8 @@ export default class MoviesList {
   _handleViewAction(actionType, updateType, update) {
     switch (actionType) {
       case UserAction.UPDATE_FILM:
-        this._moviesModel.updateFilm(updateType, update);
+        this._api.updateMovie(update)
+          .then((response) => this._moviesModel.updateFilm(updateType, response));
         break;
       case UserAction.ADD_COMMENT:
         this._moviesModel.addComment(updateType, update);
