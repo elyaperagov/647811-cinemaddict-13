@@ -7,10 +7,10 @@ import {RenderPosition, renderElement} from './helpers/render.js';
 import {UpdateType} from "./constants.js";
 import Api from "./api.js";
 
-const AUTHORIZATION = `Basic 14211421`;
-const END_POINT = `https://13.ecmascript.pages.academy/cinemaddict`;
+export const AUTHORIZATION = `Basic 14211421`;
+export const END_POINT = `https://13.ecmascript.pages.academy/cinemaddict`;
 
-const api = new Api(END_POINT, AUTHORIZATION);
+export const api = new Api(END_POINT, AUTHORIZATION);
 // const apiComments = new ApiComments(END_POINT, AUTHORIZATION);
 
 // const commentsCollection = new Array(COMMENTS_QUANTITY).fill([]).map((arr, index) => {

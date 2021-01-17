@@ -1,10 +1,5 @@
 import Observer from "../helpers/observer.js";
-import Api from "../api.js";
-
-const AUTHORIZATION = `Basic 14211421`;
-const END_POINT = `https://13.ecmascript.pages.academy/cinemaddict`;
-
-const api = new Api(END_POINT, AUTHORIZATION);
+import {api} from "../main.js";
 
 export default class Movies extends Observer {
   constructor() {
@@ -55,13 +50,44 @@ export default class Movies extends Observer {
     this.updateFilm(updateType, movie);
   }
 
+  static updateToClient(movie) {
+    return api.getUpdatedComments(movie.id).then((commentsCollection) => {
+      const adaptedMovie = Object.assign(
+          {},
+          movie,
+          {
+            id: movie.id,
+            comments: commentsCollection,
+            title: movie.film_info.title,
+            alternativeTitle: movie.film_info.alternative_title,
+            rating: movie.film_info.total_rating,
+            poster: movie.film_info.poster,
+            age: movie.film_info.age_rating,
+            director: movie.film_info.director,
+            writers: movie.film_info.writers,
+            actors: movie.film_info.actors,
+            year: new Date(movie.film_info.release.date),
+            releaseCountry: movie.film_info.release.release_country,
+            duration: movie.film_info.runtime,
+            genre: movie.film_info.genre,
+            description: movie.film_info.description,
+            isInWatchlist: movie.user_details.watchlist,
+            isWatched: movie.user_details.already_watched,
+            watchingDate: movie.user_details.watching_date,
+            isFavorite: movie.user_details.favorite,
+          }
+      );
+      return adaptedMovie;
+    });
+  }
+
   static adaptToClient(movie) {
     const adaptedMovie = Object.assign(
         {},
         movie,
         {
           id: movie.id,
-          comments: api.getComments(movie.id),
+          comments: movie.comments,
           title: movie.film_info.title,
           alternativeTitle: movie.film_info.alternative_title,
           rating: movie.film_info.total_rating,
@@ -85,13 +111,13 @@ export default class Movies extends Observer {
     return adaptedMovie;
   }
 
-  static takeCommentId (comments) {
-    let comments_ids = [];
-      comments.forEach(comment => {
-      comments_ids.push(comment.id);
+  static takeCommentId(comments) {
+    let commentsIds = [];
+    comments.forEach((comment) => {
+      commentsIds.push(comment.id);
     });
 
-    return comments_ids;
+    return commentsIds;
   }
 
   static adaptToServer(movie) {

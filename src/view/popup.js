@@ -9,6 +9,7 @@ const createPopupCommentsTemplate = (commentaries) => {
 
 const createCommentsTemplate = (comment) => {
   const {id, message, emoji, author, date} = comment;
+  // const releaseDate = date.toISOString();
   return `<li class="film-details__comment" data-comment-id="${id}">
   <span class="film-details__comment-${emoji}">
     <img src="./images/emoji/${emoji}.png" width="55" height="55" alt="emoji-${emoji}">
@@ -25,9 +26,9 @@ const createCommentsTemplate = (comment) => {
 };
 
 export const createFilmPopupTemplate = (data) => {
-  let {title, age, description, genre, year, rating, actors, duration, isInWatchList, isWatched, comments, isFavorite, emojies, poster, writers, director, alternativeTitle, releaseCountry, newComment} = data;
+  let {title, age, description, genre, year, rating, actors, duration, isInWatchlist, isWatched, comments, isFavorite, emojies, poster, writers, director, alternativeTitle, releaseCountry, newComment} = data;
 
-  const isInWatchListButton = isInWatchList ? `checked` : ``;
+  const isInWatchListButton = isInWatchlist ? `checked` : ``;
   const isWatchedButton = isWatched ? `checked` : ``;
   const isFavoriteButton = isFavorite ? `checked` : ``;
 
@@ -131,7 +132,7 @@ export const createFilmPopupTemplate = (data) => {
 
             <label class="film-details__comment-label">
               <textarea class="film-details__comment-input" placeholder="Select reaction below and write comment here" name="comment">${newComment ? `${newComment}` : ``}</textarea>
-              
+
             </label>
 
             <div class="film-details__emoji-list">
@@ -190,7 +191,7 @@ export default class PopUpFilmCard extends Smart {
     evt.preventDefault();
     this._callback.watchListClick();
     this.updateData({
-      isInWatchList: !this._data.isInWatchList
+      isInWatchlist: !this._data.isInWatchlist
     });
   }
 
@@ -221,13 +222,6 @@ export default class PopUpFilmCard extends Smart {
     const commentId = evt.target.closest(`.film-details__comment`).dataset.commentId;
     this._callback.deleteCommentClick(commentId);
   }
-
-  // _textInputHandler(evt) {
-  //   evt.preventDefault();
-  //   this.updateData({
-  //     newComment: evt.target.value
-  //   });
-  // }
 
   _textInputHandler(evt) {
     evt.preventDefault();
@@ -275,7 +269,7 @@ export default class PopUpFilmCard extends Smart {
         {},
         film,
         {
-          isInWatchList: film.isInWatchList,
+          isInWatchlist: film.isInWatchlist,
           isWatched: film.isWatched,
           isFavorite: film.isFavorite,
         }
