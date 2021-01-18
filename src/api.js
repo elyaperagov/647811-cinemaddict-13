@@ -31,14 +31,14 @@ export default class Api {
   }
 
   getUpdatedComments(filmId) {
-    return new Promise((resolve) => {
+    return new Promise(() => {
       this._load({
         url: `comments/${filmId}`
       })
         .then(Api.toJSON)
         .then((comments) => {
-          const result = comments.map(this._adaptToClient);
-          resolve(result);
+          return comments.map(this._adaptToClient);
+
         });
     });
   }
