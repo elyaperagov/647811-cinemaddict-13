@@ -36,9 +36,9 @@ export default class Movies extends Observer {
   addComment(updateType, update) {
     const film = this._films.filter((movie) => movie.id === update.id);
 
-    film[0].comments.push(update.comment);
+    const movie = Object.assign({}, film[0], {comments: update.comments});
 
-    this.updateFilm(updateType, film[0]);
+    this.updateFilm(updateType, movie);
   }
 
   deleteComment(updateType, update) {
@@ -111,6 +111,36 @@ export default class Movies extends Observer {
     return adaptedMovie;
   }
 
+  static adaptCommentsToClient(movie) {
+    const adaptedMovie = Object.assign(
+        {},
+        movie,
+        {
+          id: movie.movie.id,
+          comments: movie.comments,
+          title: movie.movie.film_info.title,
+          alternativeTitle: movie.movie.film_info.alternative_title,
+          rating: movie.movie.film_info.total_rating,
+          poster: movie.movie.film_info.poster,
+          age: movie.movie.film_info.age_rating,
+          director: movie.movie.film_info.director,
+          writers: movie.movie.film_info.writers,
+          actors: movie.movie.film_info.actors,
+          year: new Date(movie.movie.film_info.release.date),
+          releaseCountry: movie.movie.film_info.release.release_country,
+          duration: movie.movie.film_info.runtime,
+          genre: movie.movie.film_info.genre,
+          description: movie.movie.film_info.description,
+          isInWatchlist: movie.movie.user_details.watchlist,
+          isWatched: movie.movie.user_details.already_watched,
+          watchingDate: movie.movie.user_details.watching_date,
+          isFavorite: movie.movie.user_details.favorite,
+        }
+    );
+
+    return adaptedMovie;
+  }
+
   static takeCommentId(comments) {
     let commentsIds = [];
     comments.forEach((comment) => {
@@ -120,18 +150,15 @@ export default class Movies extends Observer {
     return commentsIds;
   }
 
-  static updateToServer (movie) {
+  static updateToServer(movie) {
     const adaptedMovie = Object.assign(
         {},
-        movie.comment,
+        movie,
         {
-          // "id": comments.id,
-          "comment": comment.message,
-          "emotion": comment.emoji,
-          "date": comment.date,
-          "author": comment.author
+          "comment": movie.comment.message,
+          "emotion": movie.comment.emoji,
+          "date": movie.comment.date
         });
-    
 
     return adaptedMovie;
   }

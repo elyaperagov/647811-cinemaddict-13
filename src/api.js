@@ -34,30 +34,30 @@ export default class Api {
 
   getUpdatedComments(filmId) {
     return this._load({
-        url: `comments/${filmId}`
-      })
-      .then(Api.toJSON)
-      .then((comments) => comments.map(this._adaptToClient));
-    };
+      url: `comments/${filmId}`
+    })
+    .then(Api.toJSON)
+    .then((comments) => comments.map(this._adaptToClient));
+  }
 
-    addComment(movie) {
-      return this._load({
-        url: `comments/${movie.id}`,
-        method: Method.POST,
-        body: JSON.stringify(MoviesModel.updateToServer(movie)),
-        headers: new Headers({"Content-Type": `application/json`})
-      })
-        .then(Api.toJSON)
-        .then(MoviesModel.adaptToClient);
-    }
-  
-    deleteComment(comment) {
-      return this._load({
-        url: `comments/${comment.comment}`,
-        method: Method.DELETE
-      });
-    }
-    
+  addComment(movie) {
+    return this._load({
+      url: `comments/${movie.id}`,
+      method: Method.POST,
+      body: JSON.stringify(MoviesModel.updateToServer(movie)),
+      headers: new Headers({"Content-Type": `application/json`})
+    })
+      .then(Api.toJSON)
+      .then(MoviesModel.adaptCommentsToClient);
+  }
+
+  deleteComment(comment) {
+    return this._load({
+      url: `comments/${comment.comment}`,
+      method: Method.DELETE
+    });
+  }
+
   _adaptToClient(comments) {
     const adaptedComments = Object.assign({},
         comments, {

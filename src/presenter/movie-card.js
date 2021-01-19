@@ -1,7 +1,7 @@
 import FilmCard from "../view/film-card.js";
 import PopUpFilmCard from "../view/popup.js";
 import {UserAction, UpdateType} from "../constants.js";
-import {RenderPosition, renderElement, replace, remove, generateId} from '../helpers/render.js';
+import {RenderPosition, renderElement, replace, remove} from '../helpers/render.js';
 
 const Mode = {
   DEFAULT: `DEFAULT`,
@@ -126,8 +126,7 @@ export default class Movie {
         this._changeData(
             UserAction.ADD_COMMENT,
             UpdateType.PATCH,
-            Object.assign({}, {id: this._film.id}, {comment: {author: `author`, emoji: emoji.value, message: message.value, date: new Date()}})
-            // Object.assign({}, {id: this._film.id}, {comment: {id: generateId().toString(10), author: `author`, emoji: emoji.value, message: message.value, date: new Date()}})
+            Object.assign({}, {id: this._film.id}, {comment: {emoji: emoji.value, message: message.value, date: new Date()}})
         );
       }
     }
