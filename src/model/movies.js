@@ -120,6 +120,22 @@ export default class Movies extends Observer {
     return commentsIds;
   }
 
+  static updateToServer (movie) {
+    const adaptedMovie = Object.assign(
+        {},
+        movie.comment,
+        {
+          // "id": comments.id,
+          "comment": comment.message,
+          "emotion": comment.emoji,
+          "date": comment.date,
+          "author": comment.author
+        });
+    
+
+    return adaptedMovie;
+  }
+
   static adaptToServer(movie) {
     const adaptedMovie = Object.assign(
         {},
