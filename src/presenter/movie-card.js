@@ -124,15 +124,18 @@ export default class Movie {
   }
 
   _addCommentClick(evt) {
-    this._addCommentClickPromise(evt)
-    .then(() => {
-      shake(this._popUpFilmCardComponent.getElement().querySelector(`form`));
+    return this._addCommentClickPromise(evt)
+    // .then(() => {
+    //   console.log('dfdf')
+    // })
+    .catch(() => {
       disablePopup(false, this._popUpFilmCardComponent.getElement().querySelector(`form`));
+      shake(this._popUpFilmCardComponent.getElement().querySelector(`form`));
     });
   }
 
   _addCommentClickPromise(evt) {
-    return new Promise((reject) => {
+    return new Promise((resolve, reject) => {
       const message = this._popUpFilmCardComponent.getElement().querySelector(`.film-details__comment-input`);
       const emoji = this._popUpFilmCardComponent.getElement().querySelector(`.film-details__emoji-item[checked]`);
       if (evt.key === `Enter`) {
@@ -145,6 +148,7 @@ export default class Movie {
           );
         }
         reject();
+        resolve();
       }
     });
   }
