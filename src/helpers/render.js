@@ -5,6 +5,8 @@ const RenderPosition = {
   BEFOREEND: `beforeend`
 };
 
+const SHAKE_ANIMATION_TIMEOUT = 600;
+
 const renderElement = (container, child, place) => {
   if (container instanceof Abstract) {
     container = container.getElement();
@@ -23,6 +25,27 @@ const renderElement = (container, child, place) => {
       break;
   }
 };
+
+const shake = (element) => {
+  element.style.animation = `shake ${SHAKE_ANIMATION_TIMEOUT / 1000}s`;
+  setTimeout(() => {
+    element.style.animation = ``;
+  }, SHAKE_ANIMATION_TIMEOUT);
+};
+
+const disablePopup = (isFormDisabled, container) => {
+  const elements = container.elements;
+  const [...allElements] = elements;
+
+  allElements.forEach((element) => {
+    element.disabled = isFormDisabled;
+  });
+};
+
+// const disableDeleteButton = (button, bDisabled) =>{
+//   button.disabled = bDisabled;
+//   button.innerHTML = bDisabled ? `Deleting…` : `Delete`;
+// }
 
 export const replace = (newChild, oldChild) => {
   if (oldChild instanceof Abstract) {
@@ -89,5 +112,8 @@ export {
   getMostRatedFilms,
   getMostCommentedFilms,
   getDateSortedFilms,
-  generateId
+  generateId,
+  shake,
+  disablePopup,
+  // disableDeleteButton
 };

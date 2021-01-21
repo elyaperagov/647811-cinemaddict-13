@@ -9,7 +9,6 @@ const createPopupCommentsTemplate = (commentaries) => {
 
 const createCommentsTemplate = (message) => {
   const {id, comment, emotion, author, date} = message;
-  // const releaseDate = date.toISOString();
   return `<li class="film-details__comment" data-comment-id="${id}">
   <span class="film-details__comment-${emotion}">
     <img src="./images/emoji/${emotion}.png" width="55" height="55" alt="emoji-${emotion}">
@@ -217,8 +216,15 @@ export default class PopUpFilmCard extends Smart {
     // this._callback.formSubmit(TaskEdit.parseDataToTask(this._data));
   }
 
+  _disableDeleteButton(button, bDisabled) {
+    button.disabled = bDisabled;
+    button.innerHTML = bDisabled ? `Deleting…` : `Delete`;
+  }
+
   _deleteCommentHandler(evt) {
+    let deleteButton = evt.target;
     evt.preventDefault();
+    this._disableDeleteButton(deleteButton, true);
     const commentId = evt.target.closest(`.film-details__comment`).dataset.commentId;
     this._callback.deleteCommentClick(commentId);
   }
@@ -272,6 +278,9 @@ export default class PopUpFilmCard extends Smart {
           isInWatchlist: film.isInWatchlist,
           isWatched: film.isWatched,
           isFavorite: film.isFavorite,
+          isDisabled: false,
+          // isSaving: false,
+          isDeleting: false
         }
     );
   }

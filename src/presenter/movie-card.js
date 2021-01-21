@@ -1,7 +1,7 @@
 import FilmCard from "../view/film-card.js";
 import PopUpFilmCard from "../view/popup.js";
 import {UserAction, UpdateType} from "../constants.js";
-import {RenderPosition, renderElement, replace, remove} from '../helpers/render.js';
+import {RenderPosition, renderElement, disablePopup, shake, replace, remove} from '../helpers/render.js';
 
 const Mode = {
   DEFAULT: `DEFAULT`,
@@ -65,6 +65,11 @@ export default class Movie {
       replace(this._popUpFilmCardComponent, prevPopupComponent);
     }
 
+    if (this._mode === Mode.EDITING) {
+      replace(this._filmCardComponent, prevFilmComponent);
+      this._mode = Mode.DEFAULT;
+    }
+
     remove(prevPopupComponent);
     remove(prevFilmComponent);
   }
@@ -119,17 +124,29 @@ export default class Movie {
   }
 
   _addCommentClick(evt) {
-    if (evt.key === `Enter` && evt.ctrlKey) {
+    this._addCommentClickPromise(evt)
+    .then(() => {
+      shake(this._popUpFilmCardComponent.getElement().querySelector(`form`));
+      disablePopup(false, this._popUpFilmCardComponent.getElement().querySelector(`form`));
+    });
+  }
+
+  _addCommentClickPromise(evt) {
+    return new Promise((reject) => {
       const message = this._popUpFilmCardComponent.getElement().querySelector(`.film-details__comment-input`);
       const emoji = this._popUpFilmCardComponent.getElement().querySelector(`.film-details__emoji-item[checked]`);
-      if (message.value !== `` && emoji) {
-        this._changeData(
-            UserAction.ADD_COMMENT,
-            UpdateType.PATCH,
-            Object.assign({}, {id: this._film.id}, {comment: {emoji: emoji.value, message: message.value, date: new Date()}})
-        );
+      if (evt.key === `Enter`) {
+        disablePopup(true, this._popUpFilmCardComponent.getElement().querySelector(`form`));
+        if (message.value !== `` && emoji) {
+          this._changeData(
+              UserAction.ADD_COMMENT,
+              UpdateType.PATCH,
+              Object.assign({}, {id: this._film.id}, {comment: {emoji: emoji.value, message: message.value, date: new Date()}})
+          );
+        }
+        reject();
       }
-    }
+    });
   }
 
   resetView() {

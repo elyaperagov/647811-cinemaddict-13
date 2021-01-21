@@ -30,28 +30,6 @@ const filterPresenter = new FilterPresenter(siteMainElement, filterModel, movies
 filterPresenter.init();
 moviesPresenter.render();
 
-// api.getMovies()
-//   .then((movies) => {
-//     moviesModel.setFilms(UpdateType.INIT, movies);
-//   })
-// .catch(() => {
-//   moviesModel.setFilms(UpdateType.INIT, []);
-// });
-
-// api.getMovies()
-//   .then((movies) => {
-//     moviesModel.setFilms(UpdateType.INIT, movies);
-//     const promises = movies.map((movie) => {
-//       return api.getComments(movie.id);
-//     });
-//     return Promise.all(promises);
-//   })
-//   .then((comments) => {
-//     commentsModel.setComments(comments);
-//   });
-
-//   console.log(commentsModel);
-
 api.getMovies()
   .then((movies) => {
     const commentsCollection = movies.map((movie) => {

@@ -18,6 +18,7 @@ import {RenderPosition, renderElement, remove, getMostRatedFilms, getMostComment
 const CARDS_IN_ROW = 5;
 const MOST_COMMENTED_FILMS = 2;
 const TOP_RATED_FILMS = 2;
+// const body = document.querySelector(`body`);
 
 export default class MoviesList {
   constructor(container, moviesModel, filterModel, api) {
@@ -40,9 +41,6 @@ export default class MoviesList {
     this._handleModeChange = this._handleModeChange.bind(this);
     this._handleLoadMoreButtonClick = this._handleLoadMoreButtonClick.bind(this);
     this._handleSortTypeChange = this._handleSortTypeChange.bind(this);
-
-    // this._moviesModel.addObserver(this._handleModelEvent);
-    // this._filterModel.addObserver(this._handleModelEvent);
   }
 
   render() {
@@ -88,15 +86,15 @@ export default class MoviesList {
     this._renderBoard();
   }
 
-  // destroy() {
-  //   this._clearBoard({resetRenderedFilmsCount: true, resetSortType: true});
+  destroy() {
+    this._clearBoard({resetRenderedFilmsCount: true, resetSortType: true});
 
-  //   remove(this._filmsComponent);
-  //   remove(this._filmsComponent);
+    remove(this._filmsComponent);
+    remove(this._filmsComponent);
 
-  //   this._moviesModel.removeObserver(this._handleModelEvent);
-  //   this._filterModel.removeObserver(this._handleModelEvent);
-  // }
+    this._moviesModel.removeObserver(this._handleModelEvent);
+    this._filterModel.removeObserver(this._handleModelEvent);
+  }
 
   _handleModeChange() {
     Object.values(this._filmsPresenter).forEach((presenter) => presenter.resetView());
@@ -125,6 +123,15 @@ export default class MoviesList {
     }
   }
 
+  _disablePopupForm(isFormDisabled, container) {
+    const elements = container.elements;
+    const [...allElements] = elements;
+
+    allElements.forEach((element) => {
+      element.disabled = isFormDisabled;
+    });
+  }
+
   _handleViewAction(actionType, updateType, update) {
     switch (actionType) {
       case UserAction.UPDATE_FILM:
@@ -135,7 +142,10 @@ export default class MoviesList {
         this._api.addComment(update).then((response) => {
           this._moviesModel.addComment(updateType, response);
         });
-        // this._moviesModel.addComment(updateType, update);
+        // .catch(() => {
+        //   shake(body.querySelector(`form`));
+        //   disablePopup(false, body.querySelector(`form`));
+        // });
         break;
       case UserAction.DELETE_COMMENT:
         this._api.deleteComment(update).then(() => {
