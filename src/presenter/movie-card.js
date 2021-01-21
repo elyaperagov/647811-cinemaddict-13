@@ -124,10 +124,10 @@ export default class Movie {
   }
 
   _addCommentClick(evt) {
-    return this._addCommentClickPromise(evt)
-    // .then(() => {
-    //   console.log('dfdf')
-    // })
+    this._addCommentClickPromise(evt)
+    .then(() => {
+      console.log(`dfdf`);
+    })
     .catch(() => {
       disablePopup(false, this._popUpFilmCardComponent.getElement().querySelector(`form`));
       shake(this._popUpFilmCardComponent.getElement().querySelector(`form`));

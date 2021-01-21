@@ -1,6 +1,7 @@
 import Smart from "./smart.js";
 import {EMOJIES} from "../constants.js";
 import he from "he";
+import {shake} from '../helpers/render.js';
 
 const createPopupCommentsTemplate = (commentaries) => {
   const commentsList = commentaries.map((comment) => createCommentsTemplate(comment)).join(``);
@@ -224,9 +225,17 @@ export default class PopUpFilmCard extends Smart {
   _deleteCommentHandler(evt) {
     let deleteButton = evt.target;
     evt.preventDefault();
-    this._disableDeleteButton(deleteButton, true);
-    const commentId = evt.target.closest(`.film-details__comment`).dataset.commentId;
-    this._callback.deleteCommentClick(commentId);
+    return new Promise((resolve, reject) => {
+      this._disableDeleteButton(deleteButton, true);
+      const commentId = evt.target.closest(`.film-details__comment`).dataset.commentId;
+      this._callback.deleteCommentClick(commentId);
+      reject();
+      resolve();
+    })
+    .catch(() => {
+      this._disableDeleteButton(deleteButton, false);
+      shake(evt.target.closest(`.film-details__comment`));
+    });
   }
 
   _textInputHandler(evt) {
