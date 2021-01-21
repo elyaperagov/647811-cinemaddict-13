@@ -42,10 +42,10 @@ const disablePopup = (isFormDisabled, container) => {
   });
 };
 
-// const disableDeleteButton = (button, bDisabled) =>{
-//   button.disabled = bDisabled;
-//   button.innerHTML = bDisabled ? `Deleting…` : `Delete`;
-// }
+const disableDeleteButton = (button, bDisabled) =>{
+  button.disabled = bDisabled;
+  button.innerHTML = bDisabled ? `Deleting…` : `Delete`;
+};
 
 export const replace = (newChild, oldChild) => {
   if (oldChild instanceof Abstract) {
@@ -115,5 +115,5 @@ export {
   generateId,
   shake,
   disablePopup,
-  // disableDeleteButton
+  disableDeleteButton
 };

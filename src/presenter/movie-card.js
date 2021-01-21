@@ -125,9 +125,6 @@ export default class Movie {
 
   _addCommentClick(evt) {
     this._addCommentClickPromise(evt)
-    .then(() => {
-      console.log(`dfdf`);
-    })
     .catch(() => {
       disablePopup(false, this._popUpFilmCardComponent.getElement().querySelector(`form`));
       shake(this._popUpFilmCardComponent.getElement().querySelector(`form`));
@@ -138,7 +135,7 @@ export default class Movie {
     return new Promise((resolve, reject) => {
       const message = this._popUpFilmCardComponent.getElement().querySelector(`.film-details__comment-input`);
       const emoji = this._popUpFilmCardComponent.getElement().querySelector(`.film-details__emoji-item[checked]`);
-      if (evt.key === `Enter`) {
+      if (evt.key === `Enter` && evt.ctrlKey) {
         disablePopup(true, this._popUpFilmCardComponent.getElement().querySelector(`form`));
         if (message.value !== `` && emoji) {
           this._changeData(
@@ -146,9 +143,10 @@ export default class Movie {
               UpdateType.PATCH,
               Object.assign({}, {id: this._film.id}, {comment: {emoji: emoji.value, message: message.value, date: new Date()}})
           );
+          resolve();
+        } else {
+          reject();
         }
-        reject();
-        resolve();
       }
     });
   }

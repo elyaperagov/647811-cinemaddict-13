@@ -1,7 +1,7 @@
 import Smart from "./smart.js";
 import {EMOJIES} from "../constants.js";
 import he from "he";
-import {shake} from '../helpers/render.js';
+import {disableDeleteButton} from '../helpers/render.js';
 
 const createPopupCommentsTemplate = (commentaries) => {
   const commentsList = commentaries.map((comment) => createCommentsTemplate(comment)).join(``);
@@ -214,28 +214,14 @@ export default class PopUpFilmCard extends Smart {
   _closePopupClickHandler(evt) {
     evt.preventDefault();
     this._callback.closePopupClick(PopUpFilmCard.parseDataToFilm(this._data));
-    // this._callback.formSubmit(TaskEdit.parseDataToTask(this._data));
-  }
-
-  _disableDeleteButton(button, bDisabled) {
-    button.disabled = bDisabled;
-    button.innerHTML = bDisabled ? `Deleting…` : `Delete`;
   }
 
   _deleteCommentHandler(evt) {
     let deleteButton = evt.target;
     evt.preventDefault();
-    return new Promise((resolve, reject) => {
-      this._disableDeleteButton(deleteButton, true);
-      const commentId = evt.target.closest(`.film-details__comment`).dataset.commentId;
-      this._callback.deleteCommentClick(commentId);
-      reject();
-      resolve();
-    })
-    .catch(() => {
-      this._disableDeleteButton(deleteButton, false);
-      shake(evt.target.closest(`.film-details__comment`));
-    });
+    disableDeleteButton(deleteButton, true);
+    const commentId = evt.target.closest(`.film-details__comment`).dataset.commentId;
+    this._callback.deleteCommentClick(commentId);
   }
 
   _textInputHandler(evt) {
@@ -286,10 +272,7 @@ export default class PopUpFilmCard extends Smart {
         {
           isInWatchlist: film.isInWatchlist,
           isWatched: film.isWatched,
-          isFavorite: film.isFavorite,
-          isDisabled: false,
-          // isSaving: false,
-          isDeleting: false
+          isFavorite: film.isFavorite
         }
     );
   }

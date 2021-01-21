@@ -13,12 +13,12 @@ import LoadingView from "../view/loading.js";
 import Movie from "./movie-card.js";
 import {filter} from "../helpers/filter.js";
 import {SortType, UpdateType, UserAction} from "../constants.js";
-import {RenderPosition, renderElement, remove, getMostRatedFilms, getMostCommentedFilms, getDateSortedFilms} from '../helpers/render.js';
+import {RenderPosition, renderElement, remove, getMostRatedFilms, shake, disablePopup, disableDeleteButton, getMostCommentedFilms, getDateSortedFilms} from '../helpers/render.js';
 
 const CARDS_IN_ROW = 5;
 const MOST_COMMENTED_FILMS = 2;
 const TOP_RATED_FILMS = 2;
-// const body = document.querySelector(`body`);
+const siteBody = document.querySelector(`body`);
 
 export default class MoviesList {
   constructor(container, moviesModel, filterModel, api) {
@@ -141,15 +141,22 @@ export default class MoviesList {
       case UserAction.ADD_COMMENT:
         this._api.addComment(update).then((response) => {
           this._moviesModel.addComment(updateType, response);
+        })
+        .catch(() => {
+          shake(siteBody.querySelector(`form`));
+          disablePopup(false, siteBody.querySelector(`form`));
         });
-        // .catch(() => {
-        //   shake(body.querySelector(`form`));
-        //   disablePopup(false, body.querySelector(`form`));
-        // });
         break;
       case UserAction.DELETE_COMMENT:
         this._api.deleteComment(update).then(() => {
           this._moviesModel.deleteComment(updateType, update);
+        })
+        .catch(() => {
+          const comments = Array.from(siteBody.querySelectorAll(`.film-details__comment`));
+          const activeComment = comments.filter((movie) => movie.dataset.commentId === update.comment);
+          shake(activeComment[0]);
+          const currentDeleteButton = activeComment[0].getElementsByClassName(`film-details__comment-delete`)[0];
+          disableDeleteButton(currentDeleteButton, false);
         });
         break;
     }
