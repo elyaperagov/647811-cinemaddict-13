@@ -1,21 +1,21 @@
 import Smart from "./smart.js";
 import {EMOJIES} from "../constants.js";
 import he from "he";
+import {disableDeleteButton} from '../helpers/render.js';
 
 const createPopupCommentsTemplate = (commentaries) => {
   const commentsList = commentaries.map((comment) => createCommentsTemplate(comment)).join(``);
   return commentsList;
 };
 
-const createCommentsTemplate = (comment) => {
-  const {id, message, emoji, author, date} = comment;
-  // const releaseDate = date.toISOString();
+const createCommentsTemplate = (message) => {
+  const {id, comment, emotion, author, date} = message;
   return `<li class="film-details__comment" data-comment-id="${id}">
-  <span class="film-details__comment-${emoji}">
-    <img src="./images/emoji/${emoji}.png" width="55" height="55" alt="emoji-${emoji}">
+  <span class="film-details__comment-${emotion}">
+    <img src="./images/emoji/${emotion}.png" width="55" height="55" alt="emoji-${emotion}">
   </span>
   <div>
-    <p class="film-details__comment-text">${he.encode(message)}</p>
+    <p class="film-details__comment-text">${he.encode(comment)}</p>
     <p class="film-details__comment-info">
       <span class="film-details__comment-author">${author}</span>
       <span class="film-details__comment-day">${date}</span>
@@ -214,11 +214,12 @@ export default class PopUpFilmCard extends Smart {
   _closePopupClickHandler(evt) {
     evt.preventDefault();
     this._callback.closePopupClick(PopUpFilmCard.parseDataToFilm(this._data));
-    // this._callback.formSubmit(TaskEdit.parseDataToTask(this._data));
   }
 
   _deleteCommentHandler(evt) {
+    let deleteButton = evt.target;
     evt.preventDefault();
+    disableDeleteButton(deleteButton, true);
     const commentId = evt.target.closest(`.film-details__comment`).dataset.commentId;
     this._callback.deleteCommentClick(commentId);
   }
@@ -271,7 +272,7 @@ export default class PopUpFilmCard extends Smart {
         {
           isInWatchlist: film.isInWatchlist,
           isWatched: film.isWatched,
-          isFavorite: film.isFavorite,
+          isFavorite: film.isFavorite
         }
     );
   }
