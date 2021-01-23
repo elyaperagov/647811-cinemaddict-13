@@ -111,6 +111,13 @@ const FilterType = {
   FAVORITES: `Favorites`
 };
 
+const MenuItem = {
+  // ADD_NEW_TASK: `ADD_NEW_TASK`,
+  FILMS: `FILMS`,
+  STATISTICS: `STATISTICS`
+};
+
+
 export {
   COMMENTS,
   YEARS,
@@ -127,5 +134,6 @@ export {
   FilterType,
   EMOJIES,
   messages,
-  authors
+  authors,
+  MenuItem
 };

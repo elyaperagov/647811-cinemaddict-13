@@ -89,7 +89,7 @@ export default class MoviesList {
   destroy() {
     this._clearBoard({resetRenderedFilmsCount: true, resetSortType: true});
 
-    remove(this._filmsComponent);
+    remove(this._filmsListComponent);
     remove(this._filmsComponent);
 
     this._moviesModel.removeObserver(this._handleModelEvent);

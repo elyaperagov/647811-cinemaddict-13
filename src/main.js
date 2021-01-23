@@ -4,7 +4,9 @@ import MoviesModel from "./model/movies.js";
 import FilterModel from "./model/filter.js";
 import FilterPresenter from "./presenter/filter.js";
 import {RenderPosition, renderElement} from './helpers/render.js';
-import {UpdateType} from "./constants.js";
+import {UpdateType, MenuItem} from "./constants.js";
+import Stats from "./view/stats.js";
+import {remove} from "./helpers/render.js";
 import Api from "./api.js";
 
 export const AUTHORIZATION = `Basic 14211421`;
@@ -30,6 +32,24 @@ const filterPresenter = new FilterPresenter(siteMainElement, filterModel, movies
 filterPresenter.init();
 moviesPresenter.render();
 
+const statisticsComponent = new Stats();
+
+const handleSiteMenuClick = (menuItem) => {
+  switch (menuItem) {
+    case MenuItem.FILMS:
+      remove(statisticsComponent);
+      moviesPresenter.destroy();
+      moviesPresenter.render();
+      break;
+    case MenuItem.STATISTICS:
+      moviesPresenter.destroy();
+      renderElement(siteMainElement, statisticsComponent, RenderPosition.BEFOREEND);
+      break;
+  }
+};
+
+filterPresenter.init(handleSiteMenuClick);
+
 api.getMovies()
   .then((movies) => {
     const commentsCollection = movies.map((movie) => {
@@ -41,6 +61,7 @@ api.getMovies()
       moviesModel.setFilms(UpdateType.INIT, movies);
     });
     renderElement(siteHeaderElement, new Profile(), RenderPosition.BEFOREEND);
+    // renderElement(siteMainElement, new Stats(), RenderPosition.BEFOREEND);
   })
 .catch(() => {
   moviesModel.setFilms(UpdateType.INIT, []);
