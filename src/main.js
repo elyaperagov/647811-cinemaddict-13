@@ -32,7 +32,7 @@ const filterPresenter = new FilterPresenter(siteMainElement, filterModel, movies
 filterPresenter.init();
 moviesPresenter.render();
 
-const statisticsComponent = new Stats();
+let statisticsComponent = null;
 
 const handleSiteMenuClick = (menuItem) => {
   switch (menuItem) {
@@ -42,6 +42,7 @@ const handleSiteMenuClick = (menuItem) => {
       moviesPresenter.render();
       break;
     case MenuItem.STATISTICS:
+      statisticsComponent = new Stats(moviesModel.getFilms());
       moviesPresenter.destroy();
       renderElement(siteMainElement, statisticsComponent, RenderPosition.BEFOREEND);
       break;

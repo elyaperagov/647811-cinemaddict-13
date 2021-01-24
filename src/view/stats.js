@@ -1,6 +1,73 @@
-import Abstract from "../view/abstract.js";
+import Smart from "../view/Smart.js";
+import Chart from "chart.js";
+import ChartDataLabels from 'chartjs-plugin-datalabels';
+
+
+const renderChart = (statisticCtx, genres) => {
+  const BAR_HEIGHT = 50;
+
+  statisticCtx.height = BAR_HEIGHT * 5;
+
+  return new Chart(statisticCtx, {
+    plugins: [ChartDataLabels],
+    type: `horizontalBar`,
+    data: {
+      labels: genres,
+      datasets: [{
+        data: [11, 8, 7, 4, 3],
+        backgroundColor: `#ffe800`,
+        hoverBackgroundColor: `#ffe800`,
+        anchor: `start`
+      }]
+    },
+    options: {
+      plugins: {
+        datalabels: {
+          font: {
+            size: 20
+          },
+          color: `#ffffff`,
+          anchor: `start`,
+          align: `start`,
+          offset: 40,
+        }
+      },
+      scales: {
+        yAxes: [{
+          ticks: {
+            fontColor: `#ffffff`,
+            padding: 100,
+            fontSize: 20
+          },
+          gridLines: {
+            display: false,
+            drawBorder: false
+          },
+          barThickness: 24
+        }],
+        xAxes: [{
+          ticks: {
+            display: false,
+            beginAtZero: true
+          },
+          gridLines: {
+            display: false,
+            drawBorder: false
+          },
+        }],
+      },
+      legend: {
+        display: false
+      },
+      tooltips: {
+        enabled: false
+      }
+    }
+  });
+};
 
 const createStatsTemplate = () => {
+  // const {genres} = data;
   return (
     `<section class="statistic">
       <p class="statistic__rank">
@@ -49,14 +116,31 @@ const createStatsTemplate = () => {
 
     </section>`
   );
-
 };
 
-export default class Stats extends Abstract {
+export default class Stats extends Smart {
+  constructor(data) {
+    super();
+
+    this._data = data;
+
+    this._renderCharts();
+  }
 
   getTemplate() {
-    return createStatsTemplate();
+    return createStatsTemplate(this._data);
+  }
+
+  _renderCharts() {
+
+    const genres = [];
+
+    this._data.map((element) => {
+      genres.push(element.genre);
+    });
+
+    const statisticCtx = this.getElement().querySelector(`.statistic__chart`);
+
+    this._chart = renderChart(statisticCtx, genres);
   }
 }
-
-
