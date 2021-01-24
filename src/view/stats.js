@@ -2,70 +2,6 @@ import Smart from "../view/Smart.js";
 import Chart from "chart.js";
 import ChartDataLabels from 'chartjs-plugin-datalabels';
 
-
-const renderChart = (statisticCtx, genres) => {
-  const BAR_HEIGHT = 50;
-
-  statisticCtx.height = BAR_HEIGHT * 5;
-
-  return new Chart(statisticCtx, {
-    plugins: [ChartDataLabels],
-    type: `horizontalBar`,
-    data: {
-      labels: genres,
-      datasets: [{
-        data: [11, 8, 7, 4, 3],
-        backgroundColor: `#ffe800`,
-        hoverBackgroundColor: `#ffe800`,
-        anchor: `start`
-      }]
-    },
-    options: {
-      plugins: {
-        datalabels: {
-          font: {
-            size: 20
-          },
-          color: `#ffffff`,
-          anchor: `start`,
-          align: `start`,
-          offset: 40,
-        }
-      },
-      scales: {
-        yAxes: [{
-          ticks: {
-            fontColor: `#ffffff`,
-            padding: 100,
-            fontSize: 20
-          },
-          gridLines: {
-            display: false,
-            drawBorder: false
-          },
-          barThickness: 24
-        }],
-        xAxes: [{
-          ticks: {
-            display: false,
-            beginAtZero: true
-          },
-          gridLines: {
-            display: false,
-            drawBorder: false
-          },
-        }],
-      },
-      legend: {
-        display: false
-      },
-      tooltips: {
-        enabled: false
-      }
-    }
-  });
-};
-
 const createStatsTemplate = () => {
   // const {genres} = data;
   return (
@@ -124,23 +60,114 @@ export default class Stats extends Smart {
 
     this._data = data;
 
-    this._renderCharts();
+    this._renderChart();
   }
 
   getTemplate() {
     return createStatsTemplate(this._data);
   }
 
-  _renderCharts() {
-
+  _getGenres(films) {
     const genres = [];
 
-    this._data.map((element) => {
+    const genresData = new Map();
+
+    films.map((element) => {
       genres.push(element.genre);
     });
 
-    const statisticCtx = this.getElement().querySelector(`.statistic__chart`);
+    genres.forEach((it) => {
+      if (genresData.has(it)) {
+        const value = genresData.get(it);
+        genresData.set(it, value + 1);
+      } else {
+        genresData.set(it, 1);
+      }
+    });
 
-    this._chart = renderChart(statisticCtx, genres);
+    console.log(genresData);
+    return genresData;
   }
+
+  // _renderCharts() {
+
+  //   // filmList.map((film) => film.genres.forEach((it) => genres.push(it)));
+  //   this._getGenres(this._data);
+
+  //   const statisticCtx = this.getElement().querySelector(`.statistic__chart`);
+
+  //   // this._chart = renderChart(statisticCtx, genres);
+  // }
+
+  _renderChart() {
+    const BAR_HEIGHT = 50;
+    const statisticCtx = this.getElement().querySelector(`.statistic__chart`);
+    statisticCtx.height = BAR_HEIGHT * 5;
+    const filmList = this._data;
+    const ctx = this.getElement().querySelector(`.statistic__chart`);
+    const genresData = this._getGenres(filmList);
+    const sortedGenresData = new Map([...genresData].sort((a, b) => b[1] - a[1]));
+
+    const genresLabels = [...sortedGenresData.keys()];
+    const genresValues = [...sortedGenresData.values()];
+
+    ctx.height = BAR_HEIGHT * genresLabels.length;
+
+    return new Chart(statisticCtx, {
+      plugins: [ChartDataLabels],
+      type: `horizontalBar`,
+      data: {
+        labels: genresLabels,
+        datasets: [{
+          data: genresValues,
+          backgroundColor: `#ffe800`,
+          hoverBackgroundColor: `#ffe800`,
+          anchor: `start`
+        }]
+      },
+      options: {
+        plugins: {
+          datalabels: {
+            font: {
+              size: 20
+            },
+            color: `#ffffff`,
+            anchor: `start`,
+            align: `start`,
+            offset: 40,
+          }
+        },
+        scales: {
+          yAxes: [{
+            ticks: {
+              fontColor: `#ffffff`,
+              padding: 100,
+              fontSize: 20
+            },
+            gridLines: {
+              display: false,
+              drawBorder: false
+            },
+            barThickness: 24
+          }],
+          xAxes: [{
+            ticks: {
+              display: false,
+              beginAtZero: true
+            },
+            gridLines: {
+              display: false,
+              drawBorder: false
+            },
+          }],
+        },
+        legend: {
+          display: false
+        },
+        tooltips: {
+          enabled: false
+        }
+      }
+    });
+  };
 }
