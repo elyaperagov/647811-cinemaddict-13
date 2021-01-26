@@ -1,5 +1,3 @@
-import Profile from "../view/profile.js";
-// import Navigation from "../view/navigation.js";
 import SortView from "../view/sort.js";
 import Films from "../view/films.js";
 import FilmsList from "../view/films-list.js";
@@ -30,7 +28,6 @@ export default class MoviesList {
     this._isLoading = true;
     this._api = api;
 
-    this._profileComponent = new Profile();
     this._filmsComponent = new Films();
     this._filmsListComponent = new FilmsList();
     this._noFilmsComponent = new NoFilms();
@@ -89,7 +86,7 @@ export default class MoviesList {
   destroy() {
     this._clearBoard({resetRenderedFilmsCount: true, resetSortType: true});
 
-    remove(this._filmsComponent);
+    remove(this._filmsListComponent);
     remove(this._filmsComponent);
 
     this._moviesModel.removeObserver(this._handleModelEvent);

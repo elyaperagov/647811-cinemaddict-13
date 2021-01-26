@@ -18,6 +18,31 @@ const DURATION = {
   MAX: 300
 };
 
+
+const BAR_HEIGHT = 50;
+const MINUTES_IN_HOUR = 60;
+
+const RankName = {
+  NOVICE: `Novice`,
+  FAN: `Fan`,
+  MOVIE_BUFF: `Movie buff`
+};
+
+const Ranks = {
+  NOVICE: {
+    MIN: 1,
+    MAX: 10
+  },
+  FAN: {
+    MIN: 11,
+    MAX: 20
+  },
+  MOVIE_BUFF: {
+    MIN: 21,
+    MAX: 50
+  }
+};
+
 const COMMENTS_QUANTITY = 50;
 
 const DESCRIPTION_MAX = 5;
@@ -104,12 +129,27 @@ const UpdateType = {
   INIT: `INIT`
 };
 
+const statsPeriod = {
+  ALL_TIME: `all-time`,
+  TODAY: `today`,
+  WEEK: `week`,
+  MONTH: `month`,
+  YEAR: `year`
+};
+
 const FilterType = {
   ALL: `All`,
   WATCHLIST: `Watchlist`,
   HISTORY: `History`,
   FAVORITES: `Favorites`
 };
+
+const MenuItem = {
+  // ADD_NEW_TASK: `ADD_NEW_TASK`,
+  FILMS: `FILMS`,
+  STATISTICS: `STATISTICS`
+};
+
 
 export {
   COMMENTS,
@@ -127,5 +167,11 @@ export {
   FilterType,
   EMOJIES,
   messages,
-  authors
+  authors,
+  MenuItem,
+  BAR_HEIGHT,
+  MINUTES_IN_HOUR,
+  RankName,
+  Ranks,
+  statsPeriod
 };

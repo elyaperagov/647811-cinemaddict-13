@@ -4,7 +4,9 @@ import MoviesModel from "./model/movies.js";
 import FilterModel from "./model/filter.js";
 import FilterPresenter from "./presenter/filter.js";
 import {RenderPosition, renderElement} from './helpers/render.js';
-import {UpdateType} from "./constants.js";
+import {UpdateType, MenuItem} from "./constants.js";
+import Stats from "./view/stats.js";
+import {remove} from "./helpers/render.js";
 import Api from "./api.js";
 
 export const AUTHORIZATION = `Basic 14211421`;
@@ -30,6 +32,32 @@ const filterPresenter = new FilterPresenter(siteMainElement, filterModel, movies
 filterPresenter.init();
 moviesPresenter.render();
 
+let statisticsComponent = null;
+
+const handleSiteMenuClick = (menuItem) => {
+  switch (menuItem) {
+    case MenuItem.FILMS:
+      remove(statisticsComponent);
+      moviesPresenter.destroy();
+      moviesPresenter.render();
+      break;
+    case MenuItem.STATISTICS:
+      moviesPresenter.destroy();
+      const prevStatisticsComponent = statisticsComponent;
+      statisticsComponent = new Stats(moviesModel.getFilms());
+      renderElement(siteMainElement, statisticsComponent, RenderPosition.BEFOREEND);
+      if (prevStatisticsComponent === null) {
+        renderElement(siteMainElement, statisticsComponent, RenderPosition.BEFOREEND);
+        return;
+      }
+      // replace(statisticsComponent, prevStatisticsComponent);
+      remove(prevStatisticsComponent);
+      break;
+  }
+};
+
+filterPresenter.init(handleSiteMenuClick);
+
 api.getMovies()
   .then((movies) => {
     const commentsCollection = movies.map((movie) => {
@@ -39,8 +67,10 @@ api.getMovies()
     });
     Promise.all(commentsCollection).then(() => {
       moviesModel.setFilms(UpdateType.INIT, movies);
+
     });
-    renderElement(siteHeaderElement, new Profile(), RenderPosition.BEFOREEND);
+    renderElement(siteHeaderElement, new Profile(movies), RenderPosition.BEFOREEND);
+    // renderElement(siteMainElement, new Stats(), RenderPosition.BEFOREEND);
   })
 .catch(() => {
   moviesModel.setFilms(UpdateType.INIT, []);
