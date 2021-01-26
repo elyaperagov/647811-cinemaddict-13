@@ -1,173 +1,202 @@
 import Smart from "../view/Smart.js";
 import Chart from "chart.js";
 import ChartDataLabels from 'chartjs-plugin-datalabels';
+import isToday from 'date-fns/isToday';
+import isThisWeek from 'date-fns/isThisWeek';
+import isThisMonth from 'date-fns/isThisMonth';
+import isThisYear from 'date-fns/isThisYear';
+import parseISO from 'date-fns/parseISO';
+import {BAR_HEIGHT, statsPeriod} from "../constants.js";
+import {calculateMoviesDuration, getStatistics, getGenres, getUserRank} from "../helpers/statistics-helpers.js";
 
-const createStatsTemplate = () => {
-  // const {genres} = data;
-  return (
-    `<section class="statistic">
-      <p class="statistic__rank">
-        Your rank
-        <img class="statistic__img" src="images/bitmap@2x.png" alt="Avatar" width="35" height="35">
-        <span class="statistic__rank-label">Sci-Fighter</span>
-      </p>
+// const getGenresData = (filmList) => {
+//   const genres = [];
+//   const genresData = new Map();
 
-      <form action="https://echo.htmlacademy.ru/" method="get" class="statistic__filters">
-        <p class="statistic__filters-description">Show stats:</p>
+//   filmList.map((film) => film.genre.forEach((it) => genres.push(it)));
 
-        <input type="radio" class="statistic__filters-input visually-hidden" name="statistic-filter" id="statistic-all-time" value="all-time" checked>
-        <label for="statistic-all-time" class="statistic__filters-label">All time</label>
+//   genres.forEach((it) => {
+//     if (genresData.has(it)) {
+//       const value = genresData.get(it);
+//       genresData.set(it, value + 1);
+//     } else {
+//       genresData.set(it, 1);
+//     }
+//   });
 
-        <input type="radio" class="statistic__filters-input visually-hidden" name="statistic-filter" id="statistic-today" value="today">
-        <label for="statistic-today" class="statistic__filters-label">Today</label>
+//   console.log(genresData);
+// }
 
-        <input type="radio" class="statistic__filters-input visually-hidden" name="statistic-filter" id="statistic-week" value="week">
-        <label for="statistic-week" class="statistic__filters-label">Week</label>
+const renderChart = (statisticCtx, dataLabels, dataValues) => {
+  statisticCtx.height = BAR_HEIGHT * 10;
 
-        <input type="radio" class="statistic__filters-input visually-hidden" name="statistic-filter" id="statistic-month" value="month">
-        <label for="statistic-month" class="statistic__filters-label">Month</label>
-
-        <input type="radio" class="statistic__filters-input visually-hidden" name="statistic-filter" id="statistic-year" value="year">
-        <label for="statistic-year" class="statistic__filters-label">Year</label>
-      </form>
-
-      <ul class="statistic__text-list">
-        <li class="statistic__text-item">
-          <h4 class="statistic__item-title">You watched</h4>
-          <p class="statistic__item-text">22 <span class="statistic__item-description">movies</span></p>
-        </li>
-        <li class="statistic__text-item">
-          <h4 class="statistic__item-title">Total duration</h4>
-          <p class="statistic__item-text">130 <span class="statistic__item-description">h</span> 22 <span class="statistic__item-description">m</span></p>
-        </li>
-        <li class="statistic__text-item">
-          <h4 class="statistic__item-title">Top genre</h4>
-          <p class="statistic__item-text">Sci-Fi</p>
-        </li>
-      </ul>
-
-      <div class="statistic__chart-wrap">
-        <canvas class="statistic__chart" width="1000"></canvas>
-      </div>
-
-    </section>`
-  );
+  return new Chart(statisticCtx, {
+    plugins: [ChartDataLabels],
+    type: `horizontalBar`,
+    data: {
+      labels: dataLabels,
+      datasets: [{
+        data: dataValues,
+        backgroundColor: `#ffe800`,
+        hoverBackgroundColor: `#ffe800`,
+        anchor: `start`
+      }]
+    },
+    options: {
+      plugins: {
+        datalabels: {
+          font: {
+            size: 20
+          },
+          color: `#ffffff`,
+          anchor: `start`,
+          align: `start`,
+          offset: 40,
+        }
+      },
+      scales: {
+        yAxes: [{
+          ticks: {
+            fontColor: `#ffffff`,
+            padding: 100,
+            fontSize: 20
+          },
+          gridLines: {
+            display: false,
+            drawBorder: false
+          },
+          barThickness: 24
+        }],
+        xAxes: [{
+          ticks: {
+            display: false,
+            beginAtZero: true
+          },
+          gridLines: {
+            display: false,
+            drawBorder: false
+          },
+        }],
+      },
+      legend: {
+        display: false
+      },
+      tooltips: {
+        enabled: false
+      }
+    }
+  });
 };
 
-export default class Stats extends Smart {
+const createStatisticsTemplate = (films, period) => {
+  const totalDuration = calculateMoviesDuration(films);
+  const watchedMovies = films.filter((film) => film.isWatched);
+  const {topGenre} = getStatistics(films);
+  getGenres(films);
+  // getGenresData(films)
+
+  return (`<section class="statistic">
+    <p class="statistic__rank">
+      Your rank
+      <img class="statistic__img" src="images/bitmap@2x.png" alt="Avatar" width="35" height="35">
+      <span class="statistic__rank-label">${getUserRank(films)}</span>
+    </p>
+
+    <form action="https://echo.htmlacademy.ru/" method="get" class="statistic__filters">
+      <p class="statistic__filters-description">Show stats:</p>
+
+      <input type="radio" class="statistic__filters-input visually-hidden" name="statistic-filter" id="statistic-all-time" value="all-time" ${period === statsPeriod.ALL_TIME ? `checked` : ``}>
+      <label for="statistic-all-time" class="statistic__filters-label">All time</label>
+
+      <input type="radio" class="statistic__filters-input visually-hidden" name="statistic-filter" id="statistic-today" value="today" ${period === statsPeriod.TODAY ? `checked` : ``}>
+      <label for="statistic-today" class="statistic__filters-label">Today</label>
+
+      <input type="radio" class="statistic__filters-input visually-hidden" name="statistic-filter" id="statistic-week" value="week" ${period === statsPeriod.WEEK ? `checked` : ``}>
+      <label for="statistic-week" class="statistic__filters-label">Week</label>
+
+      <input type="radio" class="statistic__filters-input visually-hidden" name="statistic-filter" id="statistic-month" value="month" ${period === statsPeriod.MONTH ? `checked` : ``}>
+      <label for="statistic-month" class="statistic__filters-label">Month</label>
+
+      <input type="radio" class="statistic__filters-input visually-hidden" name="statistic-filter" id="statistic-year" value="year" ${period === statsPeriod.YEAR ? `checked` : ``}>
+      <label for="statistic-year" class="statistic__filters-label">Year</label>
+    </form>
+
+    <ul class="statistic__text-list">
+      <li class="statistic__text-item">
+        <h4 class="statistic__item-title">You watched</h4>
+        <p class="statistic__item-text">${watchedMovies.length} <span class="statistic__item-description">movies</span></p>
+      </li>
+      <li class="statistic__text-item">
+        <h4 class="statistic__item-title">Total duration</h4>
+        <p class="statistic__item-text">${totalDuration.hours} <span class="statistic__item-description">h</span> ${totalDuration.minutes} <span class="statistic__item-description">m</span></p>
+      </li>
+      <li class="statistic__text-item">
+        <h4 class="statistic__item-title">Top genre</h4>
+        <p class="statistic__item-text">${topGenre}</p>
+      </li>
+    </ul>
+
+    <div class="statistic__chart-wrap">
+      <canvas class="statistic__chart" width="1000"></canvas>
+    </div>
+
+  </section>`);
+};
+
+export default class Statistics extends Smart {
   constructor(data) {
     super();
+    this._films = data;
+    this._filmsByPeriod = this._films;
+    this._period = statsPeriod.ALL_TIME;
+    this._statisticsChangeHandler = this._statisticsChangeHandler.bind(this);
+    this._setChart();
+    this._setStatisticsChangeHandler();
+  }
 
-    this._data = data;
+  _statisticsChangeHandler(evt) {
+    evt.preventDefault();
+    this._period = evt.target.value;
+    this._getStatisticFromPeriod();
+    this.updateData(this._filmsByPeriod);
+  }
 
-    this._renderChart();
+  _setStatisticsChangeHandler() {
+    this.getElement().querySelector(`.statistic__filters`).addEventListener(`change`, this._statisticsChangeHandler);
+  }
+
+  _getStatisticFromPeriod() {
+    switch (this._period) {
+      case statsPeriod.ALL_TIME:
+        this._filmsByPeriod = this._films;
+        break;
+      case statsPeriod.TODAY:
+        this._filmsByPeriod = this._films.filter((item) => isToday(parseISO(item.watchingDate)));
+        break;
+      case statsPeriod.WEEK:
+        this._filmsByPeriod = this._films.filter((item) => isThisWeek(parseISO(item.watchingDate)));
+        break;
+      case statsPeriod.MONTH:
+        this._filmsByPeriod = this._films.filter((item) => isThisMonth(parseISO(item.watchingDate)));
+        break;
+      case statsPeriod.YEAR:
+        this._filmsByPeriod = this._films.filter((item) => isThisYear(parseISO(item.watchingDate)));
+        break;
+    }
+  }
+
+  _setChart() {
+    const statisticCtx = this.getElement().querySelector(`.statistic__chart`);
+    const {genresLabels, genresValues} = getStatistics(this._filmsByPeriod);
+    renderChart(statisticCtx, genresLabels, genresValues);
   }
 
   getTemplate() {
-    return createStatsTemplate(this._data);
+    return createStatisticsTemplate(this._filmsByPeriod, this._period);
   }
 
-  _getGenres(films) {
-    const genres = [];
-
-    const genresData = new Map();
-
-    films.map((element) => {
-      genres.push(element.genre);
-    });
-
-    genres.forEach((it) => {
-      if (genresData.has(it)) {
-        const value = genresData.get(it);
-        genresData.set(it, value + 1);
-      } else {
-        genresData.set(it, 1);
-      }
-    });
-
-    console.log(genresData);
-    return genresData;
+  restoreHandlers() {
+    this._setChart();
+    this._setStatisticsChangeHandler();
   }
-
-  // _renderCharts() {
-
-  //   // filmList.map((film) => film.genres.forEach((it) => genres.push(it)));
-  //   this._getGenres(this._data);
-
-  //   const statisticCtx = this.getElement().querySelector(`.statistic__chart`);
-
-  //   // this._chart = renderChart(statisticCtx, genres);
-  // }
-
-  _renderChart() {
-    const BAR_HEIGHT = 50;
-    const statisticCtx = this.getElement().querySelector(`.statistic__chart`);
-    statisticCtx.height = BAR_HEIGHT * 5;
-    const filmList = this._data;
-    const ctx = this.getElement().querySelector(`.statistic__chart`);
-    const genresData = this._getGenres(filmList);
-    const sortedGenresData = new Map([...genresData].sort((a, b) => b[1] - a[1]));
-
-    const genresLabels = [...sortedGenresData.keys()];
-    const genresValues = [...sortedGenresData.values()];
-
-    ctx.height = BAR_HEIGHT * genresLabels.length;
-
-    return new Chart(statisticCtx, {
-      plugins: [ChartDataLabels],
-      type: `horizontalBar`,
-      data: {
-        labels: genresLabels,
-        datasets: [{
-          data: genresValues,
-          backgroundColor: `#ffe800`,
-          hoverBackgroundColor: `#ffe800`,
-          anchor: `start`
-        }]
-      },
-      options: {
-        plugins: {
-          datalabels: {
-            font: {
-              size: 20
-            },
-            color: `#ffffff`,
-            anchor: `start`,
-            align: `start`,
-            offset: 40,
-          }
-        },
-        scales: {
-          yAxes: [{
-            ticks: {
-              fontColor: `#ffffff`,
-              padding: 100,
-              fontSize: 20
-            },
-            gridLines: {
-              display: false,
-              drawBorder: false
-            },
-            barThickness: 24
-          }],
-          xAxes: [{
-            ticks: {
-              display: false,
-              beginAtZero: true
-            },
-            gridLines: {
-              display: false,
-              drawBorder: false
-            },
-          }],
-        },
-        legend: {
-          display: false
-        },
-        tooltips: {
-          enabled: false
-        }
-      }
-    });
-  };
 }

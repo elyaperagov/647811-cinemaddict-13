@@ -21,9 +21,7 @@ export default class Filter {
 
   init(callback) {
     this._currentFilter = this._filterModel.getFilter();
-
     this._handleMenuClick = callback;
-
     const filters = this._getFilters();
     const prevFilterComponent = this._filterComponent;
 

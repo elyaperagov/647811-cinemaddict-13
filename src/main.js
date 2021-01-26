@@ -42,9 +42,16 @@ const handleSiteMenuClick = (menuItem) => {
       moviesPresenter.render();
       break;
     case MenuItem.STATISTICS:
-      statisticsComponent = new Stats(moviesModel.getFilms());
       moviesPresenter.destroy();
+      const prevStatisticsComponent = statisticsComponent;
+      statisticsComponent = new Stats(moviesModel.getFilms());
       renderElement(siteMainElement, statisticsComponent, RenderPosition.BEFOREEND);
+      if (prevStatisticsComponent === null) {
+        renderElement(siteMainElement, statisticsComponent, RenderPosition.BEFOREEND);
+        return;
+      }
+      // replace(statisticsComponent, prevStatisticsComponent);
+      remove(prevStatisticsComponent);
       break;
   }
 };
@@ -60,8 +67,9 @@ api.getMovies()
     });
     Promise.all(commentsCollection).then(() => {
       moviesModel.setFilms(UpdateType.INIT, movies);
+
     });
-    renderElement(siteHeaderElement, new Profile(), RenderPosition.BEFOREEND);
+    renderElement(siteHeaderElement, new Profile(movies), RenderPosition.BEFOREEND);
     // renderElement(siteMainElement, new Stats(), RenderPosition.BEFOREEND);
   })
 .catch(() => {
