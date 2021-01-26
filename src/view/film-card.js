@@ -1,4 +1,5 @@
 import AbstractView from "./abstract.js";
+import {getHours, getMinutes} from '../helpers/statistics-helpers.js';
 
 const createFilmCardTemplate = (filmCard) => {
   let {title, description, genre, year, rating, duration, isInWatchlist, isWatched, isFavorite, comments, poster} = filmCard;
@@ -22,7 +23,7 @@ const createFilmCardTemplate = (filmCard) => {
     <p class="film-card__rating">${rating}</p>
     <p class="film-card__info">
       <span class="film-card__year">${releaseYear}</span>
-      <span class="film-card__duration">${duration} min.</span>
+      <span class="film-card__duration">${getHours(duration)}h ${getMinutes(duration)}m</span>
       <span class="film-card__genre">${genre[0]}</span>
     </p>
     <img src="${poster}" alt="" class="film-card__poster">
@@ -41,8 +42,6 @@ export default class FilmCard extends AbstractView {
   constructor(filmCard) {
     super();
     this._filmCard = filmCard;
-    // this._comments = comments;
-
     this._popupClickHandler = this._popupClickHandler.bind(this);
     this._watchListClickHandler = this._watchListClickHandler.bind(this);
     this._watchedClickHandler = this._watchedClickHandler.bind(this);
