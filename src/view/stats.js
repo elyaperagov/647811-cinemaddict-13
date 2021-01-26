@@ -1,11 +1,10 @@
-import Smart from "../view/Smart.js";
+import Smart from "../view/smart.js";
 import Chart from "chart.js";
 import ChartDataLabels from 'chartjs-plugin-datalabels';
-import isToday from 'date-fns/isToday';
-import isThisWeek from 'date-fns/isThisWeek';
-import isThisMonth from 'date-fns/isThisMonth';
-import isThisYear from 'date-fns/isThisYear';
-import parseISO from 'date-fns/parseISO';
+import isToday from 'date-fns/is_today';
+import isThisWeek from 'date-fns/is_this_week';
+import isThisMonth from 'date-fns/is_this_month';
+import isThisYear from 'date-fns/is_this_year';
 import {BAR_HEIGHT, statsPeriod} from "../constants.js";
 import {calculateMoviesDuration, getStatistics, getGenres, getUserRank} from "../helpers/statistics-helpers.js";
 
@@ -90,7 +89,7 @@ const renderChart = (statisticCtx, dataLabels, dataValues) => {
 
 const createStatisticsTemplate = (films, period) => {
   const totalDuration = calculateMoviesDuration(films);
-  const watchedMovies = films.filter((film) => film.isWatched);
+  // const watchedMovies = films.filter((film) => film.isWatched);
   const {topGenre} = getStatistics(films);
   getGenres(films);
   // getGenresData(films)
@@ -124,7 +123,7 @@ const createStatisticsTemplate = (films, period) => {
     <ul class="statistic__text-list">
       <li class="statistic__text-item">
         <h4 class="statistic__item-title">You watched</h4>
-        <p class="statistic__item-text">${watchedMovies.length} <span class="statistic__item-description">movies</span></p>
+        <p class="statistic__item-text">${films.length} <span class="statistic__item-description">movies</span></p>
       </li>
       <li class="statistic__text-item">
         <h4 class="statistic__item-title">Total duration</h4>
@@ -146,7 +145,7 @@ const createStatisticsTemplate = (films, period) => {
 export default class Statistics extends Smart {
   constructor(data) {
     super();
-    this._films = data;
+    this._films = data.filter((film) => film.isWatched);
     this._filmsByPeriod = this._films;
     this._period = statsPeriod.ALL_TIME;
     this._statisticsChangeHandler = this._statisticsChangeHandler.bind(this);
@@ -169,18 +168,27 @@ export default class Statistics extends Smart {
     switch (this._period) {
       case statsPeriod.ALL_TIME:
         this._filmsByPeriod = this._films;
+        // this._filmsByPeriod.forEach(item => console.log(item.watchingDate));
         break;
       case statsPeriod.TODAY:
-        this._filmsByPeriod = this._films.filter((item) => isToday(parseISO(item.watchingDate)));
+        this._filmsByPeriod = this._films.filter((item) => isToday(item.watchingDate));
+        // this._filmsByPeriod.forEach(item => console.log(item.watchingDate));
+
         break;
       case statsPeriod.WEEK:
-        this._filmsByPeriod = this._films.filter((item) => isThisWeek(parseISO(item.watchingDate)));
+        this._filmsByPeriod = this._films.filter((item) => isThisWeek(item.watchingDate));
+        // this._filmsByPeriod.forEach(item => console.log(item.watchingDate));
+
         break;
       case statsPeriod.MONTH:
-        this._filmsByPeriod = this._films.filter((item) => isThisMonth(parseISO(item.watchingDate)));
+        this._filmsByPeriod = this._films.filter((item) => isThisMonth(item.watchingDate));
+        // this._filmsByPeriod.forEach(item => console.log(item.watchingDate));
+
         break;
       case statsPeriod.YEAR:
-        this._filmsByPeriod = this._films.filter((item) => isThisYear(parseISO(item.watchingDate)));
+        this._filmsByPeriod = this._films.filter((item) => isThisYear(item.watchingDate));
+        // this._filmsByPeriod.forEach(item => console.log(item.watchingDate));
+
         break;
     }
   }
