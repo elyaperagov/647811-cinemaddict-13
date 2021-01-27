@@ -89,7 +89,6 @@ const renderChart = (statisticCtx, dataLabels, dataValues) => {
 
 const createStatisticsTemplate = (films, period) => {
   const totalDuration = calculateMoviesDuration(films);
-  // const watchedMovies = films.filter((film) => film.isWatched);
   const {topGenre} = getStatistics(films);
   getGenres(films);
   // getGenresData(films)
@@ -168,27 +167,18 @@ export default class Statistics extends Smart {
     switch (this._period) {
       case statsPeriod.ALL_TIME:
         this._filmsByPeriod = this._films;
-        // this._filmsByPeriod.forEach(item => console.log(item.watchingDate));
         break;
       case statsPeriod.TODAY:
         this._filmsByPeriod = this._films.filter((item) => isToday(item.watchingDate));
-        // this._filmsByPeriod.forEach(item => console.log(item.watchingDate));
-
         break;
       case statsPeriod.WEEK:
         this._filmsByPeriod = this._films.filter((item) => isThisWeek(item.watchingDate));
-        // this._filmsByPeriod.forEach(item => console.log(item.watchingDate));
-
         break;
       case statsPeriod.MONTH:
         this._filmsByPeriod = this._films.filter((item) => isThisMonth(item.watchingDate));
-        // this._filmsByPeriod.forEach(item => console.log(item.watchingDate));
-
         break;
       case statsPeriod.YEAR:
         this._filmsByPeriod = this._films.filter((item) => isThisYear(item.watchingDate));
-        // this._filmsByPeriod.forEach(item => console.log(item.watchingDate));
-
         break;
     }
   }

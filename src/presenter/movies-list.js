@@ -7,7 +7,6 @@ import FilmsListContainer from "../view/film-list-container.js";
 import TopRated from "../view/top-rated.js";
 import NoFilms from "../view/no-films.js";
 import LoadingView from "../view/loading.js";
-// import {FilterType} from "../constants.js";
 import Movie from "./movie-card.js";
 import {filter} from "../helpers/filter.js";
 import {SortType, UpdateType, UserAction} from "../constants.js";

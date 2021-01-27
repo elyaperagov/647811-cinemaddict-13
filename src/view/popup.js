@@ -1,7 +1,9 @@
 import Smart from "./smart.js";
 import {EMOJIES} from "../constants.js";
 import he from "he";
+import dayjs from "dayjs";
 import {disableDeleteButton} from '../helpers/render.js';
+import {getHours, getMinutes} from '../helpers/statistics-helpers.js';
 
 const createPopupCommentsTemplate = (commentaries) => {
   const commentsList = commentaries.map((comment) => createCommentsTemplate(comment)).join(``);
@@ -18,7 +20,7 @@ const createCommentsTemplate = (message) => {
     <p class="film-details__comment-text">${he.encode(comment)}</p>
     <p class="film-details__comment-info">
       <span class="film-details__comment-author">${author}</span>
-      <span class="film-details__comment-day">${date}</span>
+      <span class="film-details__comment-day">${dayjs(date).format(`DD/MM/YYYY HH:mm`) }</span>
       <button class="film-details__comment-delete">Delete</button>
     </p>
   </div>
@@ -83,11 +85,11 @@ export const createFilmPopupTemplate = (data) => {
               </tr>
               <tr class="film-details__row">
                 <td class="film-details__term">Release Date</td>
-                <td class="film-details__cell">${year}</td>
+                <td class="film-details__cell">${dayjs(year).format(`DD MMMM YYYY`)}</td>
               </tr>
               <tr class="film-details__row">
                 <td class="film-details__term">Runtime</td>
-                <td class="film-details__cell">${duration}</td>
+                <td class="film-details__cell">${getHours(duration)}h ${getMinutes(duration)}m</td>
               </tr>
               <tr class="film-details__row">
                 <td class="film-details__term">Country</td>
@@ -192,7 +194,7 @@ export default class PopUpFilmCard extends Smart {
     this._callback.watchListClick();
     this.updateData({
       isInWatchlist: !this._data.isInWatchlist
-    });
+    }, true);
   }
 
   _watchedClickHandler(evt) {
@@ -200,7 +202,7 @@ export default class PopUpFilmCard extends Smart {
     this._callback.watchedClick();
     this.updateData({
       isWatched: !this._data.isWatched
-    });
+    }, true);
   }
 
   _favoriteClickHandler(evt) {
@@ -208,7 +210,7 @@ export default class PopUpFilmCard extends Smart {
     this._callback.favoriteClick();
     this.updateData({
       isFavorite: !this._data.isFavorite
-    });
+    }, true);
   }
 
   _closePopupClickHandler(evt) {

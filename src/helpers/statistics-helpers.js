@@ -23,15 +23,13 @@ const inRange = (low, num, high, inclusive) => {
 };
 
 const getUserRank = (films) => {
-  const watchedMovies = films.filter((film) => film.isWatched).length;
-
-  if (inRange(Ranks.NOVICE.MIN, watchedMovies, Ranks.NOVICE.MAX)) {
+  if (inRange(Ranks.NOVICE.MIN, films, Ranks.NOVICE.MAX)) {
     return RankName.NOVICE;
   }
-  if (inRange(Ranks.FAN.MIN, watchedMovies, Ranks.FAN.MAX)) {
+  if (inRange(Ranks.FAN.MIN, films, Ranks.FAN.MAX)) {
     return RankName.FAN;
   }
-  if (inRange(Ranks.MOVIE_BUFF.MIN, watchedMovies, Ranks.MOVIE_BUFF.MAX)) {
+  if (inRange(Ranks.MOVIE_BUFF.MIN, films, Ranks.MOVIE_BUFF.MAX)) {
     return RankName.MOVIE_BUFF;
   }
   return ``;
@@ -42,11 +40,10 @@ const calculateMoviesDuration = (movies) => {
     hours: 0,
     minutes: 0
   };
-  const watchedFilms = movies.filter((film) => film.isWatched);
 
-  if (watchedFilms.length) {
-    const totalHours = watchedFilms.map((film) => getHours(film.duration)).reduce((sum, current) => sum + current);
-    const totalMinutes = watchedFilms.map((film) => getMinutes(film.duration)).reduce((sum, current) => sum + current);
+  if (movies.length) {
+    const totalHours = movies.map((film) => getHours(film.duration)).reduce((sum, current) => sum + current);
+    const totalMinutes = movies.map((film) => getMinutes(film.duration)).reduce((sum, current) => sum + current);
     const runtime = (totalHours * MINUTES_IN_HOUR) + totalMinutes;
     const hours = (runtime / 60);
     const resultHours = Math.floor(hours);
@@ -108,5 +105,7 @@ export {
   getUserRank,
   getStatistics,
   calculateMoviesDuration,
-  getGenres
+  getGenres,
+  getHours,
+  getMinutes
 };
