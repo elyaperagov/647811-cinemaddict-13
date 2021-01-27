@@ -218,12 +218,17 @@ export default class PopUpFilmCard extends Smart {
     this._callback.closePopupClick(PopUpFilmCard.parseDataToFilm(this._data));
   }
 
+  // updateScrollTop() {
+  //   this.getElement().scrollTop = this._scrollTop;
+  // }
+
   _deleteCommentHandler(evt) {
     let deleteButton = evt.target;
     evt.preventDefault();
     disableDeleteButton(deleteButton, true);
     const commentId = evt.target.closest(`.film-details__comment`).dataset.commentId;
     this._callback.deleteCommentClick(commentId);
+    this._scrollTop = this.getElement().scrollTop;
   }
 
   _textInputHandler(evt) {
@@ -232,6 +237,7 @@ export default class PopUpFilmCard extends Smart {
       newComment: evt.target.value
     }, true);
     this._callback.addCommentClick(evt);
+    this._scrollTop = this.getElement().scrollTop;
   }
 
   setWatchListClickHandler(callback) {
@@ -260,6 +266,7 @@ export default class PopUpFilmCard extends Smart {
     comments.forEach((element) => {
       element.addEventListener(`click`, this._deleteCommentHandler);
     });
+    // this.updateScrollTop()
   }
 
   setAddCommentHandler(callback) {

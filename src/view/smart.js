@@ -6,6 +6,18 @@ export default class Smart extends AbstractView {
     this._data = {};
   }
 
+  // getScroll() {
+  //   return this.getElement().scrollTop;
+  // }
+
+  // applyScroll(scroll) {
+  //   this.getElement().scrollIntoView(0, scroll);
+  // }
+
+  // updateScrollTop() {
+  //   this.getElement().scrollTop = this._scrollTop;
+  // }
+
   updateData(update, justDataUpdating) {
     if (!update) {
       return;

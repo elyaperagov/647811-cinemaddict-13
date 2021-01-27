@@ -37,9 +37,11 @@ let statisticsComponent = null;
 const handleSiteMenuClick = (menuItem) => {
   switch (menuItem) {
     case MenuItem.FILMS:
-      remove(statisticsComponent);
-      moviesPresenter.destroy();
-      moviesPresenter.render();
+      if (statisticsComponent) {
+        remove(statisticsComponent);
+        moviesPresenter.destroy();
+        moviesPresenter.render();
+      }
       break;
     case MenuItem.STATISTICS:
       moviesPresenter.destroy();

@@ -34,9 +34,8 @@ export default class Movie {
 
     const prevFilmComponent = this._filmCardComponent;
     const prevPopupComponent = this._popUpFilmCardComponent;
-
-    this._filmCardComponent = new FilmCard(film);
     this._popUpFilmCardComponent = new PopUpFilmCard(film);
+    this._filmCardComponent = new FilmCard(film);
 
     this._filmCardComponent.setWatchListClickHandler(this._handleWatchListClick);
     this._filmCardComponent.setWatchedClickHandler(this._handleWatchedClick);
@@ -62,7 +61,9 @@ export default class Movie {
     }
 
     if (siteBody.contains(prevPopupComponent.getElement())) {
+      const currentScroll = prevPopupComponent._scrollTop;
       replace(this._popUpFilmCardComponent, prevPopupComponent);
+      this._popUpFilmCardComponent.getElement().scrollTo(0, currentScroll);
     }
 
     if (this._mode === Mode.EDITING) {
@@ -72,6 +73,10 @@ export default class Movie {
 
     remove(prevPopupComponent);
     remove(prevFilmComponent);
+  }
+
+  applyScroll(scroll) {
+    this.getElement().scrollIntoView(0, scroll);
   }
 
   destroy() {
@@ -135,8 +140,10 @@ export default class Movie {
     return new Promise((resolve, reject) => {
       const message = this._popUpFilmCardComponent.getElement().querySelector(`.film-details__comment-input`);
       const emoji = this._popUpFilmCardComponent.getElement().querySelector(`.film-details__emoji-item[checked]`);
-      if (evt.key === `Enter` && evt.ctrlKey) {
+
+      if (evt.key === `Enter`) {
         disablePopup(true, this._popUpFilmCardComponent.getElement().querySelector(`form`));
+
         if (message.value !== `` && emoji) {
           this._changeData(
               UserAction.ADD_COMMENT,
@@ -160,7 +167,7 @@ export default class Movie {
   _handleWatchListClick() {
     this._changeData(
         UserAction.UPDATE_FILM,
-        UpdateType.MINOR,
+        UpdateType.PATCH,
         Object.assign(
             {},
             this._film,
@@ -174,7 +181,7 @@ export default class Movie {
   _handleFavoriteClick() {
     this._changeData(
         UserAction.UPDATE_FILM,
-        UpdateType.MINOR,
+        UpdateType.PATCH,
         Object.assign(
             {},
             this._film,
@@ -188,7 +195,7 @@ export default class Movie {
   _handleWatchedClick() {
     this._changeData(
         UserAction.UPDATE_FILM,
-        UpdateType.MINOR,
+        UpdateType.PATCH,
         Object.assign(
             {},
             this._film,
