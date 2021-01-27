@@ -195,6 +195,7 @@ export default class PopUpFilmCard extends Smart {
     this.updateData({
       isInWatchlist: !this._data.isInWatchlist
     }, true);
+    this._scrollTop = this.getElement().scrollTop;
   }
 
   _watchedClickHandler(evt) {
@@ -203,6 +204,7 @@ export default class PopUpFilmCard extends Smart {
     this.updateData({
       isWatched: !this._data.isWatched
     }, true);
+    this._scrollTop = this.getElement().scrollTop;
   }
 
   _favoriteClickHandler(evt) {
@@ -211,6 +213,7 @@ export default class PopUpFilmCard extends Smart {
     this.updateData({
       isFavorite: !this._data.isFavorite
     }, true);
+    this._scrollTop = this.getElement().scrollTop;
   }
 
   _closePopupClickHandler(evt) {

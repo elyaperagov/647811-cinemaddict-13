@@ -138,7 +138,7 @@ const statsPeriod = {
 };
 
 const FilterType = {
-  ALL: `All`,
+  ALL: `All Movies`,
   WATCHLIST: `Watchlist`,
   HISTORY: `History`,
   FAVORITES: `Favorites`
