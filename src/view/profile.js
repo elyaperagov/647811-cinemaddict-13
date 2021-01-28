@@ -1,5 +1,5 @@
-import Smart from "./smart.js";
 import {getUserRank} from "../helpers/statistics-helpers.js";
+import Smart from "./smart.js";
 
 const createUserProfileTemplate = (data) => {
   return `<section class="header__profile profile">
@@ -11,7 +11,7 @@ const createUserProfileTemplate = (data) => {
 export default class Profile extends Smart {
   constructor(data) {
     super();
-    this._films = data.filter((film) => film.isWatched);
+    this._films = data;
   }
   getTemplate() {
     return createUserProfileTemplate(this._films);

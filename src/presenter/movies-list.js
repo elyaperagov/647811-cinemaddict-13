@@ -7,6 +7,7 @@ import FilmsListContainer from "../view/film-list-container.js";
 import TopRated from "../view/top-rated.js";
 import NoFilms from "../view/no-films.js";
 import LoadingView from "../view/loading.js";
+import Profile from "../view/profile.js";
 import Movie from "./movie-card.js";
 import {filter} from "../helpers/filter.js";
 import {SortType, UpdateType, UserAction} from "../constants.js";
@@ -16,6 +17,7 @@ const CARDS_IN_ROW = 5;
 const MOST_COMMENTED_FILMS = 2;
 const TOP_RATED_FILMS = 2;
 const siteBody = document.querySelector(`body`);
+const siteHeaderElement = document.querySelector(`.header`);
 
 export default class MoviesList {
   constructor(container, moviesModel, filterModel, api) {
@@ -26,6 +28,8 @@ export default class MoviesList {
     this._filmsPresenter = {};
     this._isLoading = true;
     this._api = api;
+
+    this._profile = null;
 
     this._filmsComponent = new Films();
     this._filmsListComponent = new FilmsList();
@@ -133,6 +137,7 @@ export default class MoviesList {
       case UserAction.UPDATE_FILM:
         this._api.updateMovie(update)
           .then((response) => this._moviesModel.updateFilm(updateType, response));
+        this._renderProfile();
         break;
       case UserAction.ADD_COMMENT:
         this._api.addComment(update).then((response) => {
@@ -234,6 +239,18 @@ export default class MoviesList {
     renderElement(this._filmsListComponent, this._showMoreButtonComponent, RenderPosition.BEFOREEND);
   }
 
+  _renderProfile() {
+    // debugger;
+    const films = this._moviesModel.getFilms().filter((film) => film.isWatched);
+    const prevProfileComponent = this._profile;
+    this._profile = new Profile(films);
+    renderElement(siteHeaderElement, this._profile, RenderPosition.BEFOREEND);
+
+    if (prevProfileComponent !== null) {
+      remove(prevProfileComponent);
+    }
+  }
+
   _renderBoard() {
     if (this._isLoading) {
       this._renderLoading();
@@ -249,6 +266,7 @@ export default class MoviesList {
     }
 
     this._renderSort();
+    this._renderProfile();
 
     this._renderFilms(films.slice(0, Math.min(filmsCount, this._renderedFilmsCount)));
 
