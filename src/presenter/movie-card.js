@@ -66,11 +66,6 @@ export default class Movie {
       this._popUpFilmCardComponent.getElement().scrollTo(0, currentScroll);
     }
 
-    if (this._mode === Mode.EDITING) {
-      replace(this._filmCardComponent, prevFilmComponent);
-      this._mode = Mode.DEFAULT;
-    }
-
     remove(prevPopupComponent);
     remove(prevFilmComponent);
   }
@@ -89,6 +84,9 @@ export default class Movie {
     siteBody.classList.remove(`hide-overflow`);
     this._popUpFilmCardComponent.getElement().querySelector(`.film-details__comment-input`).value = ``;
     this._mode = Mode.DEFAULT;
+    document.removeEventListener(`keydown`, (evt) => {
+      this._addCommentClick(evt);
+    });
   }
 
   _onEscKeyDown(evt) {
@@ -142,7 +140,7 @@ export default class Movie {
       const emoji = this._popUpFilmCardComponent.getElement().querySelector(`.film-details__emoji-item[checked]`);
       if (evt.key === `Enter` && evt.ctrlKey) {
         disablePopup(true, this._popUpFilmCardComponent.getElement().querySelector(`form`));
-        if (message.value !== `` && emoji) {
+        if (message.value && emoji) {
           this._changeData(
               UserAction.ADD_COMMENT,
               UpdateType.PATCH,

@@ -54,7 +54,6 @@ const handleSiteMenuClick = (menuItem) => {
         renderElement(siteMainElement, statisticsComponent, RenderPosition.BEFOREEND);
         return;
       }
-      // replace(statisticsComponent, prevStatisticsComponent);
       remove(prevStatisticsComponent);
       break;
   }

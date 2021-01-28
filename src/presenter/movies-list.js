@@ -2,20 +2,16 @@ import SortView from "../view/sort.js";
 import Films from "../view/films.js";
 import FilmsList from "../view/films-list.js";
 import ShowMoreButton from "../view/show-more.js";
-import MostCommented from "../view/most-commented.js";
 import FilmsListContainer from "../view/film-list-container.js";
-import TopRated from "../view/top-rated.js";
 import NoFilms from "../view/no-films.js";
 import LoadingView from "../view/loading.js";
 import Profile from "../view/profile.js";
 import Movie from "./movie-card.js";
 import {filter} from "../helpers/filter.js";
 import {SortType, UpdateType, UserAction} from "../constants.js";
-import {RenderPosition, renderElement, remove, getMostRatedFilms, shake, disablePopup, disableDeleteButton, getMostCommentedFilms, getDateSortedFilms} from '../helpers/render.js';
+import {RenderPosition, renderElement, remove, getMostRatedFilms, shake, disablePopup, disableDeleteButton, getDateSortedFilms} from '../helpers/render.js';
 
 const CARDS_IN_ROW = 5;
-const MOST_COMMENTED_FILMS = 2;
-const TOP_RATED_FILMS = 2;
 const siteBody = document.querySelector(`body`);
 const siteHeaderElement = document.querySelector(`.header`);
 
@@ -275,29 +271,5 @@ export default class MoviesList {
     if (filmsCount > this._renderedFilmsCount) {
       this._renderLoadMoreButton();
     }
-
-    // this._renderExtraMoviesList();
-  }
-
-  _renderExtraMoviesList() {
-    this._filmsTopRatedComponent = new TopRated();
-    this._filmsMostCommentedComponent = new MostCommented();
-
-    renderElement(this._filmsComponent, this._filmsTopRatedComponent, RenderPosition.BEFOREEND);
-    renderElement(this._filmsComponent, this._filmsMostCommentedComponent, RenderPosition.BEFOREEND);
-
-    const topRatedContainerElements = this._filmsTopRatedComponent.getElement().querySelector(`.films-list--extra .films-list__container`);
-    const mostCommentedContainerElements = this._filmsMostCommentedComponent.getElement().querySelector(`.films-list--extra:last-child .films-list__container`);
-
-    const topRatedFilms = getMostRatedFilms(this._getFilms());
-    const mostCommentedFilms = getMostCommentedFilms(this._getFilms());
-
-    topRatedFilms
-      .slice(0, TOP_RATED_FILMS)
-      .forEach((film) => this._renderFilm(topRatedContainerElements, film));
-
-    mostCommentedFilms
-      .slice(0, MOST_COMMENTED_FILMS)
-      .forEach((film) => this._renderFilm(mostCommentedContainerElements, film));
   }
 }

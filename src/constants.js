@@ -45,7 +45,7 @@ const Ranks = {
 
 const COMMENTS_QUANTITY = 50;
 
-const DESCRIPTION_MAX = 5;
+const DESCRIPTION_MAX = 140;
 
 const messages = [
   `Lorem ipsum dolor sit amet, consectetur adipiscing elit.`,

@@ -1,3 +1,5 @@
+import {DESCRIPTION_MAX} from "../constants.js";
+
 const getTimeFromMins = (mins) => {
   let hours = Math.trunc(mins / 60);
   let minutes = mins % 60;
@@ -46,6 +48,8 @@ const updateItem = (items, update) => {
   ];
 };
 
+const getShortDescription = (description) => `${description.substring(0, DESCRIPTION_MAX)}...`;
+
 const getMeRandomElements = function (sourceArray, neededElements) {
   let result = [];
   for (let i = 0; i < neededElements; i++) {
@@ -62,5 +66,6 @@ export {
   getTimeFromMins,
   getPosterName,
   updateItem,
-  getMeRandomElements
+  getMeRandomElements,
+  getShortDescription
 };
