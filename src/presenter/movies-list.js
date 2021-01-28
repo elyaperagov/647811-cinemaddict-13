@@ -136,8 +136,10 @@ export default class MoviesList {
     switch (actionType) {
       case UserAction.UPDATE_FILM:
         this._api.updateMovie(update)
-          .then((response) => this._moviesModel.updateFilm(updateType, response));
-        this._renderProfile();
+          .then((response) => {
+            this._moviesModel.updateFilm(updateType, response);
+            this._renderProfile();
+          });
         break;
       case UserAction.ADD_COMMENT:
         this._api.addComment(update).then((response) => {
