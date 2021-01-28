@@ -140,10 +140,8 @@ export default class Movie {
     return new Promise((resolve, reject) => {
       const message = this._popUpFilmCardComponent.getElement().querySelector(`.film-details__comment-input`);
       const emoji = this._popUpFilmCardComponent.getElement().querySelector(`.film-details__emoji-item[checked]`);
-
       if (evt.key === `Enter` && evt.ctrlKey) {
         disablePopup(true, this._popUpFilmCardComponent.getElement().querySelector(`form`));
-
         if (message.value !== `` && emoji) {
           this._changeData(
               UserAction.ADD_COMMENT,

@@ -91,7 +91,6 @@ const createStatisticsTemplate = (films, period) => {
   const totalDuration = calculateMoviesDuration(films);
   const {topGenre} = getStatistics(films);
   getGenres(films);
-  // getGenresData(films)
 
   return (`<section class="statistic">
     <p class="statistic__rank">

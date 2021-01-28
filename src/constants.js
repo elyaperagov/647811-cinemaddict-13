@@ -145,7 +145,6 @@ const FilterType = {
 };
 
 const MenuItem = {
-  // ADD_NEW_TASK: `ADD_NEW_TASK`,
   FILMS: `FILMS`,
   STATISTICS: `STATISTICS`
 };

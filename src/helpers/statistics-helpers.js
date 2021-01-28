@@ -10,15 +10,14 @@ const getMinutes = (mins) => {
   return minutes;
 };
 
-const inRange = (low, num, high, inclusive) => {
-  inclusive = (typeof inclusive === `undefined`) ? false : inclusive;
-  if (inclusive && num >= low && num <= high) {
-    return true;
-  }
-  if (num > low && num < high) {
-    return true;
+const inRange = (first, value, last) => {
+  if (value) {
+    let lower = Math.min(first, last);
+    let upper = Math.max(first, last);
+    const result = value.length >= lower && value.length <= upper;
+    return result;
   } else {
-    return false;
+    return ``;
   }
 };
 
@@ -31,8 +30,9 @@ const getUserRank = (films) => {
   }
   if (inRange(Ranks.MOVIE_BUFF.MIN, films, Ranks.MOVIE_BUFF.MAX)) {
     return RankName.MOVIE_BUFF;
+  } else {
+    return ``;
   }
-  return ``;
 };
 
 const calculateMoviesDuration = (movies) => {
@@ -64,7 +64,6 @@ const getGenres = (films) => {
   }).flat(1); // спросить про flatMap и flat
   return genres;
 };
-
 
 const getStatistics = (movies) => {
   let genresLabels = [];

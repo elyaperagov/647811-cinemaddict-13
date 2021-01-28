@@ -165,7 +165,6 @@ export default class PopUpFilmCard extends Smart {
 
   restoreHandlers() {
     this._setInnerHandlers();
-    // this.setFormSubmitHandler(this._callback.formSubmit);
   }
 
   getTemplate() {
@@ -221,10 +220,6 @@ export default class PopUpFilmCard extends Smart {
     this._callback.closePopupClick(PopUpFilmCard.parseDataToFilm(this._data));
   }
 
-  // updateScrollTop() {
-  //   this.getElement().scrollTop = this._scrollTop;
-  // }
-
   _deleteCommentHandler(evt) {
     let deleteButton = evt.target;
     evt.preventDefault();
@@ -269,7 +264,6 @@ export default class PopUpFilmCard extends Smart {
     comments.forEach((element) => {
       element.addEventListener(`click`, this._deleteCommentHandler);
     });
-    // this.updateScrollTop()
   }
 
   setAddCommentHandler(callback) {

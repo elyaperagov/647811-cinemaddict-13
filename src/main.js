@@ -6,11 +6,13 @@ import FilterPresenter from "./presenter/filter.js";
 import {RenderPosition, renderElement} from './helpers/render.js';
 import {UpdateType, MenuItem} from "./constants.js";
 import Stats from "./view/stats.js";
+import Footer from "./view/footer.js";
 import {remove} from "./helpers/render.js";
 import Api from "./api.js";
 
 export const AUTHORIZATION = `Basic 14211421`;
 export const END_POINT = `https://13.ecmascript.pages.academy/cinemaddict`;
+const footerContainer = document.querySelector(`.footer__statistics`);
 
 export const api = new Api(END_POINT, AUTHORIZATION);
 // const apiComments = new ApiComments(END_POINT, AUTHORIZATION);
@@ -72,9 +74,10 @@ api.getMovies()
 
     });
     renderElement(siteHeaderElement, new Profile(movies), RenderPosition.BEFOREEND);
-    // renderElement(siteMainElement, new Stats(), RenderPosition.BEFOREEND);
+    renderElement(footerContainer, new Footer(movies), RenderPosition.BEFOREEND);
   })
 .catch(() => {
   moviesModel.setFilms(UpdateType.INIT, []);
   renderElement(siteHeaderElement, new Profile(), RenderPosition.BEFOREEND);
+  renderElement(footerContainer, new Footer(), RenderPosition.BEFOREEND);
 });
