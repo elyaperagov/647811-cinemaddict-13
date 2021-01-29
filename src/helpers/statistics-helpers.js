@@ -61,7 +61,7 @@ const getGenres = (films) => {
   const genres = films.filter((film) => film.isWatched)
   .map((film) => {
     return film.genre;
-  }).flat(1); // спросить про flatMap и flat
+  }).flat(1);
   return genres;
 };
 

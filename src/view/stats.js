@@ -8,24 +8,6 @@ import isThisYear from 'date-fns/is_this_year';
 import {BAR_HEIGHT, statsPeriod} from "../constants.js";
 import {calculateMoviesDuration, getStatistics, getGenres, getUserRank} from "../helpers/statistics-helpers.js";
 
-// const getGenresData = (filmList) => {
-//   const genres = [];
-//   const genresData = new Map();
-
-//   filmList.map((film) => film.genre.forEach((it) => genres.push(it)));
-
-//   genres.forEach((it) => {
-//     if (genresData.has(it)) {
-//       const value = genresData.get(it);
-//       genresData.set(it, value + 1);
-//     } else {
-//       genresData.set(it, 1);
-//     }
-//   });
-
-//   console.log(genresData);
-// }
-
 const renderChart = (statisticCtx, dataLabels, dataValues) => {
   statisticCtx.height = BAR_HEIGHT * 10;
 

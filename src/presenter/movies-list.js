@@ -56,12 +56,6 @@ export default class MoviesList {
     const films = this._moviesModel.getFilms();
     const filtredFilms = filter[filterType](films);
 
-    // const updatedFilms = filtredFilms.map((film) => {
-    //   film.comments = comments[getRandomInteger(0, comments.length - 1)];
-
-    //   return film;
-    // });
-
     switch (this._currentSortType) {
       case SortType.DATE:
         return getDateSortedFilms(filtredFilms);
@@ -112,7 +106,7 @@ export default class MoviesList {
       this._renderedFilmsCount = CARDS_IN_ROW;
     } else {
       this._renderedFilmsCount = Math.min(filmsCount, this._renderedFilmsCount);
-    } /*  СПРОСИТЬ НА СОЗВОНЕ */
+    }
 
     if (resetSortType) {
       this._currentSortType = SortType.DEFAULT;
@@ -217,7 +211,6 @@ export default class MoviesList {
     const newRenderedFilmsCount = Math.min(filmsCount, this._renderedFilmsCount + CARDS_IN_ROW);
     const films = this._getFilms().slice(this._renderedFilmsCount, newRenderedFilmsCount);
 
-    // СПРОСИТЬ НА СОЗВОНЕ ПРО ЛОГИКУ newRenderedFilmsCount
     this._renderFilms(films);
     this._renderedFilmsCount = newRenderedFilmsCount;
 
@@ -229,7 +222,7 @@ export default class MoviesList {
   _renderLoadMoreButton() {
     if (this._loadMoreButtonComponent !== null) {
       this._loadMoreButtonComponent = null;
-    } /*  НЕ ПОНЯЛ ЭТО УСЛОВИЕ  */
+    }
 
     this._showMoreButtonComponent = new ShowMoreButton();
     this._showMoreButtonComponent.loadMoreClickHandler(this._handleLoadMoreButtonClick);
@@ -238,7 +231,6 @@ export default class MoviesList {
   }
 
   _renderProfile() {
-    // debugger;
     const films = this._moviesModel.getFilms().filter((film) => film.isWatched);
     const prevProfileComponent = this._profile;
     this._profile = new Profile(films);

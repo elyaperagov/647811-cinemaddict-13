@@ -1,4 +1,3 @@
-// import Profile from "./view/profile.js";
 import MoviesList from "./presenter/movies-list.js";
 import MoviesModel from "./model/movies.js";
 import FilterModel from "./model/filter.js";
@@ -15,14 +14,6 @@ export const END_POINT = `https://13.ecmascript.pages.academy/cinemaddict`;
 const footerContainer = document.querySelector(`.footer__statistics`);
 
 export const api = new Api(END_POINT, AUTHORIZATION);
-// const apiComments = new ApiComments(END_POINT, AUTHORIZATION);
-
-// const commentsCollection = new Array(COMMENTS_QUANTITY).fill([]).map((arr, index) => {
-//     const filmComments = new Array(index + 1).fill().map(generateComment);
-//     return filmComments;
-// }); /* СПРОСИТЬ */
-
-// const siteHeaderElement = document.querySelector(`.header`);
 const siteMainElement = document.querySelector(`.main`);
 
 const moviesModel = new MoviesModel();
@@ -72,11 +63,9 @@ api.getMovies()
       moviesModel.setFilms(UpdateType.INIT, movies);
 
     });
-    // renderElement(siteHeaderElement, new Profile(movies), RenderPosition.BEFOREEND);
     renderElement(footerContainer, new Footer(movies), RenderPosition.BEFOREEND);
   })
 .catch(() => {
   moviesModel.setFilms(UpdateType.INIT, []);
-  // renderElement(siteHeaderElement, new Profile(), RenderPosition.BEFOREEND);
   renderElement(footerContainer, new Footer(), RenderPosition.BEFOREEND);
 });

@@ -70,10 +70,6 @@ export default class Movie {
     remove(prevFilmComponent);
   }
 
-  applyScroll(scroll) {
-    this.getElement().scrollIntoView(0, scroll);
-  }
-
   destroy() {
     remove(this._filmCardComponent);
     remove(this._popUpFilmCardComponent);
@@ -84,8 +80,9 @@ export default class Movie {
     siteBody.classList.remove(`hide-overflow`);
     this._popUpFilmCardComponent.getElement().querySelector(`.film-details__comment-input`).value = ``;
     this._mode = Mode.DEFAULT;
+    document.removeEventListener(`keydown`, this._addCommentClick);
     document.removeEventListener(`keydown`, (evt) => {
-      this._addCommentClick(evt);
+      this._onEscKeyDown(evt);
     });
   }
 
@@ -93,7 +90,6 @@ export default class Movie {
     if (evt.key === `Escape` || evt.key === `Esc`) {
       evt.preventDefault();
       this._closePopup();
-      document.removeEventListener(`keydown`, this._onEscKeyDown);
     }
   }
 
@@ -103,9 +99,7 @@ export default class Movie {
     document.addEventListener(`keydown`, (evt) => {
       this._onEscKeyDown(evt);
     });
-    document.addEventListener(`keydown`, (evt) => {
-      this._addCommentClick(evt);
-    });
+    document.addEventListener(`keydown`, this._addCommentClick);
     this._changeMode();
     this._mode = Mode.POPUP;
   }
