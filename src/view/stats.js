@@ -69,7 +69,7 @@ const renderChart = (statisticCtx, dataLabels, dataValues) => {
   });
 };
 
-const createStatisticsTemplate = (films, period) => {
+const createStatisticsTemplate = (films, period, rank) => {
   const totalDuration = calculateMoviesDuration(films);
   const {topGenre} = getStatistics(films);
   getGenres(films);
@@ -78,7 +78,7 @@ const createStatisticsTemplate = (films, period) => {
     <p class="statistic__rank">
       Your rank
       <img class="statistic__img" src="images/bitmap@2x.png" alt="Avatar" width="35" height="35">
-      <span class="statistic__rank-label">${getUserRank(films)}</span>
+      <span class="statistic__rank-label">${rank}</span>
     </p>
 
     <form action="https://echo.htmlacademy.ru/" method="get" class="statistic__filters">
@@ -165,13 +165,14 @@ export default class Statistics extends Smart {
   }
 
   _setChart() {
+    this._rank = getUserRank(this._films);
     const statisticCtx = this.getElement().querySelector(`.statistic__chart`);
     const {genresLabels, genresValues} = getStatistics(this._filmsByPeriod);
     renderChart(statisticCtx, genresLabels, genresValues);
   }
 
   getTemplate() {
-    return createStatisticsTemplate(this._filmsByPeriod, this._period);
+    return createStatisticsTemplate(this._filmsByPeriod, this._period, this._rank);
   }
 
   restoreHandlers() {

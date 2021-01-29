@@ -27,6 +27,7 @@ export default class Movie {
     this._handleClosePopupClick = this._handleClosePopupClick.bind(this);
     this._deleteCommentClick = this._deleteCommentClick.bind(this);
     this._addCommentClick = this._addCommentClick.bind(this);
+    this._onEscKeyDown = this._onEscKeyDown.bind(this);
   }
 
   init(film) {
@@ -75,15 +76,22 @@ export default class Movie {
     remove(this._popUpFilmCardComponent);
   }
 
+  _openPopup() {
+    renderElement(siteBody, this._popUpFilmCardComponent, RenderPosition.BEFOREEND);
+    siteBody.classList.add(`hide-overflow`);
+    document.addEventListener(`keydown`, this._addCommentClick);
+    document.addEventListener(`keydown`, this._onEscKeyDown);
+    this._changeMode();
+    this._mode = Mode.POPUP;
+  }
+
   _closePopup() {
     this._popUpFilmCardComponent.getElement().remove();
     siteBody.classList.remove(`hide-overflow`);
     this._popUpFilmCardComponent.getElement().querySelector(`.film-details__comment-input`).value = ``;
     this._mode = Mode.DEFAULT;
     document.removeEventListener(`keydown`, this._addCommentClick);
-    document.removeEventListener(`keydown`, (evt) => {
-      this._onEscKeyDown(evt);
-    });
+    document.removeEventListener(`keydown`, this._onEscKeyDown);
   }
 
   _onEscKeyDown(evt) {
@@ -91,17 +99,6 @@ export default class Movie {
       evt.preventDefault();
       this._closePopup();
     }
-  }
-
-  _openPopup() {
-    renderElement(siteBody, this._popUpFilmCardComponent, RenderPosition.BEFOREEND);
-    siteBody.classList.add(`hide-overflow`);
-    document.addEventListener(`keydown`, (evt) => {
-      this._onEscKeyDown(evt);
-    });
-    document.addEventListener(`keydown`, this._addCommentClick);
-    this._changeMode();
-    this._mode = Mode.POPUP;
   }
 
   _popupClickHandler() {
