@@ -23,7 +23,7 @@ import {calculateMoviesDuration, getStatistics, getGenres, getUserRank} from "..
 //     }
 //   });
 
-//   console.log(genresData);
+//   console.log(genresData);  ОБСУДИТЬ ЭТОТ МЕТОД!!!Ы
 // }
 
 const renderChart = (statisticCtx, dataLabels, dataValues) => {

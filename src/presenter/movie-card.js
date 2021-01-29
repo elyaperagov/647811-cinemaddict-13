@@ -84,8 +84,12 @@ export default class Movie {
     siteBody.classList.remove(`hide-overflow`);
     this._popUpFilmCardComponent.getElement().querySelector(`.film-details__comment-input`).value = ``;
     this._mode = Mode.DEFAULT;
+    // document.removeEventListener(`keydown`, (evt) => {
+    //   this._onEscKeyDown(evt);
+    // });   СПРОСИТЬ ТУТ!!
+    document.removeEventListener(`keydown`, this._addCommentClick);
     document.removeEventListener(`keydown`, (evt) => {
-      this._addCommentClick(evt);
+      this._onEscKeyDown(evt);
     });
   }
 
@@ -93,7 +97,6 @@ export default class Movie {
     if (evt.key === `Escape` || evt.key === `Esc`) {
       evt.preventDefault();
       this._closePopup();
-      document.removeEventListener(`keydown`, this._onEscKeyDown);
     }
   }
 
@@ -103,9 +106,7 @@ export default class Movie {
     document.addEventListener(`keydown`, (evt) => {
       this._onEscKeyDown(evt);
     });
-    document.addEventListener(`keydown`, (evt) => {
-      this._addCommentClick(evt);
-    });
+    document.addEventListener(`keydown`, this._addCommentClick);
     this._changeMode();
     this._mode = Mode.POPUP;
   }
@@ -138,8 +139,11 @@ export default class Movie {
     return new Promise((resolve, reject) => {
       const message = this._popUpFilmCardComponent.getElement().querySelector(`.film-details__comment-input`);
       const emoji = this._popUpFilmCardComponent.getElement().querySelector(`.film-details__emoji-item[checked]`);
+      // const currentScroll = this._popUpFilmCardComponent.getElement().scrollTop;
+      // console.log(currentScroll);   ВОТ ТУТ СПРОСИТЬ КАК ПРОКИНУТЬ currentScroll в init
       if (evt.key === `Enter` && evt.ctrlKey) {
         disablePopup(true, this._popUpFilmCardComponent.getElement().querySelector(`form`));
+
         if (message.value && emoji) {
           this._changeData(
               UserAction.ADD_COMMENT,

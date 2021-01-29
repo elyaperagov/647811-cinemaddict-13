@@ -134,7 +134,7 @@ export default class MoviesList {
         this._api.updateMovie(update)
           .then((response) => {
             this._moviesModel.updateFilm(updateType, response);
-            this._renderProfile();
+            this._renderProfile();  // КАК ЕЩЕ МОЖНО ОТРИСОВЫВАТЬ ПРОФИЛЬ С АКТУАЛЬНЫМ КОЛИЧЕСТВОМ ФИЛЬМОВ
           });
         break;
       case UserAction.ADD_COMMENT:
