@@ -165,7 +165,6 @@ export default class PopUpFilmCard extends Smart {
 
   restoreHandlers() {
     this._setInnerHandlers();
-    // this.setFormSubmitHandler(this._callback.formSubmit);
   }
 
   getTemplate() {
@@ -180,12 +179,6 @@ export default class PopUpFilmCard extends Smart {
   }
 
   _setInnerHandlers() {
-    this.setClosePopupClickHandler(this._callback.closePopupClick);
-    this.setFavoriteClickHandler(this._callback.favoriteClick);
-    this.setWatchListClickHandler(this._callback.watchListClick);
-    this.setWatchedClickHandler(this._callback.watchedClick);
-    this.setDeleteCommentHandler(this._callback.deleteCommentClick);
-    this.setAddCommentHandler(this._callback.addCommentClick);
     this.getElement().querySelector(`.film-details__emoji-list`).addEventListener(`change`, this._emojiChangeHandler);
   }
 
@@ -195,6 +188,7 @@ export default class PopUpFilmCard extends Smart {
     this.updateData({
       isInWatchlist: !this._data.isInWatchlist
     }, true);
+    this._scrollTop = this.getElement().scrollTop;
   }
 
   _watchedClickHandler(evt) {
@@ -203,6 +197,7 @@ export default class PopUpFilmCard extends Smart {
     this.updateData({
       isWatched: !this._data.isWatched
     }, true);
+    this._scrollTop = this.getElement().scrollTop;
   }
 
   _favoriteClickHandler(evt) {
@@ -211,6 +206,7 @@ export default class PopUpFilmCard extends Smart {
     this.updateData({
       isFavorite: !this._data.isFavorite
     }, true);
+    this._scrollTop = this.getElement().scrollTop;
   }
 
   _closePopupClickHandler(evt) {
@@ -224,6 +220,7 @@ export default class PopUpFilmCard extends Smart {
     disableDeleteButton(deleteButton, true);
     const commentId = evt.target.closest(`.film-details__comment`).dataset.commentId;
     this._callback.deleteCommentClick(commentId);
+    this._scrollTop = this.getElement().scrollTop;
   }
 
   _textInputHandler(evt) {
@@ -232,6 +229,7 @@ export default class PopUpFilmCard extends Smart {
       newComment: evt.target.value
     }, true);
     this._callback.addCommentClick(evt);
+    this._scrollTop = this.getElement().scrollTop;
   }
 
   setWatchListClickHandler(callback) {

@@ -27,6 +27,7 @@ export default class Movie {
     this._handleClosePopupClick = this._handleClosePopupClick.bind(this);
     this._deleteCommentClick = this._deleteCommentClick.bind(this);
     this._addCommentClick = this._addCommentClick.bind(this);
+    this._onEscKeyDown = this._onEscKeyDown.bind(this);
   }
 
   init(film) {
@@ -34,9 +35,8 @@ export default class Movie {
 
     const prevFilmComponent = this._filmCardComponent;
     const prevPopupComponent = this._popUpFilmCardComponent;
-
-    this._filmCardComponent = new FilmCard(film);
     this._popUpFilmCardComponent = new PopUpFilmCard(film);
+    this._filmCardComponent = new FilmCard(film);
 
     this._filmCardComponent.setWatchListClickHandler(this._handleWatchListClick);
     this._filmCardComponent.setWatchedClickHandler(this._handleWatchedClick);
@@ -62,12 +62,9 @@ export default class Movie {
     }
 
     if (siteBody.contains(prevPopupComponent.getElement())) {
+      const currentScroll = prevPopupComponent._scrollTop;
       replace(this._popUpFilmCardComponent, prevPopupComponent);
-    }
-
-    if (this._mode === Mode.EDITING) {
-      replace(this._filmCardComponent, prevFilmComponent);
-      this._mode = Mode.DEFAULT;
+      this._popUpFilmCardComponent.getElement().scrollTo(0, currentScroll);
     }
 
     remove(prevPopupComponent);
@@ -79,32 +76,29 @@ export default class Movie {
     remove(this._popUpFilmCardComponent);
   }
 
+  _openPopup() {
+    renderElement(siteBody, this._popUpFilmCardComponent, RenderPosition.BEFOREEND);
+    siteBody.classList.add(`hide-overflow`);
+    document.addEventListener(`keydown`, this._addCommentClick);
+    document.addEventListener(`keydown`, this._onEscKeyDown);
+    this._changeMode();
+    this._mode = Mode.POPUP;
+  }
+
   _closePopup() {
     this._popUpFilmCardComponent.getElement().remove();
     siteBody.classList.remove(`hide-overflow`);
     this._popUpFilmCardComponent.getElement().querySelector(`.film-details__comment-input`).value = ``;
     this._mode = Mode.DEFAULT;
+    document.removeEventListener(`keydown`, this._addCommentClick);
+    document.removeEventListener(`keydown`, this._onEscKeyDown);
   }
 
   _onEscKeyDown(evt) {
     if (evt.key === `Escape` || evt.key === `Esc`) {
       evt.preventDefault();
       this._closePopup();
-      document.removeEventListener(`keydown`, this._onEscKeyDown);
     }
-  }
-
-  _openPopup() {
-    renderElement(siteBody, this._popUpFilmCardComponent, RenderPosition.BEFOREEND);
-    siteBody.classList.add(`hide-overflow`);
-    document.addEventListener(`keydown`, (evt) => {
-      this._onEscKeyDown(evt);
-    });
-    document.addEventListener(`keydown`, (evt) => {
-      this._addCommentClick(evt);
-    });
-    this._changeMode();
-    this._mode = Mode.POPUP;
   }
 
   _popupClickHandler() {
@@ -137,7 +131,7 @@ export default class Movie {
       const emoji = this._popUpFilmCardComponent.getElement().querySelector(`.film-details__emoji-item[checked]`);
       if (evt.key === `Enter` && evt.ctrlKey) {
         disablePopup(true, this._popUpFilmCardComponent.getElement().querySelector(`form`));
-        if (message.value !== `` && emoji) {
+        if (message.value && emoji) {
           this._changeData(
               UserAction.ADD_COMMENT,
               UpdateType.PATCH,
@@ -160,7 +154,7 @@ export default class Movie {
   _handleWatchListClick() {
     this._changeData(
         UserAction.UPDATE_FILM,
-        UpdateType.MINOR,
+        UpdateType.PATCH,
         Object.assign(
             {},
             this._film,
@@ -174,7 +168,7 @@ export default class Movie {
   _handleFavoriteClick() {
     this._changeData(
         UserAction.UPDATE_FILM,
-        UpdateType.MINOR,
+        UpdateType.PATCH,
         Object.assign(
             {},
             this._film,
@@ -188,7 +182,7 @@ export default class Movie {
   _handleWatchedClick() {
     this._changeData(
         UserAction.UPDATE_FILM,
-        UpdateType.MINOR,
+        UpdateType.PATCH,
         Object.assign(
             {},
             this._film,

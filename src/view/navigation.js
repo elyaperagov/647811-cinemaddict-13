@@ -4,7 +4,7 @@ import {MenuItem} from '../constants';
 const createFilterItemTemplate = (filter, currentFilterType) => {
   const {type, name, count} = filter;
   return (
-    `<a href="#watchlist" data-menu-type="${MenuItem.FILMS}" class="main-navigation__item ${type === currentFilterType ? `main-navigation__item--active` : ``}" data-filter-type="${type}">${name}<span class="main-navigation__item-count" data-filter-type="${type}">${count}</span></a>`
+    `<a href="#watchlist" data-menu-type="${MenuItem.FILMS}" class="main-navigation__item ${type === currentFilterType ? `main-navigation__item--active` : ``}" data-filter-type="${type}">${name}${type === `All Movies` ? `` : `<span class="main-navigation__item-count">${count}</span>`}</a>`
   );
 };
 

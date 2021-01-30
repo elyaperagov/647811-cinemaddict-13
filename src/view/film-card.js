@@ -1,5 +1,6 @@
 import AbstractView from "./abstract.js";
 import {getHours, getMinutes} from '../helpers/statistics-helpers.js';
+import {getShortDescription} from '../helpers/common.js';
 
 const createFilmCardTemplate = (filmCard) => {
   let {title, description, genre, year, rating, duration, isInWatchlist, isWatched, isFavorite, comments, poster} = filmCard;
@@ -27,7 +28,7 @@ const createFilmCardTemplate = (filmCard) => {
       <span class="film-card__genre">${genre[0]}</span>
     </p>
     <img src="${poster}" alt="" class="film-card__poster">
-    <p class="film-card__description">${description}</p>
+    <p class="film-card__description">${getShortDescription(description)}</p>
     <a class="film-card__comments">${comments.length} comments</a>
     <div class="film-card__controls">
       <button class="film-card__controls-item button ${isInWatchListClassName}" type="button">Add to watchlist</button>
