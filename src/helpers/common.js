@@ -1,13 +1,13 @@
 import {DESCRIPTION_MAX} from "../constants.js";
 
 const getTimeFromMins = (mins) => {
-  let hours = Math.trunc(mins / 60);
-  let minutes = mins % 60;
+  const hours = Math.trunc(mins / 60);
+  const minutes = mins % 60;
   return hours + `h ` + minutes + `m `;
 };
 
 const getPosterName = (name) => {
-  let title = name.toLowerCase().replace(/\s/g, `-`);
+  const title = name.toLowerCase().replace(/\s/g, `-`);
   return title;
 };
 
@@ -28,7 +28,7 @@ const randomDate = (start, end = new Date()) => {
 
 const shuffleArray = (array) => {
   for (let i = array.length - 1; i > 0; i--) {
-    let j = Math.floor(Math.random() * (i + 1));
+    const j = Math.floor(Math.random() * (i + 1));
     [array[i], array[j]] = [array[j], array[i]];
   }
   return array;
@@ -51,7 +51,7 @@ const updateItem = (items, update) => {
 const getShortDescription = (description) => `${description.substring(0, DESCRIPTION_MAX)}...`;
 
 const getMeRandomElements = function (sourceArray, neededElements) {
-  let result = [];
+  const result = [];
   for (let i = 0; i < neededElements; i++) {
     result.push(sourceArray[Math.floor(Math.random() * sourceArray.length)]);
   }

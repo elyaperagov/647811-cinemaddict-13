@@ -3,7 +3,7 @@ import {getHours, getMinutes} from '../helpers/statistics-helpers.js';
 import {getShortDescription} from '../helpers/common.js';
 
 const createFilmCardTemplate = (filmCard) => {
-  let {title, description, genre, year, rating, duration, isInWatchlist, isWatched, isFavorite, comments, poster} = filmCard;
+  const {title, description, genre, year, rating, duration, isInWatchlist, isWatched, isFavorite, comments, poster} = filmCard;
 
   const releaseYear = year.getUTCFullYear();
 

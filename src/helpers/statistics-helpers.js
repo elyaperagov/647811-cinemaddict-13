@@ -1,19 +1,19 @@
 import {MINUTES_IN_HOUR, RankName, Ranks} from "../constants.js";
 
 const getHours = (mins) => {
-  let hours = Math.trunc(mins / 60);
+  const hours = Math.trunc(mins / 60);
   return hours;
 };
 
 const getMinutes = (mins) => {
-  let minutes = mins % 60;
+  const minutes = mins % 60;
   return minutes;
 };
 
 const inRange = (first, value, last) => {
   if (value) {
-    let lower = Math.min(first, last);
-    let upper = Math.max(first, last);
+    const lower = Math.min(first, last);
+    const upper = Math.max(first, last);
     const result = value.length >= lower && value.length <= upper;
     return result;
   } else {
@@ -66,9 +66,9 @@ const getGenres = (films) => {
 };
 
 const getStatistics = (movies) => {
-  let genresLabels = [];
-  let genresValues = [];
-  let genresCounts = {};
+  const genresLabels = [];
+  const genresValues = [];
+  const genresCounts = {};
   let max = 0;
   const allGenres = getGenres(movies);
   const topGenres = [];

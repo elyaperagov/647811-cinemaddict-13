@@ -28,7 +28,7 @@ const createCommentsTemplate = (message) => {
 };
 
 export const createFilmPopupTemplate = (data) => {
-  let {title, age, description, genre, year, rating, actors, duration, isInWatchlist, isWatched, comments, isFavorite, emojies, poster, writers, director, alternativeTitle, releaseCountry, newComment} = data;
+  const {title, age, description, genre, year, rating, actors, duration, isInWatchlist, isWatched, comments, isFavorite, emojies, poster, writers, director, alternativeTitle, releaseCountry, newComment} = data;
 
   const isInWatchListButton = isInWatchlist ? `checked` : ``;
   const isWatchedButton = isWatched ? `checked` : ``;
@@ -215,7 +215,7 @@ export default class PopUpFilmCard extends Smart {
   }
 
   _deleteCommentHandler(evt) {
-    let deleteButton = evt.target;
+    const deleteButton = evt.target;
     evt.preventDefault();
     disableDeleteButton(deleteButton, true);
     const commentId = evt.target.closest(`.film-details__comment`).dataset.commentId;

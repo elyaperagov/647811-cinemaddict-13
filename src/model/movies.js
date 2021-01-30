@@ -142,7 +142,7 @@ export default class Movies extends Observer {
   }
 
   static takeCommentId(comments) {
-    let commentsIds = [];
+    const commentsIds = [];
     comments.forEach((comment) => {
       commentsIds.push(comment.id);
     });
