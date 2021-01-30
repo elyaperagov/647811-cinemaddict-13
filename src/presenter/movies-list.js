@@ -11,9 +11,9 @@ import {filter} from "../helpers/filter.js";
 import {SortType, UpdateType, UserAction} from "../constants.js";
 import {RenderPosition, renderElement, remove, getMostRatedFilms, shake, disablePopup, disableDeleteButton, getDateSortedFilms} from '../helpers/render.js';
 
-const CARDS_IN_ROW = 5;
 const siteBody = document.querySelector(`body`);
 const siteHeaderElement = document.querySelector(`.header`);
+const CARDS_IN_ROW = 5;
 
 export default class MoviesList {
   constructor(container, moviesModel, filterModel, api) {
@@ -47,7 +47,6 @@ export default class MoviesList {
     this._filterModel.addObserver(this._handleModelEvent);
 
     renderElement(this._filmsListComponent, this._filmListContainerComponent, RenderPosition.BEFOREEND);
-
     this._renderBoard();
   }
 
