@@ -105,6 +105,29 @@ export default class Movie {
     this._openPopup();
   }
 
+  openModal(film) {
+    this._film = film;
+    // const prevPopupComponent = this._popUpFilmCardComponent;
+    this._popUpFilmCardComponent = new PopUpFilmCard(film);
+
+    this._popUpFilmCardComponent.setAddCommentHandler(this._addCommentClick);
+    this._popUpFilmCardComponent.setDeleteCommentHandler(this._deleteCommentClick);
+    this._popUpFilmCardComponent.setClosePopupClickHandler(this._handleClosePopupClick);
+    this._popUpFilmCardComponent.setWatchListClickHandler(this._handleWatchListClick);
+    this._popUpFilmCardComponent.setFavoriteClickHandler(this._handleFavoriteClick);
+    this._popUpFilmCardComponent.setWatchedClickHandler(this._handleWatchedClick);
+
+    // if (siteBody.contains(prevPopupComponent.getElement())) {
+    //   const currentScroll = prevPopupComponent._scrollTop;
+    //   replace(this._popUpFilmCardComponent, prevPopupComponent);
+    //   this._popUpFilmCardComponent.getElement().scrollTo(0, currentScroll);
+    // }
+
+    // remove(prevPopupComponent);
+
+    this._openPopup();
+  }
+
   _handleClosePopupClick() {
     this._closePopup();
   }
@@ -116,6 +139,7 @@ export default class Movie {
         Object.assign({}, {id: this._film.id}, {comment: commentId})
     );
   }
+
 
   _addCommentClick(evt) {
     this._addCommentClickPromise(evt)
@@ -129,7 +153,7 @@ export default class Movie {
     return new Promise((resolve, reject) => {
       const message = this._popUpFilmCardComponent.getElement().querySelector(`.film-details__comment-input`);
       const emoji = this._popUpFilmCardComponent.getElement().querySelector(`.film-details__emoji-item[checked]`);
-      if (evt.key === `Enter` && evt.ctrlKey) {
+      if (evt.key === `Enter` && evt.metaKey || evt.ctrlKey && evt.key === `Enter`) {
         disablePopup(true, this._popUpFilmCardComponent.getElement().querySelector(`form`));
         if (message.value && emoji) {
           this._changeData(
@@ -154,12 +178,13 @@ export default class Movie {
   _handleWatchListClick() {
     this._changeData(
         UserAction.UPDATE_FILM,
-        UpdateType.PATCH,
+        UpdateType.MINOR,
         Object.assign(
             {},
             this._film,
             {
-              isInWatchlist: !this._film.isInWatchlist
+              isInWatchlist: !this._film.isInWatchlist,
+              isPopup: this._mode === `POPUP`,
             }
         )
     );
@@ -168,12 +193,13 @@ export default class Movie {
   _handleFavoriteClick() {
     this._changeData(
         UserAction.UPDATE_FILM,
-        UpdateType.PATCH,
+        UpdateType.MINOR,
         Object.assign(
             {},
             this._film,
             {
               isFavorite: !this._film.isFavorite,
+              isPopup: this._mode === `POPUP`
             }
         )
     );
@@ -182,12 +208,13 @@ export default class Movie {
   _handleWatchedClick() {
     this._changeData(
         UserAction.UPDATE_FILM,
-        UpdateType.PATCH,
+        UpdateType.MINOR,
         Object.assign(
             {},
             this._film,
             {
-              isWatched: !this._film.isWatched
+              isWatched: !this._film.isWatched,
+              isPopup: this._mode === `POPUP`
             }
         )
     );

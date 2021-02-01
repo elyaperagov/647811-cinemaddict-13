@@ -126,6 +126,7 @@ export default class MoviesList {
       case UserAction.UPDATE_FILM:
         this._api.updateMovie(update)
           .then((response) => {
+            this._id = update.isPopup ? update.id : null;
             this._moviesModel.updateFilm(updateType, response);
             this._renderProfile();
           });
@@ -255,12 +256,24 @@ export default class MoviesList {
     }
 
     this._renderSort();
-    this._renderProfile();
 
     this._renderFilms(films.slice(0, Math.min(filmsCount, this._renderedFilmsCount)));
 
     if (filmsCount > this._renderedFilmsCount) {
       this._renderLoadMoreButton();
+    }
+    this._restorePopup();
+  }
+
+  _restorePopup() {
+    if (this._id) {
+      const film = this._moviesModel.getFilms().find((filmItem) => {
+        return filmItem.id === this._id;
+      });
+
+      const moviePresenter = new Movie(this._filmListContainerComponent, this._handleViewAction, this._handleModeChange);
+
+      moviePresenter.openModal(film);
     }
   }
 }
