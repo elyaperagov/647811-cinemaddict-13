@@ -131,6 +131,7 @@ export default class MoviesList {
             this._id = update.isPopup ? update.id : null;
             this._moviesModel.updateFilm(updateType, response);
             this._renderProfile();
+            this._restorePopup();
           });
         break;
       case UserAction.ADD_COMMENT:
@@ -160,11 +161,7 @@ export default class MoviesList {
   _handleModelEvent(updateType, data) {
     switch (updateType) {
       case UpdateType.PATCH:
-        // if (this._filmsPresenter[data.id]._mode === `POPUP`) {
-        //   this._filmsPresenter[data.id].openModal(data);
-        // } else {
         this._filmsPresenter[data.id].init(data);
-        // }
         break;
       case UpdateType.MINOR:
         this._clearBoard();
@@ -263,12 +260,13 @@ export default class MoviesList {
 
     this._renderSort();
 
+    this._renderProfile();
+
     this._renderFilms(films.slice(0, Math.min(filmsCount, this._renderedFilmsCount)));
 
     if (this._renderedFilmsCount < filmsCount) {
       this._renderLoadMoreButton();
     }
-    this._restorePopup();
   }
 
   _restorePopup() {
@@ -278,11 +276,9 @@ export default class MoviesList {
       });
 
       const moviePresenter = new Movie(this._filmListContainerComponent, this._handleViewAction, this._handleModeChange);
-      // if (film.isFavorite && this._filterModel.getFilter() === `Favorite`) {
-      //   moviePresenter.init(film);
-      // }
-      // console.log(this._filterModel.getFilter());
-      moviePresenter.openModal(film);
+      moviePresenter.openModal(film, this._currentOpenModal, (currentElement) => {
+        this._currentOpenModal = currentElement;
+      });
     }
   }
 }
