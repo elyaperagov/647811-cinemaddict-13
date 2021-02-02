@@ -90,7 +90,7 @@ export default class MoviesList {
   }
 
   _clearBoard({resetRenderedFilmsCount = false, resetSortType = false} = {}) {
-    const filmsCount = this._getFilms().length;
+    // const filmsCount = this._getFilms().length;
 
     Object
       .values(this._filmsPresenter)
@@ -105,8 +105,8 @@ export default class MoviesList {
 
     if (resetRenderedFilmsCount) {
       this._renderedFilmsCount = CARDS_IN_ROW;
-    } else {
-      this._renderedFilmsCount = Math.min(filmsCount, this._renderedFilmsCount);
+    // } else {
+    //   this._renderedFilmsCount = Math.min(filmsCount, this._renderedFilmsCount);
     }
 
     if (resetSortType) {
@@ -160,7 +160,11 @@ export default class MoviesList {
   _handleModelEvent(updateType, data) {
     switch (updateType) {
       case UpdateType.PATCH:
+        // if (this._filmsPresenter[data.id]._mode === `POPUP`) {
+        //   this._filmsPresenter[data.id].openModal(data);
+        // } else {
         this._filmsPresenter[data.id].init(data);
+        // }
         break;
       case UpdateType.MINOR:
         this._clearBoard();
@@ -274,7 +278,7 @@ export default class MoviesList {
       });
 
       const moviePresenter = new Movie(this._filmListContainerComponent, this._handleViewAction, this._handleModeChange);
-      // if (film.isFavorite && this._filterModel.getFilter() === `Favotite`) {
+      // if (film.isFavorite && this._filterModel.getFilter() === `Favorite`) {
       //   moviePresenter.init(film);
       // }
       // console.log(this._filterModel.getFilter());

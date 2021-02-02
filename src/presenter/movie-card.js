@@ -57,7 +57,9 @@ export default class Movie {
 
   destroy() {
     remove(this._filmCardComponent);
-    // remove(this._popUpFilmCardComponent);
+    if (this._popUpFilmCardComponent) {
+      remove(this._popUpFilmCardComponent);
+    }
   }
 
   _openPopup() {
@@ -95,7 +97,7 @@ export default class Movie {
     this._popUpFilmCardComponent = new PopUpFilmCard(film);
     this._prevModal = this._popUpFilmCardComponent;
 
-    const currentScroll = this._prevModal._scrollTop;
+    // const currentScroll = this._prevModal._scrollTop;
 
     this._popUpFilmCardComponent.setAddCommentHandler(this._addCommentClick);
     this._popUpFilmCardComponent.setDeleteCommentHandler(this._deleteCommentClick);
@@ -112,7 +114,7 @@ export default class Movie {
 
     // remove(this._prevModal);
 
-    this._popUpFilmCardComponent.getElement().scrollTo(0, currentScroll);
+    // this._popUpFilmCardComponent.getElement().scrollTo(0, currentScroll);
 
     this._openPopup();
   }
