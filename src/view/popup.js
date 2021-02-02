@@ -179,12 +179,12 @@ export default class PopUpFilmCard extends Smart {
   }
 
   _setInnerHandlers() {
-    // this.setClosePopupClickHandler(this._callback.closePopupClick);
-    // this.setFavoriteClickHandler(this._callback.favoriteClick);
-    // this.setWatchListClickHandler(this._callback.watchListClick);
-    // this.setWatchedClickHandler(this._callback.watchedClick);
-    // this.setDeleteCommentHandler(this._callback.deleteCommentClick);
-    // this.setAddCommentHandler(this._callback.addCommentClick);
+    this.setClosePopupClickHandler(this._callback.closePopupClick);
+    this.setFavoriteClickHandler(this._callback.favoriteClick);
+    this.setWatchListClickHandler(this._callback.watchListClick);
+    this.setWatchedClickHandler(this._callback.watchedClick);
+    this.setDeleteCommentHandler(this._callback.deleteCommentClick);
+    this.setAddCommentHandler(this._callback.addCommentClick);
     this.getElement().querySelector(`.film-details__emoji-list`).addEventListener(`change`, this._emojiChangeHandler);
   }
 

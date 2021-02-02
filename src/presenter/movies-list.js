@@ -99,7 +99,9 @@ export default class MoviesList {
 
     remove(this._sortComponent);
     remove(this._noFilmsComponent);
-    remove(this._showMoreButtonComponent);
+    if (this._showMoreButtonComponent) {
+      remove(this._showMoreButtonComponent);
+    }
 
     if (resetRenderedFilmsCount) {
       this._renderedFilmsCount = CARDS_IN_ROW;
@@ -259,7 +261,7 @@ export default class MoviesList {
 
     this._renderFilms(films.slice(0, Math.min(filmsCount, this._renderedFilmsCount)));
 
-    if (filmsCount > this._renderedFilmsCount) {
+    if (this._renderedFilmsCount < filmsCount) {
       this._renderLoadMoreButton();
     }
     this._restorePopup();
@@ -272,7 +274,10 @@ export default class MoviesList {
       });
 
       const moviePresenter = new Movie(this._filmListContainerComponent, this._handleViewAction, this._handleModeChange);
-
+      // if (film.isFavorite && this._filterModel.getFilter() === `Favotite`) {
+      //   moviePresenter.init(film);
+      // }
+      // console.log(this._filterModel.getFilter());
       moviePresenter.openModal(film);
     }
   }
