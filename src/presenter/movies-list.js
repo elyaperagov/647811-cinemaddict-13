@@ -90,7 +90,6 @@ export default class MoviesList {
   }
 
   _clearBoard({resetRenderedFilmsCount = false, resetSortType = false} = {}) {
-    const filmsCount = this._getFilms().length;
 
     Object
       .values(this._filmsPresenter)
@@ -99,12 +98,12 @@ export default class MoviesList {
 
     remove(this._sortComponent);
     remove(this._noFilmsComponent);
-    remove(this._showMoreButtonComponent);
+    if (this._showMoreButtonComponent) {
+      remove(this._showMoreButtonComponent);
+    }
 
     if (resetRenderedFilmsCount) {
       this._renderedFilmsCount = CARDS_IN_ROW;
-    } else {
-      this._renderedFilmsCount = Math.min(filmsCount, this._renderedFilmsCount);
     }
 
     if (resetSortType) {
@@ -126,13 +125,17 @@ export default class MoviesList {
       case UserAction.UPDATE_FILM:
         this._api.updateMovie(update)
           .then((response) => {
+            this._id = update.isPopup ? update.id : null;
             this._moviesModel.updateFilm(updateType, response);
             this._renderProfile();
+            this._restorePopup();
           });
         break;
       case UserAction.ADD_COMMENT:
         this._api.addComment(update).then((response) => {
+          this._id = update.isPopup ? update.id : null;
           this._moviesModel.addComment(updateType, response);
+          this._restorePopup();
         })
         .catch(() => {
           shake(siteBody.querySelector(`form`));
@@ -141,7 +144,9 @@ export default class MoviesList {
         break;
       case UserAction.DELETE_COMMENT:
         this._api.deleteComment(update).then(() => {
+          this._id = update.isPopup ? update.id : null;
           this._moviesModel.deleteComment(updateType, update);
+          this._restorePopup();
         })
         .catch(() => {
           const comments = Array.from(siteBody.querySelectorAll(`.film-details__comment`));
@@ -255,12 +260,26 @@ export default class MoviesList {
     }
 
     this._renderSort();
+
     this._renderProfile();
 
     this._renderFilms(films.slice(0, Math.min(filmsCount, this._renderedFilmsCount)));
 
-    if (filmsCount > this._renderedFilmsCount) {
+    if (this._renderedFilmsCount < filmsCount) {
       this._renderLoadMoreButton();
+    }
+  }
+
+  _restorePopup() {
+    if (this._id) {
+      const film = this._moviesModel.getFilms().find((filmItem) => {
+        return filmItem.id === this._id;
+      });
+
+      const moviePresenter = new Movie(this._filmListContainerComponent, this._handleViewAction, this._handleModeChange);
+      moviePresenter.openModal(film, this._currentOpenModal, (currentElement) => {
+        this._currentOpenModal = currentElement;
+      });
     }
   }
 }
