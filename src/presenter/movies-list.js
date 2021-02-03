@@ -90,7 +90,6 @@ export default class MoviesList {
   }
 
   _clearBoard({resetRenderedFilmsCount = false, resetSortType = false} = {}) {
-    // const filmsCount = this._getFilms().length;
 
     Object
       .values(this._filmsPresenter)
@@ -105,8 +104,6 @@ export default class MoviesList {
 
     if (resetRenderedFilmsCount) {
       this._renderedFilmsCount = CARDS_IN_ROW;
-    // } else {
-    //   this._renderedFilmsCount = Math.min(filmsCount, this._renderedFilmsCount);
     }
 
     if (resetSortType) {
@@ -136,7 +133,9 @@ export default class MoviesList {
         break;
       case UserAction.ADD_COMMENT:
         this._api.addComment(update).then((response) => {
+          this._id = update.isPopup ? update.id : null;
           this._moviesModel.addComment(updateType, response);
+          this._restorePopup();
         })
         .catch(() => {
           shake(siteBody.querySelector(`form`));
@@ -145,7 +144,9 @@ export default class MoviesList {
         break;
       case UserAction.DELETE_COMMENT:
         this._api.deleteComment(update).then(() => {
+          this._id = update.isPopup ? update.id : null;
           this._moviesModel.deleteComment(updateType, update);
+          this._restorePopup();
         })
         .catch(() => {
           const comments = Array.from(siteBody.querySelectorAll(`.film-details__comment`));

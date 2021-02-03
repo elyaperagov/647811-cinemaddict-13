@@ -116,6 +116,8 @@ export default class Movie {
       const currentScroll = prevElement._scrollTop;
       replace(this._popUpFilmCardComponent, prevElement);
       this._popUpFilmCardComponent.getElement().scrollTo(0, currentScroll);
+      document.removeEventListener(`keydown`, this._addCommentClick);
+      document.removeEventListener(`keydown`, this._onEscKeyDown);
     } else {
       renderElement(siteBody, this._popUpFilmCardComponent, RenderPosition.BEFOREEND);
     }
@@ -134,7 +136,7 @@ export default class Movie {
     this._changeData(
         UserAction.DELETE_COMMENT,
         UpdateType.PATCH,
-        Object.assign({}, {id: this._film.id}, {comment: commentId})
+        Object.assign({}, {id: this._film.id}, {comment: commentId, isPopup: this._mode === `POPUP`})
     );
   }
 
@@ -157,7 +159,7 @@ export default class Movie {
           this._changeData(
               UserAction.ADD_COMMENT,
               UpdateType.PATCH,
-              Object.assign({}, {id: this._film.id}, {comment: {emoji: emoji.value, message: message.value, date: new Date()}})
+              Object.assign({}, {id: this._film.id}, {comment: {emoji: emoji.value, message: message.value, date: new Date()}, isPopup: this._mode === `POPUP`})
           );
           resolve();
         } else {

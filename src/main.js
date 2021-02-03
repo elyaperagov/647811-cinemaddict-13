@@ -9,7 +9,7 @@ import Footer from "./view/footer.js";
 import {remove} from "./helpers/render.js";
 import Api from "./api.js";
 
-export const AUTHORIZATION = `Basic sorrowbringer`;
+export const AUTHORIZATION = `Basic 14211421`;
 export const END_POINT = `https://13.ecmascript.pages.academy/cinemaddict`;
 const footerContainer = document.querySelector(`.footer__statistics`);
 
