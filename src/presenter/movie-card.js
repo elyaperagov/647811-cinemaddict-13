@@ -74,6 +74,8 @@ export default class Movie {
   destroy() {
     remove(this._filmCardComponent);
     remove(this._popUpFilmCardComponent);
+    document.removeEventListener(`keydown`, this._addCommentClick);
+    document.removeEventListener(`keydown`, this._onEscKeyDown);
   }
 
   _closePopup() {
@@ -96,10 +98,13 @@ export default class Movie {
     this._openPopup();
   }
 
-  openModal(film, preveElement, callback) {
+  openModal(film, prevElement, callback) {
     this._film = film;
     this._popUpFilmCardComponent = new PopUpFilmCard(film);
-    callback(this._popUpFilmCardComponent);
+    callback(this._popUpFilmCardComponent, this._addCommentClick, this._onEscKeyDown);
+
+    document.removeEventListener(`keydown`, prevElement[1]);
+    document.removeEventListener(`keydown`, prevElement[2]);
 
     this._popUpFilmCardComponent.setAddCommentHandler(this._addCommentClick);
     this._popUpFilmCardComponent.setDeleteCommentHandler(this._deleteCommentClick);
@@ -108,7 +113,7 @@ export default class Movie {
     this._popUpFilmCardComponent.setFavoriteClickHandler(this._handleFavoriteClick);
     this._popUpFilmCardComponent.setWatchedClickHandler(this._handleWatchedClick);
 
-    this._openPopup(preveElement);
+    this._openPopup(prevElement[0]);
   }
 
   _openPopup(prevElement) {
@@ -116,8 +121,7 @@ export default class Movie {
       const currentScroll = prevElement._scrollTop;
       replace(this._popUpFilmCardComponent, prevElement);
       this._popUpFilmCardComponent.getElement().scrollTo(0, currentScroll);
-      document.removeEventListener(`keydown`, this._addCommentClick);
-      document.removeEventListener(`keydown`, this._onEscKeyDown);
+
     } else {
       renderElement(siteBody, this._popUpFilmCardComponent, RenderPosition.BEFOREEND);
     }
@@ -139,7 +143,6 @@ export default class Movie {
         Object.assign({}, {id: this._film.id}, {comment: commentId, isPopup: this._mode === `POPUP`})
     );
   }
-
 
   _addCommentClick(evt) {
     this._addCommentClickPromise(evt)

@@ -277,8 +277,10 @@ export default class MoviesList {
       });
 
       const moviePresenter = new Movie(this._filmListContainerComponent, this._handleViewAction, this._handleModeChange);
-      moviePresenter.openModal(film, this._currentOpenModal, (currentElement) => {
-        this._currentOpenModal = currentElement;
+      moviePresenter.openModal(film, [this.currentOpenModal, this.add, this.esc], (currentElement, add, esc) => {
+        this.currentOpenModal = currentElement;
+        this.add = add;
+        this.esc = esc;
       });
     }
   }
